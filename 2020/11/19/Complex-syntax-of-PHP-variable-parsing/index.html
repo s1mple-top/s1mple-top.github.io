@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Complex syntax of PHP variable parsing | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2020-11-19T10:48:20.000Z" itemprop="datePublished">
+          2020-11-19
+      </time>
+    
+</span>
+                <h1>Complex syntax of PHP variable parsing</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="FOREWORD"><a href="#FOREWORD" class="headerlink" title="FOREWORD"></a><strong>FOREWORD</strong></h2><p>本篇是一篇小记；php是一门很灵活的语言，也有一些复杂变量语法；今天也偶然翻到了队长的博客看到了相关的内容，也就复习下复杂变量；</p>
+<h2 id="text"><a href="#text" class="headerlink" title="text"></a><strong>text</strong></h2><p>先来看一个例子；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$str = $_GET[<span class="string">&#x27;str&#x27;</span>];</span><br><span class="line">$str = addslashes($str);</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&#x27;/[A-Za-z0-9]+\(/i&#x27;</span>,$str) == <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hack&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&#x27;$a=&quot;&#x27;</span> . $str . <span class="string">&#x27;&quot;;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Topic-explanation"><a href="#Topic-explanation" class="headerlink" title="Topic explanation"></a><strong>Topic explanation</strong></h2><p>分析题目并不是很难，逻辑也是很好理解，接收GET传参，然后对内容进行addslashes函数处理，将一些敏感字符前面加上转义字符；然后进行正则，过去正则之后才是进行eval执行；</p>
+<p>先来分步看下，如果没有经过addslashes函数处理，也没有经过正则处理；那么我们的思路必然是进行闭合，然后进行命令执行；</p>
+<p>然后如果我们加上了addslashes函数进行处理之后，也就无法进行闭合，那么就需要用到我们需要说的复杂变量；</p>
+<h2 id="Introduction-of-complex-variables"><a href="#Introduction-of-complex-variables" class="headerlink" title="Introduction of complex variables"></a>Introduction of complex variables</h2><p>关于复杂变量的理解，我们先来看一个例子；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$s1mple = <span class="string">&quot;s1mple&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;<span class="subst">&#123;$s1mple&#125;</span>&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;$&#123;s1mple&#125;&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>感兴趣的师傅可以本地复现下，会发现两者的回显效果是一样的；</p>
+<p>php规定：<br>任何具有string表达的标量变量，数组单元或对象属性都可使用此语法。只需简单地像在<strong>string</strong>以外的地方那样写出表达式，然后用花括号 <strong>{</strong> 和 <strong>}</strong> 把它括起来即可。由于 <strong>{</strong> 无法被转义，只有 <strong>$</strong> 紧挨着 <strong>{</strong> 时才会被识别。可以用 <strong>{$</strong> 来表达 **{$**。并且这里有个小细节，在php中，单引号和双引号表达的效果有时候是不一样的，双引号可以对其中的变量进行解析，而单引号只是将其中的字符全部当作字符串从而输出；比如如下的一个小例子；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$s1mple = <span class="string">&quot;s1mple&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;$s1mple&#x27;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$s1mple</span>&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>感兴趣的师傅测试会发现结果不一样，这也就是单引号和双引号的不同之处；所以一般涉及复杂变量利用的都是用双引号来闭合的，有些题中师傅们可以将其作为一个参考点；</p>
+<h2 id="Complex-variables-combined-with-functions"><a href="#Complex-variables-combined-with-functions" class="headerlink" title="Complex variables combined with functions"></a><strong>Complex variables combined with functions</strong></h2><p>这个用法也是来源于php的文档，函数，方法，静态变量和类常量只有在php5以后猜可以在{$}中使用；然而，只有在该字符串被定义的命名空间中才可以将其值作为变量名来访问，只单一的使用花括号无法处理从函数或方法的返回值或者类常量以及类静态变量的值；</p>
+<p>比如如下的例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$s1mple = <span class="string">&quot;$&#123;phpinfo()&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/DMAJDe"><img src="https://s3.ax1x.com/2020/11/19/DMAJDe.png" alt="DMAJDe.png"></a></p>
+<p>可以看到我们的phpinfo函数已经执行，那么按照我们之前的说法，也是可以进行${${phpinfo()}}这样的写法的；一样可以成功解析；那么为什么这种写法可以成功解析呢？其原因还是在于在php中，php是可以接收函数的返回值作为变量名的。我们phpinfo被成功的解析，然后将返回值做为了变量名；</p>
+<p>这里通过例子解释的更明白些，看一个例子；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">$root = <span class="string">&#x27;s1mple&#x27;</span>;</span><br><span class="line"></span><br><span class="line">$&#123;system(<span class="string">&#x27;whoami&#x27;</span>)&#125; = <span class="string">&#x27;s1mple_is_here&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $root;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行之后观察其回显效果；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/DMAXP1"><img src="https://s3.ax1x.com/2020/11/19/DMAXP1.png" alt="DMAXP1.png"></a></p>
+<p>这里我们不难看到，php引擎先是处理了函数，进行执行之后返回了root；然后将root作为变量名重新赋值，所以最后才是覆盖了之前的$root的变量；</p>
+<h2 id="回到题目"><a href="#回到题目" class="headerlink" title="回到题目"></a><strong>回到题目</strong></h2><p>解释了php复杂变量的利用原理，那么回到题目，如果我们加上了addslashes函数处理；我们无法进行引号闭合，那就只能进行复杂变量的利用了；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/DMAUUA"><img src="https://s3.ax1x.com/2020/11/19/DMAUUA.png" alt="DMAUUA.png"></a></p>
+<p>其原理之前也是讲述过，先来执行命令，然后将回显的效果当作变量名；所以我们这个命令的回显结果就是我们的变量名；但是在这之前我们的命令已经执行完毕并进行回显；</p>
+<p>如果我们再加入最后一个限制的条件的话；就是加入我们的正则表达式；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$str = $_GET[<span class="string">&#x27;str&#x27;</span>];</span><br><span class="line">$str = addslashes($str);</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&#x27;/[A-Za-z0-9]+\(/i&#x27;</span>,$str) == <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hack&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&#x27;$a=&quot;&#x27;</span> . $str . <span class="string">&#x27;&quot;;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>加入我们的正则之后，如果我们再使用之前的payload的话，会发现已经被ban了；返回的是hack；因为我们正则的过滤，是不允许括号前出现数字和字符的，我们 ium按照payload2的方法来，显然是触犯了这个规则；</p>
+<p>那么解决最后的问题方法，就是需要利用php的一个特性了；比如我们传入<code>$&#123;(phpinfo)()&#125;</code>如此我们就避免来再括号前面出现字母和数字的情形；</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/DMA3jO"><img src="https://s3.ax1x.com/2020/11/19/DMA3jO.png" alt="DMA3jO.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/DMAYHH"><img src="https://s3.ax1x.com/2020/11/19/DMAYHH.png" alt="DMAYHH.png"></a></p>
+<p>简单来说就是我们system(‘ls’);和“system”(‘ls’);和(system)(ls);是等价的；还和”\x\x\x”(‘id’);其中(system)()这样的特性只有在php7的情况下才可以使用；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2020/11/23/%E7%A5%A5%E4%BA%91web/" style="float: left;">
+        ← 祥云web
+    </a>
+    
+    
+    <a class="pull-right" href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">
+        Further discussion on SSTI template injection →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

