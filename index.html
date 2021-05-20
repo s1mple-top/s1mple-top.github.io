@@ -209,6 +209,38 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2021/05/20/FastJson源码解读-历代反序列化剖析/">FastJson源码解读+历代反序列化剖析</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-05-20T14:07:49.000Z" itemprop="datePublished">
+          2021-05-20
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        fastjson是阿里巴巴开发的一款处理json和对象的json库，其已经被广泛的应用；
+先通过一个简单的demo来体悟下fastjson机制；之前分析过hashmap类，其内部是采用节点的方式内含key和value来进行存储的，就方便拿hashmap来体验下；
+123456789public class fastjson &#123;    public static void main(String[] args) throws E
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/05/20/FastJson源码解读-历代反序列化剖析/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2021/03/27/java-HashMap深入理解/">java HashMap深入理解</a></h3>
                     <span>
                         <span class="post-meta">
@@ -489,43 +521,6 @@ text先来看一个例子；
                     
                     <p class="pull-right readMore">
                         <a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Yii2 deserialization rce pop chain analysis</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T12:19:55.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        影响范围
-Yii2 &lt; 2.0.38
-
-该框架反序列化起点在： /vendor/yiisoft/yii2/db/BatchQueryResult.php 中；
-12345public function __destruct()&#123;    // make sure cursor is closed    $this-&gt;reset();&#125;
-
-直接析构函数出可以调用reset函数；追踪reset函数；
-12345
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Read More...</a>
                     </p>
                     
                 </div>
