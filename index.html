@@ -209,6 +209,38 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2021/08/16/inctf一道sql注入题有感/">inctf一道sql注入题有感</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-08-15T16:26:56.000Z" itemprop="datePublished">
+          2021-08-16
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        ​    七夕佳节，很多朋友都和自己的朋友出去happy；我和队伍一起打了一场愉快的ctf；其中记述一道自己做的题，奈何最后郭院士的脚本出的太快没抢到；
+这题前端随便登陆，登陆上去是上传和下载文件的功能，在/var/www/html下有个index.php和conf.php文件；可以直接任意文件下载，这不过多赘述；拿到文件之后审计代码，代码不是很难，贴出来；
+123456789101112131415161718192021222324
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/08/16/inctf一道sql注入题有感/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2021/05/20/java-urldns-unserialize/">java urldns unserialize</a></h3>
                     <span>
                         <span class="post-meta">
@@ -487,40 +519,6 @@ text先来看一个例子；
                     
                     <p class="pull-right readMore">
                         <a href="/2020/11/19/Complex-syntax-of-PHP-variable-parsing/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Further discussion on SSTI template injection</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-19T05:25:46.000Z" itemprop="datePublished">
-          2020-11-19
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        模板注入一个亘古不变的话题，现在来深入的了解一下；
-基础点都不再赘述；网上资料很多；这里主要分享一下在再次复现SSTI的时候发现的一些有趣的点；
-首先来说有一个可以直接利用的链条；
-&#39;&#39;.__class__.__mro__[-1].__subclasses__()[40](&#39;/etc/passwd&#39;).read()
-这里我们可以直接调用file类进行文件读取；这里再分享几种找到file的方法；通过简单的实
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Read More...</a>
                     </p>
                     
                 </div>
