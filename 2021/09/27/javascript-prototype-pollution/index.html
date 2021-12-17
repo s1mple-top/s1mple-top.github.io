@@ -186,7 +186,7 @@
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<h1 id="javascript-prototype-pollution"><a href="#javascript-prototype-pollution" class="headerlink" title="javascript prototype pollution"></a>javascript prototype pollution</h1><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    Prototype pollution是一个老生常谈的问题了；JavaScript是一门非常灵活的语言，在某些方面可能比PHP更加灵活。所以，除了传统的SQL注入、代码执行等注入型漏洞外，也会有一些独有的安全问题，比如prototype polllution。</p>
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    Prototype pollution是一个老生常谈的问题了；JavaScript是一门非常灵活的语言，在某些方面可能比PHP更加灵活。所以，除了一些sql注入和代码执行等注入型漏洞外，也会有一些独有的安全问题，比如prototype polllution。</p>
 <h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    说javascript灵活是因为一般的OOP语言会使用class关键字进行模版的定义，从这个class去实例化的对象都会自然的继承了模版中相应的属性；但是javascrip可以支持直接定义一个对象；大可不必要提前定义模版；</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/owNrFI"><img src="https://s4.ax1x.com/2021/12/04/owNrFI.png" alt="owNrFI.png"></a></p>
 <p>​    可以鲜明的看到直接定义了一个对象，当去尝试new的时候会抛出错误“不是构造器”；当然也可通过构造函数去定义一个模版，后期可以批量的实例化对象；</p>
