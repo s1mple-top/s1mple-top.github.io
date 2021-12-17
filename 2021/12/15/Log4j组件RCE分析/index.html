@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Log4j组件RCE分析 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2021-12-15T08:05:14.000Z" itemprop="datePublished">
+          2021-12-15
+      </time>
+    
+</span>
+                <h1>Log4j组件RCE分析</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<p>最近爆出了一个新的rce；有趣的是不是爆出如何，而是爆出之后的反复bypass；这篇文章就先来追踪一下漏洞原理；</p>
+<p>问题出现在error处；会触发log4j2的错误处理流程打印异常日志；</p>
+<p>来个demo；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>  org.apache.logging.log4j.LogManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.logging.log4j.Logger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">exploits</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LogManager.getLogger(exploits.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        logger.error(<span class="string">&quot;$&#123;jndi:ldap://localhost:1099/exp&#125;&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>追踪个流程；</p>
+<p>在log4j2中日志是存在相应级别；按照从低到高来分：</p>
+<p>ALL &lt; TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF。</p>
+<ul>
+<li>ALL 最低等级的 用于打开所有日志记录</li>
+<li>TRACE 较低的日志级别 一般不会使用</li>
+<li>DEBUG 主要用于开发过程中打印 一些运行信息</li>
+<li>INFO 突出强调应用程序的运行过程。打印一些你感兴趣的或者重要的信息 可用于生产环境中输出程序运行的一些重要信息,但是不能滥用 避免打印过多的日志</li>
+<li>WARN 表明会出现潜在错误的情形 有些信息不是错误信息 但是也要给程序员的一些提示</li>
+<li>ERROR 指出虽然发生错误事件 但仍然不影响系统的继续运行。打印错误和异常信息 如果不想输出太多日志 太多数情况下可以使用这个级别</li>
+<li>FATAL 指出严重的错误事件,将会导致应用程序的退出。</li>
+<li>OFF 最高等级的，用于关闭所有日志记录</li>
+</ul>
+<p>相应的定义在StandardLevel枚举class中有以下自定义级别，intLevel 值越小，级别越高：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OFF(<span class="number">0</span>),</span><br><span class="line">FATAL(<span class="number">100</span>),</span><br><span class="line">ERROR(<span class="number">200</span>),</span><br><span class="line">WARN(<span class="number">300</span>),</span><br><span class="line">INFO(<span class="number">400</span>),</span><br><span class="line">DEBUG(<span class="number">500</span>),</span><br><span class="line">TRACE(<span class="number">600</span>),</span><br><span class="line">ALL(<span class="number">2147483647</span>);</span><br></pre></td></tr></table></figure>
+
+<p>debug代码进入error方法处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/oHGn8s"><img src="https://s4.ax1x.com/2021/12/11/oHGn8s.png" alt="oHGn8s.png"></a></p>
+<p>Level.ERROR返回的是个Level obj；简单看一下相应的静态域处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/oHJFzR"><img src="https://s4.ax1x.com/2021/12/11/oHJFzR.png" alt="oHJFzR.png"></a></p>
+<p>不难理解是生成了相应的obj；然后给相应的域作值；利用最开始的日志处理选择obj，最后一起封装传入logIfEnabled方法去进行处理；这里也是一些敏感处理方法的一些处理措施；判断日志处理权限是否合适和一些日志是否输出；其内部实现机制是结合相应配置的filter进行判断；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/oqLIJI"><img src="https://s4.ax1x.com/2021/12/12/oqLIJI.png" alt="oqLIJI.png"></a></p>
+<p>进入相应的filter看一波；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/oqLxFs"><img src="https://s4.ax1x.com/2021/12/12/oqLxFs.png" alt="oqLxFs.png"></a></p>
+<p>不过这里是本地debug，没有在config中定义相应的filter；所以直接return；这里第二个条件有意思；看一下intLevel生成方式；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.intLevel = <span class="keyword">this</span>.loggerConfigLevel.intLevel();</span><br></pre></td></tr></table></figure>
+
+<p>不难发现是在相应的configlevel中进行获得；</p>
+<h2 id="Logger"><a href="#Logger" class="headerlink" title="Logger"></a>Logger</h2><p>说到这里有必要去理解一下logger的生成方式；其实内部的实现机制是根据getLogger方法传入的内容去LoggerRegistery中去find；如果没有找到就会去newInstance一个新的logger；然后将new的logger用putIfAbsent方法实现放到loggerRegistry中；newInstance内部实现机制是去实现了new Logger的操作；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Logger <span class="title">newInstance</span><span class="params">(<span class="keyword">final</span> LoggerContext ctx, <span class="keyword">final</span> String name, <span class="keyword">final</span> MessageFactory messageFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Logger(ctx, name, messageFactory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以回归到intLevel的生成方式内；这里内部还有一个细节；本地测试能不能attack success；其实除了jdk的版本限制以外还有一个点；就是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> level != <span class="keyword">null</span> &amp;&amp; <span class="keyword">this</span>.intLevel &gt;= level.intLevel();</span><br></pre></td></tr></table></figure>
+
+<p>此逻辑位于logIfEnabled接口的isEnabled处理接口内；有趣的是上面也正是在介绍这个intLevel；</p>
+<p>看一个关键的构造器；位于Logger.PrivateConfig class；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PrivateConfig</span><span class="params">(<span class="keyword">final</span> Configuration config, <span class="keyword">final</span> Logger logger)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.config = config;</span><br><span class="line">    <span class="keyword">this</span>.loggerConfig = config.getLoggerConfig(Logger.<span class="keyword">this</span>.getName());</span><br><span class="line">    <span class="keyword">this</span>.loggerConfigLevel = <span class="keyword">this</span>.loggerConfig.getLevel();<span class="comment">//有趣</span></span><br><span class="line">    <span class="keyword">this</span>.intLevel = <span class="keyword">this</span>.loggerConfigLevel.intLevel();</span><br><span class="line">    <span class="keyword">this</span>.logger = logger;</span><br><span class="line">    <span class="keyword">this</span>.requiresLocation = <span class="keyword">this</span>.loggerConfig.requiresLocation();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>里面详细的讲述了intLevel的来源；这个构造器的两个参数可自己追溯一下不是很难，一个是default的configuration，其实现是在当未给相应class定义logger的时候实现采用默认的loggerconfig的策略；另一个logger也是因为在利用getLogger方法去LoggerRegistery中没find到相应的logger从而最后本质是调用newInstance方法去new Logger而create的一个logger obj；其level取决于我们使用的处理接口；所以这里是可控的；简单来说，如果最开始使用的是logger.info()；那么这里的logger就为默认处理INFO级别；但是相应的intLevel是不可控的；因为default config中就写死了error；至于为什么会如此调；上面已经说过；每个配置都有一个根记录器Root；在没有为相应的class去设置logger时，就会去默认使用rootlogger；所以其组件实现机制是直接去拿到root logger；并且默认用loggerconfig；其根logger的属性是ERROR级别；所以这里在没有给class配资相应的logger的情况下是默认处理error级别以上的日志；</p>
+<p>下面是具体实现：</p>
+<p>在我上面标出的有趣那一行，细致的debug之后会发现以下构造器；LoggerConfig.class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LoggerConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.logEventFactory = LOG_EVENT_FACTORY;</span><br><span class="line">    <span class="keyword">this</span>.level = Level.ERROR;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">this</span>.properties = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.propertiesRequireLookup = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">this</span>.config = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.reliabilityStrategy = <span class="keyword">new</span> DefaultReliabilityStrategy(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Level <span class="title">getLevel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.level == <span class="keyword">null</span> ? (<span class="keyword">this</span>.parent == <span class="keyword">null</span> ? Level.ERROR : <span class="keyword">this</span>.parent.getLevel()) : <span class="keyword">this</span>.level;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中已经默认写好了相应的default level为ERROR级别；下面利用getLevel方法触发之后会return ERROR；所以回到原本话题，intLevel是固定的200；也即是Level.ERROR.getintLevel()为200；所以默认处理的日志等级应该在error之上；</p>
+<p>上面是对isEnabled接口中的处理流程和logger生成的一些思考；继续流程：</p>
+<p>转回原本的流程追踪；在确实可以启用之后就会进行logMessage了；去将信息写入日志；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">logIfEnabled</span><span class="params">(<span class="keyword">final</span> String fqcn, <span class="keyword">final</span> Level level, <span class="keyword">final</span> Marker marker, <span class="keyword">final</span> String message, <span class="keyword">final</span> Throwable throwable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.isEnabled(level, marker, message, throwable)) &#123;</span><br><span class="line">        <span class="keyword">this</span>.logMessage(fqcn, level, marker, message, throwable);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体实现是在logMessageSafely接口中；实现原理是实现递归的操作；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">logMessageSafely</span><span class="params">(<span class="keyword">final</span> String fqcn, <span class="keyword">final</span> Level level, <span class="keyword">final</span> Marker marker, <span class="keyword">final</span> Message message, <span class="keyword">final</span> Throwable throwable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.logMessageTrackRecursion(fqcn, level, marker, message, throwable);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            ReusableMessageFactory.release(message);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">logMessageTrackRecursion</span><span class="params">(<span class="keyword">final</span> String fqcn, <span class="keyword">final</span> Level level, <span class="keyword">final</span> Marker marker, <span class="keyword">final</span> Message message, <span class="keyword">final</span> Throwable throwable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        incrementRecursionDepth();</span><br><span class="line">        <span class="keyword">this</span>.tryLogMessage(fqcn, <span class="keyword">this</span>.getLocation(fqcn), level, marker, message, throwable);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        decrementRecursionDepth();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>跟进tryLogMessage；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ovsHW4"><img src="https://s4.ax1x.com/2021/12/14/ovsHW4.png" alt="ovsHW4.png"></a></p>
+<p>内部机制是去logger相应的config下拿到相应的打日志策略；因为最开始没有给相应类创建logger；导致newInstance创建了一个logger其相应的config也是默认的loggerconfig：“root”；所以这里的策略默认的DefaultReliabilityStrategy；跟着策略看一下其内部实现机制；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ovyRhD"><img src="https://s4.ax1x.com/2021/12/14/ovyRhD.png" alt="ovyRhD.png"></a></p>
+<p>发现是调用了config下的log去打印；由config来实现；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ov2ZvQ"><img src="https://s4.ax1x.com/2021/12/14/ov2ZvQ.png" alt="ov2ZvQ.png"></a></p>
+<p>去到config下实现的目的可以清晰的看到，先来进行判断是否允许远程lookup；当允许的时候就会直接进入else if下进行处理；利用for循环去lookup properties域内的值；如果相应的obj下设定需要lookup就会直接replace；在内部进行lookup实现；将结果放到props中；这里rootlogger默认为false；properties也默认为null；所以直接进入下一步</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ovRTFx"><img src="https://s4.ax1x.com/2021/12/14/ovRTFx.png" alt="ovRTFx.png"></a></p>
+<p>构造log事件；按照判断的要求去factory中create出相应的event；接着就实现过一遍filter看一下是否filter中设定了相应不允许输出的东西在此过程中；accept or deny；当没有问题的时候，调用LoggerConfig.processLogEvent函数去处理event；调用Appender；Appender负责将日志事件传递到其目标。每个Appender都必须实现Appender接口。开始进行日志信息到最后文件的传输；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSwwMn"><img src="https://s4.ax1x.com/2021/12/15/TSwwMn.png" alt="TSwwMn.png"></a></p>
+<h2 id="Appender"><a href="#Appender" class="headerlink" title="Appender"></a>Appender</h2><p>常用的Appender有ConsoleAppender（输出到控制台）、FileAppender（输出到本地文件）等，通过AppenderControl获取具体的Appender，本次调试的是ConsoleAppender。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSUsaD"><img src="https://s4.ax1x.com/2021/12/15/TSUsaD.png" alt="TSUsaD.png"></a></p>
+<p>因为是ConsoleAppender，所以这里去到AppenderControl class下的callAppender方法；有一个过滤；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ovoChn"><img src="https://s4.ax1x.com/2021/12/14/ovoChn.png" alt="ovoChn.png"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isFilteredByAppenderControl</span><span class="params">(<span class="keyword">final</span> LogEvent event)</span> </span>&#123;</span><br><span class="line">    Filter filter = <span class="keyword">this</span>.getFilter();</span><br><span class="line">    <span class="keyword">return</span> filter != <span class="keyword">null</span> &amp;&amp; Result.DENY == filter.filter(event);</span><br><span class="line">&#125;<span class="comment">//如果有filter会进行filter再次对event进行filter；审查是否有禁止输出的点从而deny掉；</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isFilteredByLevel</span><span class="params">(<span class="keyword">final</span> LogEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.level != <span class="keyword">null</span> &amp;&amp; <span class="keyword">this</span>.intLevel &lt; event.getLevel().intLevel();</span><br><span class="line">    &#125;<span class="comment">//level的判断，默认处理要处理比规定level高的日志信息；</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isRecursiveCall</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.recursive.get() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.appenderErrorHandlerMessage(<span class="string">&quot;Recursive call to appender &quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>真正的实现是在callAppender0</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ovo7bF"><img src="https://s4.ax1x.com/2021/12/14/ovo7bF.png" alt="ovo7bF.png"></a></p>
+<p>追踪流程到tryAppend中；判断是否直接启用格式化输出；这里启用。</p>
+<h2 id="Layout"><a href="#Layout" class="headerlink" title="Layout"></a>Layout</h2><p>看下相关代码流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSDu24"><img src="https://s4.ax1x.com/2021/12/15/TSDu24.png" alt="TSDu24.png"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">directEncodeEvent</span><span class="params">(<span class="keyword">final</span> LogEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.getLayout().encode(event, <span class="keyword">this</span>.manager);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.immediateFlush || event.isEndOfBatch()) &#123;</span><br><span class="line">        <span class="keyword">this</span>.manager.flush();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先获取Layout日志格式，通过Layout.encode()进行日志信息的格式化；格式化调用在toSerializable函数中调用formatters来进行format实现；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSrEyd"><img src="https://s4.ax1x.com/2021/12/15/TSrEyd.png" alt="TSrEyd.png"></a></p>
+<p>整个格式化过程格式化完之后将其放入buffer中；buffer生成因为默认的递归深度为1；result为null；所以最后返回new一个1024大小的buffer；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">static</span> StringBuilder <span class="title">getStringBuilder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (AbstractLogger.getRecursionDepth() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> StringBuilder(<span class="number">1024</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            StringBuilder result = (StringBuilder)threadLocal.get();</span><br><span class="line">            <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">                result = <span class="keyword">new</span> StringBuilder(<span class="number">1024</span>);</span><br><span class="line">                threadLocal.set(result);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            trimToMaxSize(result);</span><br><span class="line">            result.setLength(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>传入的message经过各种Converter进行处理，最后到处理${}的时候去触发MessagePatternConverter.format处理，此处也是漏洞触发的关键点；</p>
+<p>在放入buffer的处理流程中程序如果碰到了${}就会触发相应的解析，看一下解析点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TS56nf"><img src="https://s4.ax1x.com/2021/12/15/TS56nf.png" alt="TS56nf.png"></a></p>
+<p>先创建一个workingBuilder；在利用formatTo将内容append到buffer之后会向后进程；将message放到buffer里，向下进行利用formatTo将<code>$&#123;&#125;</code>append到buffer里；当noLookups为false的时候，会去触发workingBuilder.append()去调用Substitutor的replace进行替换原来的信息；</p>
+<p>进入细致流程看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSofln"><img src="https://s4.ax1x.com/2021/12/15/TSofln.png" alt="TSofln.png"></a></p>
+<p>因为前缀是jndi；所以调用jndiLookup；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TST31s"><img src="https://s4.ax1x.com/2021/12/15/TST31s.png" alt="TST31s.png"></a></p>
+<p>这里进入最后的漏洞触发点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TSTA1A"><img src="https://s4.ax1x.com/2021/12/15/TSTA1A.png" alt="TSTA1A.png"></a></p>
+<p>触发jndi注入；因为没有开server所以error了；2333</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>漏洞的整体流程已经追踪完，但是还有一些细枝末节需要去注意；比如框架的整体运作流程和初始化的流程；以及各个组件之间的关联；我个人感觉需要去简单的过一遍；首先来看logger的生成；这个也是整个框架的启动入口点；</p>
+<p>logger的生成其实已经在上述的追溯过程中简单的追溯思考过；这里更加细致的看一下流程；</p>
+<h3 id="LogManager组件启动流程解析："><a href="#LogManager组件启动流程解析：" class="headerlink" title="LogManager组件启动流程解析："></a>LogManager组件启动流程解析：</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpfUIJ"><img src="https://s4.ax1x.com/2021/12/15/TpfUIJ.png" alt="TpfUIJ.png"></a></p>
+<p>可以很清晰的看到，在处理相关信息之前，需要先调用LogManager去调用其静态函数去进行logger的初始化；</p>
+<p>LogManager启动的入口是下面的static代码块：</p>
+<h2 id="根据配置文件载入LoggerContextFactory"><a href="#根据配置文件载入LoggerContextFactory" class="headerlink" title="根据配置文件载入LoggerContextFactory"></a>根据配置文件载入LoggerContextFactory</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">      PropertiesUtil managerProps = PropertiesUtil.getProperties();</span><br><span class="line">   <span class="comment">//用PropertiesUtil工具类去获取相关的配置信息；</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      String factoryClassName = managerProps.getStringProperty(<span class="string">&quot;log4j2.loggerContextFactory&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (factoryClassName != <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">              factory = (LoggerContextFactory)LoaderUtil.newCheckedInstanceOf(factoryClassName, LoggerContextFactory.class);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (ClassNotFoundException var8) &#123;</span><br><span class="line">              LOGGER.error(<span class="string">&quot;Unable to locate configured LoggerContextFactory &#123;&#125;&quot;</span>, factoryClassName);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (Exception var9) &#123;</span><br><span class="line">              LOGGER.error(<span class="string">&quot;Unable to create configured LoggerContextFactory &#123;&#125;&quot;</span>, factoryClassName, var9);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>追溯一下相关的流程；environment属性下调用get方法去获取相关的factory_name；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpICef"><img src="https://s4.ax1x.com/2021/12/15/TpICef.png" alt="TpICef.png"></a></p>
+<p>追踪过去看一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpIeln"><img src="https://s4.ax1x.com/2021/12/15/TpIeln.png" alt="TpIeln.png"></a></p>
+<p>可以看到environment class下调用PropertyFilePropertySource class去把相关的配置文件加载成一个java的obj；</p>
+<p>看如下的class就已经很清晰了；加载配置文件到java对象的详细流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpIwTO"><img src="https://s4.ax1x.com/2021/12/15/TpIwTO.png" alt="TpIwTO.png"></a></p>
+<p>回到原本的class中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpTMiF"><img src="https://s4.ax1x.com/2021/12/15/TpTMiF.png" alt="TpTMiF.png"></a></p>
+<p>之后从系统中去获取相关配置文件中规定的相关属性，如果为null；就用配置文件里的来进行set；更加细致的不再追溯；知道这段逻辑中，LogManager优先通过配置文件”log4j2.component.properties”通过配置项”log4j2.loggerContextFactory”来获取LoggerContextFactory，如果用户做了对应的配置，通过newCheckedInstanceOf方法实例化LoggerContextFactory的对象，最终的实现方式为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">newInstanceOf</span><span class="params">(<span class="keyword">final</span> Class&lt;T&gt; clazz)</span> <span class="keyword">throws</span> InstantiationException, IllegalAccessException, InvocationTargetException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> clazz.getConstructor().newInstance();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchMethodException var2) &#123;</span><br><span class="line">        <span class="keyword">return</span> clazz.newInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>但是在默认情况下不存在初始的默认配置文件log4j2.component.properties，因此需要从其他途径获取LoggerContextFactory。</p>
+<p>默认下已经调用envrionment下的get方法拿到的factoryClassName为null；接着看下其他处理策略；</p>
+<h2 id="通过provider实例化LoggerContextFactory对象"><a href="#通过provider实例化LoggerContextFactory对象" class="headerlink" title="通过provider实例化LoggerContextFactory对象"></a>通过provider实例化LoggerContextFactory对象</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpXy9K"><img src="https://s4.ax1x.com/2021/12/16/TpXy9K.png" alt="TpXy9K.png"></a></p>
+<p>当然这里代码写的很严谨，会先去判断ProviderUtil是否为null；如果是就直接进入第三种策略；相关判别代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ProviderUtil.class</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasProviders</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lazyInit();</span><br><span class="line">    <span class="keyword">return</span> !PROVIDERS.isEmpty();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因为这里介绍第二种策略，所以默认为不为null；进入第二种策略；先看部分代码；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpXLuQ"><img src="https://s4.ax1x.com/2021/12/16/TpXLuQ.png" alt="TpXLuQ.png"></a></p>
+<p>调用ProviderUtil.getProviders载入providers；然后调用providers的loadLoggerContextFactory方法去载入LoggerContextFactory实现类；如果依然无法get到loggerContextfactory；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpbNd0"><img src="https://s4.ax1x.com/2021/12/15/TpbNd0.png" alt="TpbNd0.png"></a></p>
+<p>则使用SimpleLoggerContextFactory作为LoggerContextFactory。</p>
+<p>但是实际上已经配置了相关的provider；项目是直接从maven上down下来的；所以配置文件可能不同；我的版本也有点低；但是追踪下发现确实是实现了相关的配置；所以直接使用Log4jPrivider去进行loadLoggerContextFactory获得loggerContextfactory；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TpjxqH"><img src="https://s4.ax1x.com/2021/12/16/TpjxqH.png" alt="TpjxqH.png"></a></p>
+<p>最后<code>LogManagerStatus.setInitialized(true);</code>设置初始化完成；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2021/11/01/Javascript-iframe-postMessage-xss/">
+        Javascript iframe postMessage xss →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

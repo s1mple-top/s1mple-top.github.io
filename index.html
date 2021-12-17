@@ -209,6 +209,39 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2021/12/15/Log4j组件RCE分析/">Log4j组件RCE分析</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-12-15T08:05:14.000Z" itemprop="datePublished">
+          2021-12-15
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        最近爆出了一个新的rce；有趣的是不是爆出如何，而是爆出之后的反复bypass；这篇文章就先来追踪一下漏洞原理；
+问题出现在error处；会触发log4j2的错误处理流程打印异常日志；
+来个demo；
+123456789101112import  org.apache.logging.log4j.LogManager;import org.apache.logging.log4j.Logger;public class exploits
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/12/15/Log4j组件RCE分析/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2021/11/01/Javascript-iframe-postMessage-xss/">Javascript iframe postMessage xss</a></h3>
                     <span>
                         <span class="post-meta">
@@ -488,39 +521,6 @@ HashMap 继
                     
                     <p class="pull-right readMore">
                         <a href="/2021/03/27/java-HashMap理解/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2021/03/09/Laravel8-new-pop-chain-mining-process/">Laravel8 new pop chain mining process</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2021-03-09T14:45:16.000Z" itemprop="datePublished">
-          2021-03-09
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        Installation method:1composer create-project laravel&#x2F;laravel&#x3D;8.5.9 laravel8
-
-Manually add deserialization point:/routes/web.php：
-123&lt;?phpRoute::get(&quot;/&quot;,&quot;\App\Http\Controllers\DemoController@de
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2021/03/09/Laravel8-new-pop-chain-mining-process/">Read More...</a>
                     </p>
                     
                 </div>
