@@ -188,7 +188,7 @@
         <div class="col-md-8 col-md-offset-2">
       		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    之前大二暑假开发了一款基于终端的webshell-controller；相应的代码开源选择了在中秋节前夕；在后期的比赛当中也展现出相应的风采，比如上海的极客谷杯中相应的数据库操作和反弹shell之类的操作完美施展，没有什么错误；在shell-hack中我个人加入相对比较重要的一些点是支持bypass disable_functions;</p>
 <p>下面主要介绍两个bypass的原理实现；</p>
-<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    shell-hack有多种bypass disable_functions的方法；相关的实现原理和我开发的思路在此简要的记录；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    shell-hack有多种bypass disable_functions的方法；我选取一部分的相关的实现原理和我开发的思路在此简要的记录；</p>
 <h3 id="LD-PRELOAD"><a href="#LD-PRELOAD" class="headerlink" title="LD_PRELOAD"></a>LD_PRELOAD</h3><p>先来看相应的bypass流程实现；</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TPLotI"><img src="https://s4.ax1x.com/2021/12/16/TPLotI.png" alt="TPLotI.png"></a></p>
 <p>​    为了方便使用，我这直接将其bypass功能融合在一个选择器中；主要的原理其实也就是利用mail或者imap_mail或者error_log去进行相关底层getuid的劫持或者利用gcc拓展修饰符去劫持掉整个进程；因为mail和error_log又或者imap_mail其实现的效果是会去调用linux的sendmail命令，sendmail底层实现是有一步是调用C中的getuid函数进行实现；所以就可劫持；但是为了拓展攻击面，往往采用后者去利用gcc拓展修饰符劫持掉整个进程；</p>
