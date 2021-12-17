@@ -247,7 +247,7 @@
 <p>可以得到两个有趣的可利用属性 为username和password,但是这两个并非HTML属性，利用如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;a id=x href=<span class="string">&quot;http://Clobbered-username:Clobbered-Password@a&quot;</span>&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">alert(x.username)<span class="comment">//Clobbered-username</span></span><br><span class="line">alert(x.password)<span class="comment">//Clobbered-password</span></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>除此之外，还有其他的一些标签结合属性名称，比如a:title</p>
+<p>除此之外，还有其他的一些标签结合属性名称，比如a:title，也都挺有趣的；</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;a id=x title=<span class="string">&quot;x:alert(1)&quot;</span>&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">	<span class="built_in">console</span>.log(x.y);<span class="comment">//&#x27;x:alert(1)&#x27;</span></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
