@@ -500,11 +500,11 @@ Manually add deserialization point:/routes/web.php：
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
-                    <h3><a href="/2020/12/09/Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop/">Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop</a></h3>
+                    <h3><a href="/2021/01/01/Javascript-iframe-postMessage-xss/">Javascript iframe postMessage xss</a></h3>
                     <span>
                         <span class="post-meta">
-      <time datetime="2020-12-09T13:15:15.000Z" itemprop="datePublished">
-          2020-12-09
+      <time datetime="2021-01-01T08:01:27.000Z" itemprop="datePublished">
+          2021-01-01
       </time>
     
 </span>
@@ -513,14 +513,14 @@ Manually add deserialization point:/routes/web.php：
                 <div class="col-md-8">
                     <p>
                       
-                        通常来说，我们挖掘pop链，首先需要寻找的是析构函数，因为在类对象被销毁的时候回自动的触发，其实根本还是因为这些魔法函数可以自动触发，那么对于我们的pop链的搭建就有很好的契机；
-首先找到的一个析构函数在 /vendor/topthink/framework/src/think/Model.php中；在最后有一个析构函数；
-1234567public function __destruct()&#123;    if ($this-&g
+                        前言：​    我最开始发现这个有趣的点的时候，是我看到了Vinoth Kumar发掘了一个Facebook的xss；细致的看了一遍他的挖掘思路，其实是利用iframe window的postMessage进行xss；当没有验证来源的时候就可以接受任意来源的数据，攻击者相应的伪造postMessage函数就可达到篡改内容的效果；
+​    在读此文章前可以考虑先阅读如下几篇文章：
+https://javascript.info/cros
                       
                     </p>
                     
                     <p class="pull-right readMore">
-                        <a href="/2020/12/09/Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop/">Read More...</a>
+                        <a href="/2021/01/01/Javascript-iframe-postMessage-xss/">Read More...</a>
                     </p>
                     
                 </div>

