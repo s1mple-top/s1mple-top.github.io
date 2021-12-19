@@ -370,6 +370,19 @@
 <p>到此分析过apache的commonscollections的师傅想来已经明白了。 最后通过getTransletInstance方法下的newInstance进行恶意类加载，这里恶意类追溯下不难发现是在defineTransletClasses方法中由bytecodes倒入的，这也是为什么构造bytecodes去进行给bytecodes赋值的原因；最后效果便是导致攻击者构造的恶意类下static模块的恶意代码执行达到rce；</p>
 <p>最后值得一提的是json数据中同样存在_tfactory属性，但是追溯TemplatesImpl中即没有其getter也没有其setter；但是无伤大雅，我们设置<code>_tfactory</code>为<code>&#123; &#125;</code>,fastjson会调用其无参构造函数得<code>_tfactory</code>对象;这样就避免在defineTransletClasses方法中出现异常退出，如下图所示，让程序不异常退出是从bytecodes中拿到相应恶意类的关键；</p>
 <p><img src="https://i.loli.net/2021/11/08/vyLbPBwYcpiWr7G.png" alt="截屏2021-11-08 下午4.30.28.png"></p>
+<h2 id="jndi攻击链条感悟："><a href="#jndi攻击链条感悟：" class="headerlink" title="jndi攻击链条感悟："></a>jndi攻击链条感悟：</h2><p>​    其实jndi的攻击原理和Templatesmpl的原理很相似；利用的都是fastjson会在自定义javabeanderserializer的时候会为每个Fileinfo定义deserializer；这里每个Fileinfo就是相应域被封装之后的对象；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TA82d0"><img src="https://s4.ax1x.com/2021/12/17/TA82d0.png" alt="TA82d0.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TA8aIf"><img src="https://s4.ax1x.com/2021/12/17/TA8aIf.png" alt="TA8aIf.png"></a></p>
+<p>默认情况下都是DefaultFieldDeserializer；当然其判断条件是是否有注解，可以看如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TAG9OA"><img src="https://s4.ax1x.com/2021/12/17/TAG9OA.png" alt="TAG9OA.png"></a></p>
+<p>判断其是否有field注解或者方法的注解；如果有则采取另外的措施；所以一般情况都为DefualtFieldDeserializer；</p>
+<p>最后利用put方法将拿到的FieldInfoDeserializer和需要反序列化的class关联（将其放到parserConfig配置文件中；）：这里利用asm生成相应的反序列化器；直接利用javabean进行反序列化避免了反射的开销；也避免了非public域的赋值问题；(Templatesmpl中就需要考虑这个问题，之前已经分析过)</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TAJPc4"><img src="https://s4.ax1x.com/2021/12/18/TAJPc4.png" alt="TAJPc4.png"></a></p>
+<p>然后和之前分析的一样，绑定之后返回相应的反序列化器集合对象；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TAJUC8"><img src="https://s4.ax1x.com/2021/12/18/TAJUC8.png" alt="TAJUC8.png"></a></p>
+<p>可以看到在之后从config中get到相应的deserializer；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TAJW2F"><img src="https://s4.ax1x.com/2021/12/18/TAJW2F.png" alt="TAJW2F.png"></a></p>
+<p>两种链的一个小区别就是jndi链在生成javabeandeserializer的时候进行内省的时候拿到的getter和setter以及file域；是不存在getonly类型的，所以会直接使用asm字节技术直接生成javabeandeserializer反序列化而没必要考虑那些非共有的域赋值的问题；而templatesmpl因为其中_outputProperties域为getonly类型，所以fastjson还是调用了反射的原理去调用getOutputProperties；方法这也是Templateslmpl攻击链成功的原因；而且因为Templateslmpl是利用反射，所以还要考虑到相应的private域的赋值问题，所以需要设置supportNonpublicField，这样fastjson才会给每个域都配值相应的反序列化器；默认也就是DefualtFieldDeserializer实现原理就是去到相应的parserConfig下去直接对接FieldValueDeserializer；根据json传入数据的类型进行处理然后反射赋值；</p>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
