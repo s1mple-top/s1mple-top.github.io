@@ -209,6 +209,40 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Further discussion on SSTI template injection</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2020-11-19T05:25:46.000Z" itemprop="datePublished">
+          2020-11-19
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        模板注入一个亘古不变的话题，现在来深入的了解一下；
+基础点都不再赘述；网上资料很多；这里主要分享一下在再次复现SSTI的时候发现的一些有趣的点；
+首先来说有一个可以直接利用的链条；
+&#39;&#39;.__class__.__mro__[-1].__subclasses__()[40](&#39;/etc/passwd&#39;).read()
+这里我们可以直接调用file类进行文件读取；这里再分享几种找到file的方法；通过简单的实
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Yii2 deserialization rce pop chain analysis</a></h3>
                     <span>
                         <span class="post-meta">

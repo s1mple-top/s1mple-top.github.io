@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>commons-fileupload bypass | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-03-13T05:47:04.000Z" itemprop="datePublished">
+          2022-03-13
+      </time>
+    
+</span>
+                <h1>commons-fileupload bypass</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="开头："><a href="#开头：" class="headerlink" title="开头："></a>开头：</h2><p>​    之前有一些师傅对Commons-fileupload这个apache文件上传组件有过一些研究，我之前也看到很多文章，今天来自己做一下研究看看相关的原理；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    首先构建一个javaweb maven的项目用于方便复现；相关搭建过程就不过多赘述了，我的环境搭建是采用springboot+fileupload；在此之前要先在配置文件中关闭掉原本springboot的文件上传解析，否则parseRequest函数处理返回为空；搭建完成之后导入相应的依赖；编写一个controller进行调用就可；问题的发生点是在对filename的处理上；</p>
+<p>放出我的controller：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbfx0g"><img src="https://s1.ax1x.com/2022/03/13/bbfx0g.png" alt="bbfx0g.png"></a></p>
+<p>追踪一下parseRequest函数：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb8xCq"><img src="https://s1.ax1x.com/2022/03/13/bb8xCq.png" alt="bb8xCq.png"></a></p>
+<p>看到内部处理流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbGm26"><img src="https://s1.ax1x.com/2022/03/13/bbGm26.png" alt="bbGm26.png"></a></p>
+<p>发现对上传的表单进行了相关的处理和解析；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbGYGt"><img src="https://s1.ax1x.com/2022/03/13/bbGYGt.png" alt="bbGYGt.png"></a></p>
+<p>进入下面FileItemIteratorImpl下看看处理细节：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbJky8"><img src="https://s1.ax1x.com/2022/03/13/bbJky8.png" alt="bbJky8.png"></a></p>
+<p>具体的判断为contentType开头要为multipart/；中间下面这段是对输入流进行相关的处理；拿到相关的编码规则等等；接着看一个敏感函数；</p>
+<p>可以很清晰的看到是对一些流里的数据做了相应的处理，按照分号和逗号进行相应的分割；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">------WebKitFormBoundaryovjb4UffMAlZ2ToM</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&quot;1.jsp&quot;</span><br><span class="line">233</span><br><span class="line">------WebKitFormBoundaryovjb4UffMAlZ2ToM--</span><br></pre></td></tr></table></figure>
+
+<p>这里都不是重点，之前有师傅爆出采用在filename左右加上空格的方法，会导致相应的waf不匹配从而造成饶过；那么相关的问题点肯定是发生在filename的地方，这里直接追溯到相关的敏感函数中去看一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbYl4A"><img src="https://s1.ax1x.com/2022/03/13/bbYl4A.png" alt="bbYl4A.png"></a></p>
+<p>入口点在此；向下追溯看看相关的敏感解析点，调试过java的师傅肯定都知道敏感的parse或多或少都要看一下；这个解析点就是在此函数中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbYdEQ"><img src="https://s1.ax1x.com/2022/03/13/bbYdEQ.png" alt="bbYdEQ.png"></a></p>
+<p>可以看到里面是对</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&quot;1.jsp&quot;</span><br></pre></td></tr></table></figure>
+
+<p>进行相关的解析；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbUuHU"><img src="https://s1.ax1x.com/2022/03/13/bbUuHU.png" alt="bbUuHU.png"></a></p>
+<p>利用分号进行分割完之后再次按照等号进行相关的分割，拿到paramName和paramValue；</p>
+<p>在解析的过程之中，会调用parseToken进行解析，跟进看一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbN16P"><img src="https://s1.ax1x.com/2022/03/13/bbN16P.png" alt="bbN16P.png"></a></p>
+<p>按照相关的逻辑进行解析，最后调用getToken函数进行处理并且return；这个函数里可以细致看一下流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbNB60"><img src="https://s1.ax1x.com/2022/03/13/bbNB60.png" alt="bbNB60.png"></a></p>
+<p>看到这里相信很多人都已经明白了，对空白字符字符做相应的处理；这里自然会处理空格，tab键，换行符等的空白字符，处理原理就是将相关的指针进行移动，从而实现去除空白字符；所以利用这个特性，可以对于一些waf进行一些简单的饶过，在filename的地方前后添加空格或者%0a之类的空白字符，就可饶过匹配，饶过之后进行解析会将其去除，所以这是一个挺好的饶waf的点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbNQSI"><img src="https://s1.ax1x.com/2022/03/13/bbNQSI.png" alt="bbNQSI.png"></a></p>
+<p>除了这种方法饶过waf之外还有一些更骚的操作，可以继续向下分析一波；</p>
+<p>这里有一个敏感的点decodeText，追溯进去看一发：</p>
+<p>发现是对filename的paramValue进行处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbtYGR"><img src="https://s1.ax1x.com/2022/03/13/bbtYGR.png" alt="bbtYGR.png"></a></p>
+<p>不过这里有相关的要求，我们没办法进入相关流程，动态调试一下，往后看看解析；看到进入相关的decodeWord，这个函数就很敏感；追进去看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbaPr6"><img src="https://s1.ax1x.com/2022/03/13/bbaPr6.png" alt="bbaPr6.png"></a></p>
+<p>可以看到开始了标志符的处理，这里我们动态调试：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbyDPK"><img src="https://s1.ax1x.com/2022/03/13/bbyDPK.png" alt="bbyDPK.png"></a></p>
+<p>发现如此构造可以在substring中街区到相关的字符；进入后续的处理；可以看到后续就进入了相应的加解密流程，但是需要匹配到相应的标识符才可进行解析；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbyfat"><img src="https://s1.ax1x.com/2022/03/13/bbyfat.png" alt="bbyfat.png"></a></p>
+<p>回溯一下标识符的匹配传入，发现是在上方利用substring进行截取；继续动态修改;</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb6LlD"><img src="https://s1.ax1x.com/2022/03/13/bb6LlD.png" alt="bb6LlD.png"></a></p>
+<p>可以看到相关的效果，调试到此发现匹配到B之后，会将我们传入的asdf进行base64的解码，这里便是一个很好的利用点，可以利用此解码机制饶过相应的waf；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbc9tP"><img src="https://s1.ax1x.com/2022/03/13/bbc9tP.png" alt="bbc9tP.png"></a></p>
+<p>可以很清晰的看到被解码成了乱码，解码成乱码肯定会触发后面的错误；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgtKg"><img src="https://s1.ax1x.com/2022/03/13/bbgtKg.png" alt="bbgtKg.png"></a></p>
+<p>这里可以看到传入正常的base64加密的filename，在这里就会被进行相关的解析；就会被正确的写入；但是事实是最后还是发生了报错，很显然是在javaCharset这里发生了问题；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgUbj"><img src="https://s1.ax1x.com/2022/03/13/bbgUbj.png" alt="bbgUbj.png"></a></p>
+<p>之类charset为空；追溯一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgrGV"><img src="https://s1.ax1x.com/2022/03/13/bbgrGV.png" alt="bbgrGV.png"></a></p>
+<p>发现是需要在map进行相关的寻找从而设置相应的编码格式；</p>
+<p>这里eval一下看看如何满足条件：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgzJP"><img src="https://s1.ax1x.com/2022/03/13/bbgzJP.png" alt="bbgzJP.png"></a></p>
+<p>找到相关的插入点即可；在此修改文件名进行调试；结果如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2JF1"><img src="https://s1.ax1x.com/2022/03/13/bb2JF1.png" alt="bb2JF1.png"></a></p>
+<p>可以看到这次已经正确的解析到了charset；继续往下跟入：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2wOe"><img src="https://s1.ax1x.com/2022/03/13/bb2wOe.png" alt="bb2wOe.png"></a></p>
+<p>发现在之前报错的javaCharset函数中已经可以正常的get到相关的编码规则；最后就会被成功的写入：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2LlT"><img src="https://s1.ax1x.com/2022/03/13/bb2LlT.png" alt="bb2LlT.png"></a></p>
+<p>所以最后我们上传<code>=?utf8?B?czFtcGxlLmpzcA==?=</code>；经过waf判断没有什么问题，最后经过commons-fileuplaod组件解析之后会成为s1mple.jsp；最后即可传入；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbRL4I"><img src="https://s1.ax1x.com/2022/03/13/bbRL4I.png" alt="bbRL4I.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbW88x"><img src="https://s1.ax1x.com/2022/03/13/bbW88x.png" alt="bbW88x.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbf6YR"><img src="https://s1.ax1x.com/2022/03/13/bbf6YR.png" alt="bbf6YR.png"></a></p>
+<p>其实分析到这里，已经没有什么悬念了，直接可以上传文件，这里base64的相对比较好理解，还有一种编码方式我这里顺带提一下吧；那种编码方式加密原理是将任何8-bit字节值可编码为3个字符：⼀个等号”=”后跟随两个⼗六进制数字(0–9或A–F)表⽰该字节的数值。例如，ASCII码换页符（⼗进制值为12）可以表⽰为”=0C”， 等号”=”（⼗进制值为61）必须表⽰为”=3D”，gb2312下“中”表⽰为=D6=D0；其实都只是加密方式的不一样，最后产生的攻击效果都是一样的；23333</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>commons-fileupload的饶过waf的方式主要是基于其自身的特性，在filename前后加上空白字符，导致无法合理匹配filename导致饶过waf是因为内部采用了isWhitespace方法进行对filename的判断，判断为空白字符则去除，所以对于上传上去是没有什么影响的；另外一种方法则是利用了commons-fileupload的内部上传处理机制，对filename进行相关的加密；从而饶过相关的waf；其实也不是很难理解23333；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2021/12/29/Spring-4-2-4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%80%E8%A7%88/">
+        Spring 4.2.4反序列化一览 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
