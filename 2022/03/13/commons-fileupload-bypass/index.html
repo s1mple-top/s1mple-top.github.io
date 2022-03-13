@@ -187,7 +187,7 @@
         </div>
         <div class="col-md-8 col-md-offset-2">
       		<h2 id="开头："><a href="#开头：" class="headerlink" title="开头："></a>开头：</h2><p>​    之前有一些师傅对Commons-fileupload这个apache文件上传组件有过一些研究，我之前也看到很多文章，今天来自己做一下研究看看相关的原理；</p>
-<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    首先构建一个javaweb maven的项目用于方便复现；相关搭建过程就不过多赘述了，我的环境搭建是采用springboot+fileupload；在此之前要先在配置文件中关闭掉原本springboot的文件上传解析，否则parseRequest函数处理返回为空；搭建完成之后导入相应的依赖；编写一个controller进行调用就可；问题的发生点是在对filename的处理上；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    首先构建一个项目用于方便复现；相关搭建过程就不过多赘述了，我的环境搭建是采用springboot+fileupload；在此之前要先在配置文件中关闭掉原本springboot的文件上传解析，否则parseRequest函数处理返回为空；搭建完成之后导入相应的依赖；编写一个controller进行调用就可；问题的发生点是在对filename的处理上；</p>
 <p>放出我的controller：</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbfx0g"><img src="https://s1.ax1x.com/2022/03/13/bbfx0g.png" alt="bbfx0g.png"></a></p>
 <p>追踪一下parseRequest函数：</p>
