@@ -241,6 +241,39 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2021/04/29/CommonsCollections1-8/">CommonsCollections1-8</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-04-29T05:44:09.000Z" itemprop="datePublished">
+          2021-04-29
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        CommonsCollections1文章首发先知社区
+CC链基本的点就是在前两个链中，所以我会着重偏向前两个链的介绍，后期的链基本就是换汤不换药，我会适当简略；
+LazyMap.get()中：
+123456789public Object get(Object key) &#123;    if (!super.map.containsKey(key)) &#123;        Object value = this.factor
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/04/29/CommonsCollections1-8/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2021/03/27/java-HashMap理解/">java HashMap理解</a></h3>
                     <span>
                         <span class="post-meta">
@@ -490,43 +523,6 @@ text先来看一个例子；
                     
                     <p class="pull-right readMore">
                         <a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Yii2 deserialization rce pop chain analysis</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T12:19:55.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        影响范围
-Yii2 &lt; 2.0.38
-
-该框架反序列化起点在： /vendor/yiisoft/yii2/db/BatchQueryResult.php 中；
-12345public function __destruct()&#123;    // make sure cursor is closed    $this-&gt;reset();&#125;
-
-直接析构函数出可以调用reset函数；追踪reset函数；
-12345
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Read More...</a>
                     </p>
                     
                 </div>
