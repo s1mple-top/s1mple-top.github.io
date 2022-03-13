@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Java原生序列化和反序列化分析 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2021-12-12T05:39:58.000Z" itemprop="datePublished">
+          2021-12-12
+      </time>
+    
+</span>
+                <h1>Java原生序列化和反序列化分析</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>之前分析各种组件或者框架的反序列化漏洞，fastjson或者shiro或者weblogic还有spring；其漏洞出发点都是在readObject；但是具体为什么是要在readObject点触发还没有细致的学习，今天恶补一下Java的原生序列化和反序列化；</p>
+<h2 id="序列化的应用："><a href="#序列化的应用：" class="headerlink" title="序列化的应用："></a>序列化的应用：</h2><p>当两个进程在进行远程通信时，彼此可以发送各种类型的数据。无论是何种类型的数据，都会以二进制序列的形式在网络上传送。发送方需要把这个Java对象转换为字节序列，才能在网络上传送；接收方则需要把字节序列再恢复为Java对象。</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>简单写一个demo来对序列化和反序列化进行一个debug学习；模仿一波类似反序列化漏洞点；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> idcard;</span><br><span class="line">    <span class="keyword">public</span> String school;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SU</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.idcard=<span class="number">410881</span>;</span><br><span class="line">        <span class="keyword">this</span>.school=<span class="string">&quot;ncu&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">information</span> <span class="keyword">extends</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String id = <span class="string">&quot;s1mple&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">public</span> String hacker = <span class="string">&quot;hack&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">      in.defaultReadObject();</span><br><span class="line">      System.out.println(<span class="string">&quot;success_to_readObject&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">information</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">cmd</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">        information test = <span class="keyword">new</span> information();</span><br><span class="line">        <span class="comment">//ObjectOutputStream s1mple = new ObjectOutputStream(new FileOutputStream(&quot;test.ser&quot;));</span></span><br><span class="line">        <span class="comment">//s1mple.writeObject(test);</span></span><br><span class="line">        ObjectInputStream s2mple = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">&quot;test.ser&quot;</span>));</span><br><span class="line">        Object cc = s2mple.readObject();</span><br><span class="line">        System.out.println(cc);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由这个程序来简单debug一下；</p>
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><h3 id="1-ObjectOutputStream实例化；"><a href="#1-ObjectOutputStream实例化；" class="headerlink" title="1.ObjectOutputStream实例化；"></a>1.ObjectOutputStream实例化；</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/I0OJW8"><img src="https://z3.ax1x.com/2021/11/12/I0OJW8.png" alt="I0OJW8.png"></a></p>
+<p>verifySubclass函数确定继承权限；这里ObjectOutputStream自然符合；</p>
+<p>new一个BlockDataOutputStream底层流对象往out也就是FileOutputStream里写数据；FileOutputStream里调用open(name, append);写入文件中；追溯name和append；不难发现；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String name = (file != <span class="keyword">null</span> ? file.getPath() : <span class="keyword">null</span>);<span class="comment">//append==false;</span></span><br></pre></td></tr></table></figure>
+
+<p>回归上图，构造两个Table；接着writeStreamHeader方法写入序列化头（魔术头，版本号）；接着bout打开缓冲区；写入的魔术头，版本号写入到FileOutputStream流中，然后再写入文件中，这里可debug去看下目标文件；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IDjmVJ"><img src="https://z3.ax1x.com/2021/11/12/IDjmVJ.png" alt="IDjmVJ.png"></a></p>
+<p>可以看到释放缓冲区之后会将内容写入到文件中；整个过程是动态的、实时的，并非是最后一下子写入文件；因为涉及到很多缓冲区对外的开和关；下面会分析；</p>
+<h3 id="2-初始化完成之后调用writeObject"><a href="#2-初始化完成之后调用writeObject" class="headerlink" title="2.初始化完成之后调用writeObject;"></a>2.初始化完成之后调用writeObject;</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IBVsbt"><img src="https://z3.ax1x.com/2021/11/12/IBVsbt.png" alt="IBVsbt.png"></a></p>
+<p>enableOverride属性在初始化的时候被设置为false；这里直接去拿writeObject0；在writeObject0中先关闭缓冲区对外通道；然后利用lookup方法返回desc；方便之后对类进行内省；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IDxVAJ"><img src="https://z3.ax1x.com/2021/11/12/IDxVAJ.png" alt="IDxVAJ.png"></a></p>
+<p>最后判断其继承的类型；从而进行相应的write函数调用；因为继承Serializable，所以这里是以二进制的形式write出来；这也解释了为什么序列化要继承Serializable接口；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrPVAO"><img src="https://z3.ax1x.com/2021/11/12/IrPVAO.png" alt="IrPVAO.png"></a></p>
+<h3 id="3-序列化数据"><a href="#3-序列化数据" class="headerlink" title="3.序列化数据"></a>3.序列化数据</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrF71H"><img src="https://z3.ax1x.com/2021/11/12/IrF71H.png" alt="IrF71H.png"></a></p>
+<p>向缓冲区buf里写入TC_OBJECT；然后调用writeClassDesc写入类的元数据；</p>
+<p>在序列化数据之前，会先对对象进行类型的判别；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrASVx"><img src="https://z3.ax1x.com/2021/11/12/IrASVx.png" alt="IrASVx.png"></a></p>
+<p>一种是Null，一种是handle一种是Proxy代理类型，最后一种是一般类型；这里自己随便写的一个类自然是一般类型，所以进入writeNonProxyDesc方法中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrZZL9"><img src="https://z3.ax1x.com/2021/11/12/IrZZL9.png" alt="IrZZL9.png"></a></p>
+<p>先将TC_CLASSDESC标识写入buf缓冲区，为了避免重复覆盖，利用了pos探针去进行标识，所以此TC_CLASSDESC标识写在byte缓冲区的第二个元素位置；这点追溯下不难发现；</p>
+<p>向下进入writeClassDescriptor方法；写入指定的类描述符的对象输出流；这里通俗点来讲就是向ObjectOutputStream流中的缓冲区写入目标类属性的数量，目标类的属性类型和属性名；其实本质上来说是调用了writeNonProxy方法；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Iruw7j"><img src="https://z3.ax1x.com/2021/11/12/Iruw7j.png" alt="Iruw7j.png"></a></p>
+<p>writeNonProxy里也有写入一些重要的点，这里追溯一下：可以看到写入序列化目标类名和serialVersionUID；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IyOCNj"><img src="https://z3.ax1x.com/2021/11/13/IyOCNj.png" alt="IyOCNj.png"></a></p>
+<p>然后判断写入标识；因为目标类继承了可序列化接口，所以目标类可序列化，那么自然写入序列化标识 SC_SERIALIZABLE；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IyOIx0"><img src="https://z3.ax1x.com/2021/11/13/IyOIx0.png" alt="IyOIx0.png"></a></p>
+<h4 id="总的来说，调用writeClassDescriptor方法写入的点为：目标类类名长度和类名-调用writeUTF，再追溯最后是调用writeShort写入长度，writeBytes写入方法名-，serialVersionUID，序列化标识SC-SERIALIZABLE，域数量，域类型和域名；"><a href="#总的来说，调用writeClassDescriptor方法写入的点为：目标类类名长度和类名-调用writeUTF，再追溯最后是调用writeShort写入长度，writeBytes写入方法名-，serialVersionUID，序列化标识SC-SERIALIZABLE，域数量，域类型和域名；" class="headerlink" title="总的来说，调用writeClassDescriptor方法写入的点为：目标类类名长度和类名(调用writeUTF，再追溯最后是调用writeShort写入长度，writeBytes写入方法名)，serialVersionUID，序列化标识SC_SERIALIZABLE，域数量，域类型和域名；"></a>总的来说，调用writeClassDescriptor方法写入的点为：目标类类名长度和类名(调用writeUTF，再追溯最后是调用writeShort写入长度，writeBytes写入方法名)，serialVersionUID，序列化标识SC_SERIALIZABLE，域数量，域类型和域名；</h4><p>写完之后利用setBlockDataMode函数打开缓冲区对外通道释放掉缓冲区，将缓冲区的内容传入文件输出流中，最后写入文件；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrKpCt"><img src="https://z3.ax1x.com/2021/11/12/IrKpCt.png" alt="IrKpCt.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrKFKS"><img src="https://z3.ax1x.com/2021/11/12/IrKFKS.png" alt="IrKFKS.png"></a></p>
+<p>然后再次关闭关闭缓冲区对外的通道，写入TC_ENDBLOCKDATA (对象的可选块数据块的结尾)。至此属性类型和属性名还有serialVersionUID等写入完毕；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrKRRP"><img src="https://z3.ax1x.com/2021/11/12/IrKRRP.png" alt="IrKRRP.png"></a></p>
+<p>然后递归调用writeClassDesc写入父类元信息。看到Super就无疑了；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrMFRx"><img src="https://z3.ax1x.com/2021/11/12/IrMFRx.png" alt="IrMFRx.png"></a></p>
+<p>和之前的流程一样，先写入TC_CLASSDESC；然后写入父类的属性类型和属性名、serialVersionUID等等；这点和上面的一样，不再赘述；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrMmee"><img src="https://z3.ax1x.com/2021/11/12/IrMmee.png" alt="IrMmee.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrMyOU"><img src="https://z3.ax1x.com/2021/11/12/IrMyOU.png" alt="IrMyOU.png"></a></p>
+<p>代码不是很难理解；写完父类属性信息之后再次打开缓冲区对外通道，写入文件流然后实时写入文件；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrQP0g"><img src="https://z3.ax1x.com/2021/11/12/IrQP0g.png" alt="IrQP0g.png"></a></p>
+<p>最后当然再向缓冲区写入TC_ENDBLOCKDATA以表示此过程写入结束；</p>
+<p>上面这些流程走完之后就开始序列化写入数据了；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrQBAH"><img src="https://z3.ax1x.com/2021/11/12/IrQBAH.png" alt="IrQBAH.png"></a></p>
+<p>进入writeSerialData函数；利用getClassDataLayout方法拿到实例化目标类和其父类；然后进入for依次对两个类进行处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrcZCR"><img src="https://z3.ax1x.com/2021/11/13/IrcZCR.png" alt="IrcZCR.png"></a></p>
+<p>先检查目标类有没有自定义writeObject方法；也就是有没有重写writeObject方法；如果有则调用invokeWriteObject方法去执行自定义的writeObject方法；这自然是没有；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IrcTi9"><img src="https://z3.ax1x.com/2021/11/13/IrcTi9.png" alt="IrcTi9.png"></a></p>
+<p>所以最后进入调用默认的序列化属性器；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Irgpid"><img src="https://z3.ax1x.com/2021/11/13/Irgpid.png" alt="Irgpid.png"></a></p>
+<p>进入defaultWriteFields函数；</p>
+<p>首先拿到Class对象，然后判断Class对象和Obj实例化对象是否为空，并且进入isInstance函数；判断是否实例化；看下isInstance函数的说明；</p>
+<p><code>Specifically, if this Class object represents a declared class, this method returns true if the specified Object argument is an instance of the represented class (or of any of its subclasses); it returns false otherwise.</code>;    翻译过来大概如下：</p>
+<p><code>具体地说，如果这个类对象表示一个声明的类，那么如果指定的对象参数是所表示的类（或其任何子类）的实例，那么这个方法返回true；否则返回false。</code></p>
+<p>再具体一点针对于isInstance函数可以看这个链接<code>https://blog.csdn.net/cumt951045/article/details/107798107</code>；</p>
+<p>这里是先来处理父类SU，obj(information)是SU的子类；所以自然符合；返回true；再进行逻辑运算最后为false；不抛出错误，继续向下进行；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/I6XRDf"><img src="https://z3.ax1x.com/2021/11/14/I6XRDf.png" alt="I6XRDf.png"></a></p>
+<p>调用checkDefaultSerialize方法；检查对象有没有正确的初始化；然后排查默认序列化时异常；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IckSvF"><img src="https://z3.ax1x.com/2021/11/14/IckSvF.png" alt="IckSvF.png"></a></p>
+<p>然后去利用getPrimDataSize函数去获取基本类型的域的个数；然后生成存储基本类型域值的字节数组；获取基本类型域的值，然后将其类型和域名写入缓冲区中；这里是int所以写入为 <code>I</code>;（想请理解看参考后面down的结果）</p>
+<p>然后获取对象的所有域；接着创建一个java数组对象类型的引用类型域数组；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IcFdtx"><img src="https://z3.ax1x.com/2021/11/14/IcFdtx.png" alt="IcFdtx.png"></a></p>
+<p>至于基本类型域的概念具体可看此链接；</p>
+<p><code>https://blog.csdn.net/weixin_34703307/article/details/114072459</code></p>
+<p>通过getObjFieldValues函数拿到非原生数据的值，这里debug拿到的是ncu，也就是String school域；然后通过for循环，调用writeObject0函数下writeString方法写入序列化流中；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> utflen = bout.getUTFLength(str);</span><br><span class="line"><span class="keyword">if</span> (utflen &lt;= <span class="number">0xFFFF</span>) &#123;</span><br><span class="line">    bout.writeByte(TC_STRING);</span><br><span class="line">    bout.writeUTF(str, utflen);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    bout.writeByte(TC_LONGSTRING);</span><br><span class="line">    bout.writeLongUTF(str, utflen);</span><br></pre></td></tr></table></figure>
+
+<p>写入方法如上代码；写入相应标识和长度还有值；</p>
+<p>最后附上down的结果；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">STREAM_MAGIC - <span class="number">0xac</span> ed</span><br><span class="line">STREAM_VERSION - <span class="number">0x00</span> <span class="number">05</span></span><br><span class="line">Contents</span><br><span class="line">  TC_OBJECT - <span class="number">0x73</span></span><br><span class="line">    TC_CLASSDESC - <span class="number">0x72</span></span><br><span class="line">      className</span><br><span class="line">        Length - <span class="number">11</span> - <span class="number">0x00</span> <span class="number">0</span>b</span><br><span class="line">        Value - information - <span class="number">0x696e666f726d6174696f6e</span></span><br><span class="line">      serialVersionUID - <span class="number">0x25</span> fa <span class="number">22</span> <span class="number">16</span> <span class="number">4d</span> ac da <span class="number">14</span></span><br><span class="line">      newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">00</span></span><br><span class="line">      classDescFlags - <span class="number">0x02</span> - SC_SERIALIZABLE</span><br><span class="line">      fieldCount - <span class="number">3</span> - <span class="number">0x00</span> <span class="number">03</span></span><br><span class="line">      Fields</span><br><span class="line">        <span class="number">0</span>:</span><br><span class="line">          Int - I - <span class="number">0x49</span></span><br><span class="line">          fieldName</span><br><span class="line">            Length - <span class="number">3</span> - <span class="number">0x00</span> <span class="number">03</span></span><br><span class="line">            Value - num - <span class="number">0x6e756d</span></span><br><span class="line">        <span class="number">1</span>:</span><br><span class="line">          Object - L - <span class="number">0x4c</span></span><br><span class="line">          fieldName</span><br><span class="line">            Length - <span class="number">6</span> - <span class="number">0x00</span> <span class="number">06</span></span><br><span class="line">            Value - hacker - <span class="number">0x6861636b6572</span></span><br><span class="line">          className1</span><br><span class="line">            TC_STRING - <span class="number">0x74</span></span><br><span class="line">              newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">01</span></span><br><span class="line">              Length - <span class="number">18</span> - <span class="number">0x00</span> <span class="number">12</span></span><br><span class="line">              Value - Ljava/lang/String; - <span class="number">0x4c6a6176612f6c616e672f537472696e673b</span></span><br><span class="line">        <span class="number">2</span>:</span><br><span class="line">          Object - L - <span class="number">0x4c</span></span><br><span class="line">          fieldName</span><br><span class="line">            Length - <span class="number">2</span> - <span class="number">0x00</span> <span class="number">02</span></span><br><span class="line">            Value - id - <span class="number">0x6964</span></span><br><span class="line">          className1</span><br><span class="line">            TC_REFERENCE - <span class="number">0x71</span>		<span class="comment">//java序列化协议是一个很严谨的协议，不会出现两个一摸一样的对象，如果二次出现就如这里的操作一样，会通过reference去指向上一个的内容，类似指针</span></span><br><span class="line">              Handle - <span class="number">8257537</span> - <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">01</span></span><br><span class="line">      classAnnotations</span><br><span class="line">        TC_ENDBLOCKDATA - <span class="number">0x78</span></span><br><span class="line">      superClassDesc</span><br><span class="line">        TC_CLASSDESC - <span class="number">0x72</span></span><br><span class="line">          className</span><br><span class="line">            Length - <span class="number">2</span> - <span class="number">0x00</span> <span class="number">02</span></span><br><span class="line">            Value - SU - <span class="number">0x5355</span></span><br><span class="line">          serialVersionUID - <span class="number">0xb0</span> ac <span class="number">0</span>a f9 e3 <span class="number">94</span> <span class="number">3</span>e af</span><br><span class="line">          newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">02</span></span><br><span class="line">          classDescFlags - <span class="number">0x02</span> - SC_SERIALIZABLE</span><br><span class="line">          fieldCount - <span class="number">2</span> - <span class="number">0x00</span> <span class="number">02</span></span><br><span class="line">          Fields</span><br><span class="line">            <span class="number">0</span>:</span><br><span class="line">              Int - I - <span class="number">0x49</span></span><br><span class="line">              fieldName</span><br><span class="line">                Length - <span class="number">6</span> - <span class="number">0x00</span> <span class="number">06</span></span><br><span class="line">                Value - idcard - <span class="number">0x696463617264</span></span><br><span class="line">            <span class="number">1</span>:</span><br><span class="line">              Object - L - <span class="number">0x4c</span></span><br><span class="line">              fieldName</span><br><span class="line">                Length - <span class="number">6</span> - <span class="number">0x00</span> <span class="number">06</span></span><br><span class="line">                Value - school - <span class="number">0x7363686f6f6c</span></span><br><span class="line">              className1</span><br><span class="line">                TC_REFERENCE - <span class="number">0x71</span></span><br><span class="line">                  Handle - <span class="number">8257537</span> - <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">01</span></span><br><span class="line">          classAnnotations</span><br><span class="line">            TC_ENDBLOCKDATA - <span class="number">0x78</span></span><br><span class="line">          superClassDesc</span><br><span class="line">            TC_NULL - <span class="number">0x70</span></span><br><span class="line">    newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">03</span></span><br><span class="line">    classdata</span><br><span class="line">      SU</span><br><span class="line">        values</span><br><span class="line">          idcard</span><br><span class="line">            (<span class="keyword">int</span>)<span class="number">410881</span> - <span class="number">0x00</span> <span class="number">06</span> <span class="number">45</span> <span class="number">01</span></span><br><span class="line">          school</span><br><span class="line">            (object)</span><br><span class="line">              TC_STRING - <span class="number">0x74</span></span><br><span class="line">                newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">04</span></span><br><span class="line">                Length - <span class="number">3</span> - <span class="number">0x00</span> <span class="number">03</span></span><br><span class="line">                Value - ncu - <span class="number">0x6e6375</span></span><br><span class="line">      information</span><br><span class="line">        values</span><br><span class="line">          num</span><br><span class="line">            (<span class="keyword">int</span>)<span class="number">20</span> - <span class="number">0x00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">14</span></span><br><span class="line">          hacker</span><br><span class="line">            (object)</span><br><span class="line">              TC_STRING - <span class="number">0x74</span></span><br><span class="line">                newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">05</span></span><br><span class="line">                Length - <span class="number">4</span> - <span class="number">0x00</span> <span class="number">04</span></span><br><span class="line">                Value - hack - <span class="number">0x6861636b</span></span><br><span class="line">          id</span><br><span class="line">            (object)</span><br><span class="line">              TC_STRING - <span class="number">0x74</span></span><br><span class="line">                newHandle <span class="number">0x00</span> <span class="number">7</span>e <span class="number">00</span> <span class="number">06</span></span><br><span class="line">                Length - <span class="number">6</span> - <span class="number">0x00</span> <span class="number">06</span></span><br><span class="line">                Value - s1mple - <span class="number">0x73316d706c65</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><p>更好的理解我采用如下的源码来表示；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> idcard;</span><br><span class="line">    <span class="keyword">public</span> String school;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SU</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.idcard=<span class="number">410881</span>;</span><br><span class="line">        <span class="keyword">this</span>.school=<span class="string">&quot;ncu&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">information</span> <span class="keyword">extends</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String id = <span class="string">&quot;s1mple&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">public</span> String hacker = <span class="string">&quot;hack&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">      <span class="comment">//in.defaultReadObject();</span></span><br><span class="line">        tests();</span><br><span class="line">      System.out.println(<span class="string">&quot;success_to_readObject&quot;</span>);</span><br><span class="line">      System.out.println(num);</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">information</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tests</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">cmd</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException </span>&#123;</span><br><span class="line">       <span class="comment">// information test = new information();</span></span><br><span class="line">        <span class="comment">//Class fucker = information.class;</span></span><br><span class="line">        <span class="comment">//Constructor constructor = fucker.getDeclaredConstructor();</span></span><br><span class="line">        <span class="comment">//Field sum = fucker.getDeclaredField(&quot;num&quot;);</span></span><br><span class="line">        <span class="comment">//information information = (information) constructor.newInstance();</span></span><br><span class="line">        <span class="comment">//sum.set(information,122);</span></span><br><span class="line">        <span class="comment">//ObjectOutputStream s1mple = new ObjectOutputStream(new FileOutputStream(&quot;fuck.ser&quot;));</span></span><br><span class="line">        <span class="comment">//s1mple.writeObject(test);</span></span><br><span class="line">        ObjectInputStream s2mple = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">&quot;test.ser&quot;</span>));</span><br><span class="line">        Object cc = s2mple.readObject();</span><br><span class="line">        <span class="comment">//System.out.println(cc);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反序列化很类似于序列化的操作；主要操作都是在function0里；</p>
+<p>首先来说也是预处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TQxu0U"><img src="https://s4.ax1x.com/2021/12/22/TQxu0U.png" alt="TQxu0U.png"></a></p>
+<p>先来判别继承权限（简单点片面说就是判别此类是不是ObjectInputSream，文章末尾会分析verifySubclass函数），然后new一个底层的输入流；值得注意的是readStreamHeader方法会去读取STREAM_MAGIC和STREAM_VERSION头，进行判别是否相等以检测流是否损坏；当然，如果两端使用的JDK中这个类版本号不一致就会出现异常;抛出错误invalid stream header；然后打开缓冲区和内部的通道，释放缓冲区；数据被读取到ObjectInputStream内部;    </p>
+<p>然后开始调用readObject方法处理序列化的数据</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IRDQET"><img src="https://z3.ax1x.com/2021/11/15/IRDQET.png" alt="IRDQET.png"></a></p>
+<p>因为调用的是带有参数的ObjectInputStream方法，所以是需要有外界传入流；所以这里调用readObject0来进行处理；readObject0是ObjectInputStream的核心方法；    </p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IRB11A"><img src="https://z3.ax1x.com/2021/11/15/IRB11A.png" alt="IRB11A.png"></a></p>
+<p>先判断一下整体的流当前是否处于块数据模式；然后拿到前数据块中剩余的未使用字节数；程序不允许有多余的未使用字节；所以如果有会抛出错误；然后关闭对内的通道；</p>
+<p>接着读取标识；通过switch选择对应标识后数据的读取方式进行读取相应的数据；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TQxRHS"><img src="https://s4.ax1x.com/2021/12/22/TQxRHS.png" alt="TQxRHS.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IIFsYD"><img src="https://z3.ax1x.com/2021/11/17/IIFsYD.png" alt="IIFsYD.png"></a></p>
+<p>case到object进行反序列化，整个object的反序化在readOrdinaryObject中;</p>
+<p>这里程序写的很谨慎；先进行判断是不是Object的标识，如果不是抛出错误；反之继续向下进行；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TQzPu6"><img src="https://s4.ax1x.com/2021/12/22/TQzPu6.png" alt="TQzPu6.png"></a></p>
+<p>在下面调用readClassDesc方法进行元数据的读取；和序列化写入是刚好反过来；这里是和序列化相同，也会判断目标class是否属于四种类型；经过case；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IIEcpF"><img src="https://z3.ax1x.com/2021/11/17/IIEcpF.png" alt="IIEcpF.png"></a></p>
+<p>case到TC_CLASSDESC；处理并返回类描述符对象；说人话就是返回的是一个描述类的一个对象，主要包括类的名称，suid等各种域；也就是元数据；其实追溯一下不难发现，还是调用了readNonProxy方法；(readClassDescriptor方法下调用)</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/TQz7PH"><img src="https://s4.ax1x.com/2021/12/22/TQz7PH.png" alt="TQz7PH.png"></a></p>
+<p>在此方法下，拿到类名，序列化id和序列化中标识类版本(0x02)；然后接着拿到了class的属性数量，并且用for循环对输入流向后读取readByte；拿到了所有属性名；记录一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ITEDtP"><img src="https://z3.ax1x.com/2021/11/18/ITEDtP.png" alt="ITEDtP.png"></a></p>
+<p>这里显然是拿到域的数量；information这个obj里有三个，这在序列化数据中有记录；读出域名和类型之后将其打包为ObjectStreamField；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/I7u5id"><img src="https://z3.ax1x.com/2021/11/18/I7u5id.png" alt="I7u5id.png"></a></p>
+<p>这里在读取的时候会将读取的字符进行判断，代码很明显，这是因为在序列化写入的时候就是在非原生数据类型前加入相关字符；</p>
+<p>然后将属性名和其类型一起打包；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ITeRne"><img src="https://z3.ax1x.com/2021/11/18/ITeRne.png" alt="ITeRne.png"></a></p>
+<p>然后在ObjectStreamField中case去修改ObjectStreamField对象下type的状态；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ITmU8P"><img src="https://z3.ax1x.com/2021/11/18/ITmU8P.png" alt="ITmU8P.png"></a></p>
+<p>然后一路return；回到ObjectInputStream这个class下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/ITmL26"><img src="https://z3.ax1x.com/2021/11/18/ITmL26.png" alt="ITmL26.png"></a></p>
+<p>然后打开内部通道；清空缓冲区；</p>
+<p>resolveClass对类类型进行构建；追溯一下看下处理流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/I7lETS"><img src="https://z3.ax1x.com/2021/11/18/I7lETS.png" alt="I7lETS.png"></a></p>
+<p>这里不对class进行实例化；</p>
+<p>继续向下：</p>
+<p>initNonProxy又构建了类的元信息。并且检查是否有重写readObject，writeObejct，readObjectNoData，writeReplace，readResolve这些方法；如果重写则记录下来；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/I71Vnx"><img src="https://z3.ax1x.com/2021/11/18/I71Vnx.png" alt="I71Vnx.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IIlX2q"><img src="https://z3.ax1x.com/2021/11/17/IIlX2q.png" alt="IIlX2q.png"></a></p>
+<p>在此判断是否有重写的readObject方法，如果有则调用invokeReadObject方法去调用相应class下的readObject方法；这也就解释了为什么所有的readObject二进制反序列化链的起点都是相应class下的readObject的原因；当然这是在实例化完相关的父类obj之后进行的操作；反序列化的时候会先去进行父类里的处理，对其进行newInstance然后进行相关Field的赋值；父类完了之后才是处理子类；所以父类obj里的相关属性已经被赋了值；然后进行子类入口readObject的触发进行攻击；    一个图就可理解；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bIBOZF"><img src="https://s1.ax1x.com/2022/03/11/bIBOZF.png" alt="bIBOZF.png"></a></p>
+<p>其实回去看一下主要的触发还是在如下：ObjectInputStream 下的readSerialData方法里；方法主要是对序列化的Field进行反序列化处理和反射赋值；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bID4eO"><img src="https://s1.ax1x.com/2022/03/11/bID4eO.png" alt="bID4eO.png"></a></p>
+<p>这里经过判断发现存在重写的readObject方法，所以直接进行调用；不会走原来的赋值操作（下图为原本正常逻辑赋值操作）；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bIrouV"><img src="https://s1.ax1x.com/2022/03/11/bIrouV.png" alt="bIrouV.png"></a></p>
+<p>其实反序列化的漏洞也就是调用反射去给相应的class下的属性进行赋值；然后序列化成二进制文件之后，文件之中会保存相应的信息，然后触发readObject的时候就会碰到上述的也会去触发目标class下的readObject方法，然后经过其调用；我们规划好相应的链条属性的值；将其赋值为obj实例，就会链式反应最后进行到Runtime下或者Templateslmpl下，最后触发命令或者newInstance恶意class；或者触发jndi注入等等；当然还有更高级的攻击方法，比如攻击无文件落地攻击tomcat等等的操作，其实都是通过反序列化进行相关实现；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2021/12/15/Log4j%E7%BB%84%E4%BB%B6RCE%E5%88%86%E6%9E%90/" style="float: left;">
+        ← Log4j组件RCE分析
+    </a>
+    
+    
+    <a class="pull-right" href="/2021/11/16/Javascript-iframe-postMessage-xss/">
+        Javascript iframe postMessage xss →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
