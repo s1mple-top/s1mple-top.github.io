@@ -17,7 +17,7 @@
 <!--<![endif]-->
 
 <head>
-  <title>commons-fileupload bypass | s1mple</title>
+  <title>java JNDI注入底层分析 | s1mple</title>
   <!-- Meta data -->
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -177,95 +177,88 @@
         <div class="row col-md-offset-2">
             <div class="col-md-8">
     			<span class="post-meta">
-      <time datetime="2022-03-13T05:47:04.000Z" itemprop="datePublished">
-          2022-03-13
+      <time datetime="2022-03-14T13:50:48.000Z" itemprop="datePublished">
+          2022-03-14
       </time>
     
 </span>
-                <h1>commons-fileupload bypass</h1>
+                <h1>java JNDI注入底层分析</h1>
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<h2 id="开头："><a href="#开头：" class="headerlink" title="开头："></a>开头：</h2><p>​    之前有一些师傅对Commons-fileupload这个apache文件上传组件有过一些研究，我之前也看到很多文章，今天来自己做一下研究看看相关的原理；</p>
-<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>​    首先构建一个项目用于方便复现；相关搭建过程就不过多赘述了，我的环境搭建是采用springboot+fileupload；在此之前要先在配置文件中关闭掉原本springboot的文件上传解析，否则parseRequest函数处理返回为空；搭建完成之后导入相应的依赖；编写一个controller进行调用就可；问题的发生点是在对filename的处理上；</p>
-<p>放出我的controller：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbfx0g"><img src="https://s1.ax1x.com/2022/03/13/bbfx0g.png" alt="bbfx0g.png"></a></p>
-<p>追踪一下parseRequest函数：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb8xCq"><img src="https://s1.ax1x.com/2022/03/13/bb8xCq.png" alt="bb8xCq.png"></a></p>
-<p>看到内部处理流程：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbGm26"><img src="https://s1.ax1x.com/2022/03/13/bbGm26.png" alt="bbGm26.png"></a></p>
-<p>发现对上传的表单进行了相关的处理和解析；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbGYGt"><img src="https://s1.ax1x.com/2022/03/13/bbGYGt.png" alt="bbGYGt.png"></a></p>
-<p>进入下面FileItemIteratorImpl下看看处理细节：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbJky8"><img src="https://s1.ax1x.com/2022/03/13/bbJky8.png" alt="bbJky8.png"></a></p>
-<p>具体的判断为contentType开头要为multipart/；中间下面这段是对输入流进行相关的处理；拿到相关的编码规则等等；接着看一个敏感函数；</p>
-<p>可以很清晰的看到是对一些流里的数据做了相应的处理，按照分号和逗号进行相应的分割；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">------WebKitFormBoundaryovjb4UffMAlZ2ToM</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&quot;1.jsp&quot;</span><br><span class="line">233</span><br><span class="line">------WebKitFormBoundaryovjb4UffMAlZ2ToM--</span><br></pre></td></tr></table></figure>
-
-<p>这里都不是重点，之前有师傅爆出采用在filename左右加上空格的方法，会导致相应的waf不匹配从而造成饶过；那么相关的问题点肯定是发生在filename的地方，这里直接追溯到相关的敏感函数中去看一下：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbYl4A"><img src="https://s1.ax1x.com/2022/03/13/bbYl4A.png" alt="bbYl4A.png"></a></p>
-<p>入口点在此；向下追溯看看相关的敏感解析点，调试过java的师傅肯定都知道敏感的parse或多或少都要看一下；这个解析点就是在此函数中；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbYdEQ"><img src="https://s1.ax1x.com/2022/03/13/bbYdEQ.png" alt="bbYdEQ.png"></a></p>
-<p>可以看到里面是对</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&quot;1.jsp&quot;</span><br></pre></td></tr></table></figure>
-
-<p>进行相关的解析；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbUuHU"><img src="https://s1.ax1x.com/2022/03/13/bbUuHU.png" alt="bbUuHU.png"></a></p>
-<p>利用分号进行分割完之后再次按照等号进行相关的分割，拿到paramName和paramValue；</p>
-<p>在解析的过程之中，会调用parseToken进行解析，跟进看一下：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbN16P"><img src="https://s1.ax1x.com/2022/03/13/bbN16P.png" alt="bbN16P.png"></a></p>
-<p>按照相关的逻辑进行解析，最后调用getToken函数进行处理并且return；这个函数里可以细致看一下流程；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbNB60"><img src="https://s1.ax1x.com/2022/03/13/bbNB60.png" alt="bbNB60.png"></a></p>
-<p>看到这里相信很多人都已经明白了，对空白字符字符做相应的处理；这里自然会处理空格，tab键，换行符等的空白字符，处理原理就是将相关的指针进行移动，从而实现去除空白字符；所以利用这个特性，可以对于一些waf进行一些简单的饶过，在filename的地方前后添加空格或者%0a之类的空白字符，就可饶过匹配，饶过之后进行解析会将其去除，所以这是一个挺好的饶waf的点；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbNQSI"><img src="https://s1.ax1x.com/2022/03/13/bbNQSI.png" alt="bbNQSI.png"></a></p>
-<p>除了这种方法饶过waf之外还有一些更骚的操作，可以继续向下分析一波；</p>
-<p>这里有一个敏感的点decodeText，追溯进去看一发：</p>
-<p>发现是对filename的paramValue进行处理；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbtYGR"><img src="https://s1.ax1x.com/2022/03/13/bbtYGR.png" alt="bbtYGR.png"></a></p>
-<p>不过这里有相关的要求，我们没办法进入相关流程，动态调试一下，往后看看解析；看到进入相关的decodeWord，这个函数就很敏感；追进去看一下；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbaPr6"><img src="https://s1.ax1x.com/2022/03/13/bbaPr6.png" alt="bbaPr6.png"></a></p>
-<p>可以看到开始了标志符的处理，这里我们动态调试：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbyDPK"><img src="https://s1.ax1x.com/2022/03/13/bbyDPK.png" alt="bbyDPK.png"></a></p>
-<p>发现如此构造可以在substring中街区到相关的字符；进入后续的处理；可以看到后续就进入了相应的加解密流程，但是需要匹配到相应的标识符才可进行解析；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbyfat"><img src="https://s1.ax1x.com/2022/03/13/bbyfat.png" alt="bbyfat.png"></a></p>
-<p>回溯一下标识符的匹配传入，发现是在上方利用substring进行截取；继续动态修改;</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb6LlD"><img src="https://s1.ax1x.com/2022/03/13/bb6LlD.png" alt="bb6LlD.png"></a></p>
-<p>可以看到相关的效果，调试到此发现匹配到B之后，会将我们传入的asdf进行base64的解码，这里便是一个很好的利用点，可以利用此解码机制饶过相应的waf；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbc9tP"><img src="https://s1.ax1x.com/2022/03/13/bbc9tP.png" alt="bbc9tP.png"></a></p>
-<p>可以很清晰的看到被解码成了乱码，解码成乱码肯定会触发后面的错误；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgtKg"><img src="https://s1.ax1x.com/2022/03/13/bbgtKg.png" alt="bbgtKg.png"></a></p>
-<p>这里可以看到传入正常的base64加密的filename，在这里就会被进行相关的解析；就会被正确的写入；但是事实是最后还是发生了报错，很显然是在javaCharset这里发生了问题；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgUbj"><img src="https://s1.ax1x.com/2022/03/13/bbgUbj.png" alt="bbgUbj.png"></a></p>
-<p>之类charset为空；追溯一下：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgrGV"><img src="https://s1.ax1x.com/2022/03/13/bbgrGV.png" alt="bbgrGV.png"></a></p>
-<p>发现是需要在map进行相关的寻找从而设置相应的编码格式；</p>
-<p>这里eval一下看看如何满足条件：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbgzJP"><img src="https://s1.ax1x.com/2022/03/13/bbgzJP.png" alt="bbgzJP.png"></a></p>
-<p>找到相关的插入点即可；在此修改文件名进行调试；结果如下：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2JF1"><img src="https://s1.ax1x.com/2022/03/13/bb2JF1.png" alt="bb2JF1.png"></a></p>
-<p>可以看到这次已经正确的解析到了charset；继续往下跟入：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2wOe"><img src="https://s1.ax1x.com/2022/03/13/bb2wOe.png" alt="bb2wOe.png"></a></p>
-<p>发现在之前报错的javaCharset函数中已经可以正常的get到相关的编码规则；最后就会被成功的写入：</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bb2LlT"><img src="https://s1.ax1x.com/2022/03/13/bb2LlT.png" alt="bb2LlT.png"></a></p>
-<p>所以最后我们上传<code>=?utf8?B?czFtcGxlLmpzcA==?=</code>；经过waf判断没有什么问题，最后经过commons-fileuplaod组件解析之后会成为s1mple.jsp；最后即可传入；</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbRL4I"><img src="https://s1.ax1x.com/2022/03/13/bbRL4I.png" alt="bbRL4I.png"></a></p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbW88x"><img src="https://s1.ax1x.com/2022/03/13/bbW88x.png" alt="bbW88x.png"></a></p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bbf6YR"><img src="https://s1.ax1x.com/2022/03/13/bbf6YR.png" alt="bbf6YR.png"></a></p>
-<p>其实分析到这里，已经没有什么悬念了，直接可以上传文件，这里base64的相对比较好理解，还有一种编码方式我这里顺带提一下吧；那种编码方式加密原理是将任何8-bit字节值可编码为3个字符：⼀个等号”=”后跟随两个⼗六进制数字(0–9或A–F)表⽰该字节的数值。例如，ASCII码换页符（⼗进制值为12）可以表⽰为”=0C”， 等号”=”（⼗进制值为61）必须表⽰为”=3D”，gb2312下“中”表⽰为=D6=D0；其实都只是加密方式的不一样，最后产生的攻击效果都是一样的；23333</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>commons-fileupload的饶过waf的方式主要是基于其自身的特性，在filename前后加上空白字符，导致无法合理匹配filename导致饶过waf是因为内部采用了isWhitespace方法进行对filename的判断，判断为空白字符则去除，所以对于上传上去是没有什么影响的；另外一种方法则是利用了commons-fileupload的内部上传处理机制，对filename进行相关的加密；从而饶过相关的waf；其实也不是很难理解23333；</p>
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>本来想要写一下jndi注入在jdk高版本下的利用这个专题的，后来发现之前分析过底层jndi注入的原理，但是好像一直没有记述，就先来补一下；趁着现在机会写一写，顺便复习一下；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>低版本的jndi注入可以很方便的进行攻击，利用reference远程绑定class和factory以及factorylocation可以在本地解析的时候使用造成factory去对class进行处理，因为本地无相应的factory最终会去factorylocation上进行远程加载，调用class.forname；但是高版本因为有JEP290的限制原因，导致无法进行相应的攻击，</p>
+<p>jdk8u113开始进行相关的安全设置，这里先使用8u112进行测试下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL4TQ1"><img src="https://s1.ax1x.com/2022/03/14/bL4TQ1.png" alt="bL4TQ1.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL42ZT"><img src="https://s1.ax1x.com/2022/03/14/bL42ZT.png" alt="bL42ZT.png"></a></p>
+<p>远程打开恶意server；本地进行相关的lookup操作；可以看到本地在RegistryContext class中拿到了远程返回的wrapper；顾名思义是一个封装；相关的具体请求解析点是在RegistryImpl_Stub中，具体可以去看一看相关的jndi注入的原理就可搞明白了，也会理解为什么会请求1099端口；这里不多解释；</p>
+<p>因为这里远程是通过reference进行class和factory的绑定，所以会进入以下处理流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL5rkD"><img src="https://s1.ax1x.com/2022/03/14/bL5rkD.png" alt="bL5rkD.png"></a></p>
+<p>ref先进行相关的赋值，然后判断是否有绑定的factory；如果有责去进行加载；看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL7N4O"><img src="https://s1.ax1x.com/2022/03/14/bL7N4O.png" alt="bL7N4O.png"></a></p>
+<p>先从本地进行加载相关的factory；本地自然为null；所以就会在reference中去寻找相关的facotrylocation；这里server端进行了相关的自动化赋值；所以本地自然会拿到，然后进行相关的赋值；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL5478"><img src="https://s1.ax1x.com/2022/03/14/bL5478.png" alt="bL5478.png"></a></p>
+<p>codebase也为null；这一步就是进行codebase的赋值；赋完值之后就会去远程codebase加载；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bLIQgA"><img src="https://s1.ax1x.com/2022/03/14/bLIQgA.png" alt="bLIQgA.png"></a></p>
+<p>相关效果如上图所示；通过实例化urlclassloader进行远程加载；如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bLHSq1"><img src="https://s1.ax1x.com/2022/03/14/bLHSq1.png" alt="bLHSq1.png"></a></p>
+<p>最后实际触发是调用Class.forName进行远程加载；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bLH9Vx"><img src="https://s1.ax1x.com/2022/03/14/bLH9Vx.png" alt="bLH9Vx.png"></a></p>
+<p>有个细节点，forName的第二个参数为true；</p>
+<p>这里熟悉class加载到jvm流程的肯定会熟悉这个函数，第二个true意味着在进行class加载到jvm之后会触发其初始化操作，会执行class中的静态代码块；所以这里也就是为什么会触发漏洞点，我们远程下载相关的恶意class看看其内部结构就懂了；看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bLHJMj"><img src="https://s1.ax1x.com/2022/03/14/bLHJMj.png" alt="bLHJMj.png"></a></p>
+<p>所以为什么可命令执行就已经很显然了；这里其实还没有到后续，基本的命令执行就在此可以发生，但是继续往后续追一下看看；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bLHDWF"><img src="https://s1.ax1x.com/2022/03/14/bLHDWF.png" alt="bLHDWF.png"></a></p>
+<p>这里已经loadclass成功，最后会将其实例化，那么自然会触发其构造器中的代码，所以这里也可将恶意的代码放在构造器中；同样可触发；可以看到这里是强制转换成ObjectFactory对象；当然恶意class并没有继承相关的接口，所以最后会导致抛出 ExecTemplateJDK8 cannot be cast to javax.naming.spi.ObjectFactory 无法转换为ObjectFactory这样的错误导致流程结束，但是已经触发了恶意的命令；</p>
+<p>这里简单的来说就是jndi的rmi的利用方式，除了rmi的利用点，还有ldap的利用等等，从危害面来分析，ldap的攻击方式更加的广泛，因为ldap有两处可以触发反序列化的地方；简单的追溯一下源码就可明白；一般情况下使用的还是开启恶意的server的攻击方式，但是ldap可以在不开启恶意的class-server的时候就对其进行攻击；</p>
+<p>来追溯一下源码：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bOXjc8"><img src="https://s1.ax1x.com/2022/03/14/bOXjc8.png" alt="bOXjc8.png"></a></p>
+<p>入口点调用了lookup方法；调用其父类的方法；追过去看一下，拿到ldap的上下文环境，然后调用lookup继续加载；具体的可以看下图所示：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bOjnHJ"><img src="https://s1.ax1x.com/2022/03/14/bOjnHJ.png" alt="bOjnHJ.png"></a></p>
+<p>继续调用c_lookup</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bOjsv8"><img src="https://s1.ax1x.com/2022/03/14/bOjsv8.png" alt="bOjsv8.png"></a></p>
+<p>在c_lookup中触发相关的远程加载；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bOj580"><img src="https://s1.ax1x.com/2022/03/14/bOj580.png" alt="bOj580.png"></a></p>
+<p>调用doSearchOnce方法去远程获得远程的Result；</p>
+<p>细致的跟进去看一下，最终在</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bOv0Z4"><img src="https://s1.ax1x.com/2022/03/14/bOv0Z4.png" alt="bOv0Z4.png"></a></p>
+<p>地方发起了远程的请求；拿到返回的对象，以及其相关的属性；这里有个细节，需要相应的classname不为空才会进行下一步的流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXhoVK"><img src="https://s1.ax1x.com/2022/03/14/bXhoVK.png" alt="bXhoVK.png"></a></p>
+<p>追到decodeObject函数下，分别对返回的属性进行相关的处理，可以看到拿到了codebases，这个点我们在恶意的server上已经为相关的Entry属性赋过值了；所以这里就发生了注入；看一下下面的图，最主要的有一个点，当javaSerializedData不为空的时候，会采用相应的classloader去对相关的数据进行deserialize；这里就很显然了，也是一个注入点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXfHcn"><img src="https://s1.ax1x.com/2022/03/14/bXfHcn.png" alt="bXfHcn.png"></a></p>
+<p>所以ldap的攻击使用范围挺广泛，除了可以返回相应的对象导致解析属性去加载原程的恶意factory class之外还可以直接利用javaSerializedData返回一段序列化数据在不去加载外部的class的时候就可以实现反序列化命令执行；</p>
+<p>我们来看一下相关的恶意工具中的class的设计；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bX4NdK"><img src="https://s1.ax1x.com/2022/03/14/bX4NdK.png" alt="bX4NdK.png"></a></p>
+<p>可以看到相关的工具中也是对一些敏感的属性进行属性值的注入，从而导致本地解析流程中的一些逻辑处理；从而可以对远程的恶意factoryclass进行加载；有点类似tomcat的AJP任意文件读取；都是对属性进行注入，从而影响相关的解析流程，从而达到文件包含或者文件读取的效果；不过文件读取因为normail函数的限制只可以读取特定目录下的文件，因为相关函数会对目录穿越进行检测；这里不过多赘述另外的漏洞了；</p>
+<p>接着刚才的流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bX5IhD"><img src="https://s1.ax1x.com/2022/03/14/bX5IhD.png" alt="bX5IhD.png"></a></p>
+<p>看到相关的程序进入到return的阶段；这里的一些判断句我们都可控制；首先来看var1；var1这里可以eval一下</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXIp9g"><img src="https://s1.ax1x.com/2022/03/14/bXIp9g.png" alt="bXIp9g.png"></a></p>
+<p>很清晰的可以看到确实是有返回值；所以为null的条件并不满足，后面的几个条件我们都可通过相关的属性值来进行控制；目的是为了让其进入decodeReference函数而不是返回null；</p>
+<p>来看一下相关的敏感函数：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXIU8e"><img src="https://s1.ax1x.com/2022/03/14/bXIU8e.png" alt="bXIU8e.png"></a></p>
+<p>可以清晰的看到这里对javaCLassName进行相关的判断和处理，显而易见这个方法就是处理class的地方；跟着程序看，var2拿到的是javaClassName，然后后续利用get方法赋值给了var3；然后下面又进行了Reference的封装；来细致的看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXIqGF"><img src="https://s1.ax1x.com/2022/03/14/bXIqGF.png" alt="bXIqGF.png"></a></p>
+<p>可以看到的是利用get方法最后赋值的是相关的factoryclass；然后进入var5的时候进行Reference的封装；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXTCmn"><img src="https://s1.ax1x.com/2022/03/14/bXTCmn.png" alt="bXTCmn.png"></a></p>
+<p>最后return；</p>
+<p>然后在LdapCtx类下进行继续解析；具体看下图；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXTDtf"><img src="https://s1.ax1x.com/2022/03/14/bXTDtf.png" alt="bXTDtf.png"></a></p>
+<p>到这里就和rmi后面的相关流程一样了；贴一下图吧；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXTOBR"><img src="https://s1.ax1x.com/2022/03/14/bXTOBR.png" alt="bXTOBR.png"></a></p>
+<p>就会造成远程加载factoryclass进行恶意命令执行；至于ldap的其他的几个用法，因为在之前追溯的时候也有过一些其他的if；比如上面的一张图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXIp9g"><img src="https://s1.ax1x.com/2022/03/14/bXIp9g.png" alt="bXIp9g.png"></a></p>
+<p>可以看到回去进行decodeRmiObject，这也是一种利用点，可以考虑深度挖掘一下，这里不讲那么多hhh；可以自行深度挖掘，因为用的也不是很多，但是并不意味着不可以进行相关注入；</p>
+<h2 id="结尾："><a href="#结尾：" class="headerlink" title="结尾："></a>结尾：</h2><p>相信看到这里应该对jndi注入有了更清晰的认知，知道为什么叫做jndi“注入”；对其相关的原理进行理解，就会问题的产生还是因为信任用户的输入，引导程序去加载恶意的server从而导致属性可控，返回对象类型可控。从而导致本地的很多流程都可控，最终导致远程加载恶意class或者其他的一些命令执行等等；</p>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
         </div>
         <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
     
-    <a class="pull-left" href="/2022/03/14/java-JNDI%E6%B3%A8%E5%85%A5%E5%BA%95%E5%B1%82%E5%88%86%E6%9E%90/" style="float: left;">
-        ← java JNDI注入底层分析
-    </a>
     
-    
-    <a class="pull-right" href="/2021/12/29/Spring-4-2-4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%80%E8%A7%88/">
-        Spring 4.2.4反序列化一览 →
+    <a class="pull-right" href="/2022/03/13/commons-fileupload-bypass/">
+        commons-fileupload bypass →
     </a>
     
 </nav>
