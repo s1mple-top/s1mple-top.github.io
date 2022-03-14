@@ -186,7 +186,7 @@
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>本来想要写一下jndi注入在jdk高版本下的利用这个专题的，后来发现之前分析过底层jndi注入的原理，但是好像一直没有记述，就先来补一下；趁着现在机会写一写，顺便复习一下；</p>
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>本来想要写一下jndi注入在jdk高版本下的利用这个专题的，后来发现之前分析过底层jndi注入的原理，但是好像一直没有记述，就先来补一下；趁着现在机会写一写，顺便复习一下；改天再来补jndi的高版本jdk的利用；</p>
 <h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>低版本的jndi注入可以很方便的进行攻击，利用reference远程绑定class和factory以及factorylocation可以在本地解析的时候使用造成factory去对class进行处理，因为本地无相应的factory最终会去factorylocation上进行远程加载，调用class.forname；但是高版本因为有JEP290的限制原因，导致无法进行相应的攻击，</p>
 <p>jdk8u113开始进行相关的安全设置，这里先使用8u112进行测试下；</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bL4TQ1"><img src="https://s1.ax1x.com/2022/03/14/bL4TQ1.png" alt="bL4TQ1.png"></a></p>
