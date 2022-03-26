@@ -209,6 +209,69 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2021/09/27/javascript-prototype-pollution/">javascript prototype pollution</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-09-27T07:33:34.000Z" itemprop="datePublished">
+          2021-09-27
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        前言：​    Prototype pollution是一个老生常谈的问题了；JavaScript是一门非常灵活的语言，在某些方面可能比PHP更加灵活。所以，除了一些sql注入和代码执行等注入型漏洞外，也会有一些独有的安全问题，比如prototype polllution。
+正文：​    说javascript灵活是因为一般的OOP语言会使用class关键字进行模版的定义，从这个class去实例化的对象都会自然的继承了模版中相应的属性
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/09/27/javascript-prototype-pollution/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2021/09/23/从shell-hack的角度来看待bypass-disable-functions/">从shell-hack的角度来看待bypass disable_functions</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2021-09-23T07:18:44.000Z" itemprop="datePublished">
+          2021-09-23
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        前言：​    之前大二暑假开发了一款基于终端的webshell-controller；相应的代码开源选择了在中秋节前夕；在后期的比赛当中也展现出相应的风采，比如上海的极客谷杯中相应的数据库操作和反弹shell之类的操作完美施展，没有什么错误；在shell-hack中我个人加入相对比较重要的一些点是支持bypass disable_functions;
+下面主要介绍两个bypass的原理实现；
+正文：​    shell-hack有多种
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2021/09/23/从shell-hack的角度来看待bypass-disable-functions/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2021/08/16/国际赛印度inctf一道sql注入题有感/">国际赛印度inctf一道sql注入题有感</a></h3>
                     <span>
                         <span class="post-meta">
@@ -455,71 +518,6 @@ Manually add deserialization point:/routes/web.php：
                     
                     <p class="pull-right readMore">
                         <a href="/2020/12/02/Jsonp-hijacking/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/24/WordPress-5-2-3-unauthorized-page-viewing-vulnerability/">WordPress 5.2.3 unauthorized page viewing vulnerability</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-24T14:29:09.000Z" itemprop="datePublished">
-          2020-11-24
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        FOREWORDwordpress5.2.3存在未授权页面访问漏洞，攻击者可以通过这种漏洞观看到受害者得所有敏感文件；包括隐私文件和加密文件；
-text首先声明，此漏洞可以未授权访问页面，但是不能未授权访问文章；本地复现可以通过下载wp源码然后在phpstudy中自行搭建；在new的地方选择page，而不是post；
-Vulnerability analysis首先进入wp-includes/class-wp.php中；有个WP的类；该
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/24/WordPress-5-2-3-unauthorized-page-viewing-vulnerability/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/23/祥云web/">祥云web</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-23T09:53:40.000Z" itemprop="datePublished">
-          2020-11-23
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        web1
-ping命令拼接，不在多说；
-webflask开启debug模式导致源码泄露
-1234567891011def Guess():    user&#x3D;request.cookies.get(&#39;user&#39;)    if user&#x3D;&#x3D;None:        return redirect(url_for(&quot;Hello&quot;))    user&#x3D;user.enco
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/23/祥云web/">Read More...</a>
                     </p>
                     
                 </div>
