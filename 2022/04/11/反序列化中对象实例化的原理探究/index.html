@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>反序列化中对象实例化的原理探究 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-04-11T11:41:44.000Z" itemprop="datePublished">
+          2022-04-11
+      </time>
+    
+</span>
+                <h1>反序列化中对象实例化的原理探究</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>​    最近打算将知识点学的细致一点，之前分析过java原生的序列化和反序列化流程，还算是比较的细；但是今天想了一个问题，在反序列化的时候如果目标类继承Serializable，那么在反序列化的时候不会触发其构造函数；当然我们知道，在java中实例化对象的方式一般有五种；</p>
+<ol>
+<li>new object</li>
+<li>Class.newinstance</li>
+<li>Constructor.newinstance</li>
+<li>Unsafe</li>
+<li>反序列化创建对象</li>
+</ol>
+<p>今天着重探究一下反序列化创建对象的方式；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> idcard;</span><br><span class="line">    <span class="keyword">public</span> String school;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SU</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.idcard=<span class="number">410881</span>;</span><br><span class="line">        <span class="keyword">this</span>.school=<span class="string">&quot;ncu&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">information</span> <span class="keyword">extends</span> <span class="title">SU</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String id = <span class="string">&quot;s1mple&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">public</span> String hacker = <span class="string">&quot;hack&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">information</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tests</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line"></span><br><span class="line">        in.defaultReadObject();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;fuckerfucker&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">cmd</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        information test = <span class="keyword">new</span> information();</span><br><span class="line">        ObjectInputStream s2mple = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">&quot;test.ser&quot;</span>));</span><br><span class="line">        information cc = (information) s2mple.readObject();</span><br><span class="line">        System.out.println(cc.id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单来看一个demo；</p>
+<p>之前文章讲述过，ObjectStreamClass函数对一个class进行内省并且封装，里面有一个敏感的函数用来获取constructor；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LV8iLD"><img src="https://s1.ax1x.com/2022/04/11/LV8iLD.png" alt="LV8iLD.png"></a></p>
+<p>追踪进去这个函数内部看一下逻辑；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LV8uSP"><img src="https://s1.ax1x.com/2022/04/11/LV8uSP.png" alt="LV8uSP.png"></a></p>
+<p>内部实现了reflFactory.newConstructorForSerialization；下面就对其进行一个分析；</p>
+<p>其实这里就是网上广泛说的，先拿到非继承Serializable类的构造函数然后再基于此生成新的construcotr；可以看一下上面图中传入的参数就可，cl和cons；</p>
+<p>跟进去看一下内部的实现逻辑；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVGj81"><img src="https://s1.ax1x.com/2022/04/11/LVGj81.png" alt="LVGj81.png"></a></p>
+<p>可以看到首先进行了constructor判断，判断当前的构造器是否为需要实例化对象的构造器，这里显然不是，这也是由反序列化中的逻辑决定的，会先进行“上”溯；拿到非继承Serializable类的构造函数；这里直接去到基类里了；判断不是之后就会进入到generateConstructor的逻辑；很显然就要创造一个新的构造器；这一步主要是因为：Constructor 对象中有一个关键属性 private volatile ConstructorAccessor constructorAccessor; ,ConstructorAccessor 是一个接口 如果构造方法不存在是没有办法反射生成的，reflectionFactory.newConstructorForSerialization 使用字节码的方式生成了这个接口的实现类。下面就来简单理解一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVt4gI"><img src="https://s1.ax1x.com/2022/04/11/LVt4gI.png" alt="LVt4gI.png"></a></p>
+<p>看一下实现的源码，先去实例化一个MethodAccessorGenerator之后调用generateSerializationConstructor函数：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVNhoF"><img src="https://s1.ax1x.com/2022/04/11/LVNhoF.png" alt="LVNhoF.png"></a></p>
+<p>看一下逻辑不难理解；传入目标的参数，从而去创建一个constructor；上面已经说过相关的原理了，采用字节码的方式进行生成；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVUeYQ"><img src="https://s1.ax1x.com/2022/04/11/LVUeYQ.png" alt="LVUeYQ.png"></a></p>
+<p>具体的实现逻辑在generate函数中实现；中间的一些实现逻辑简单跳过；最后生成点是在下面：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVUTAS"><img src="https://s1.ax1x.com/2022/04/11/LVUTAS.png" alt="LVUTAS.png"></a></p>
+<p>这里的byte就是最后的字节码，其相关的过程就是上面省略的那一部分；不过可以向上简单看一下最后的转化点：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVaL5D"><img src="https://s1.ax1x.com/2022/04/11/LVaL5D.png" alt="LVaL5D.png"></a></p>
+<p>最开始的传入点：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVDTA0"><img src="https://s1.ax1x.com/2022/04/11/LVDTA0.png" alt="LVDTA0.png"></a></p>
+<p>期间add或者set一些东西：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVDXjJ"><img src="https://s1.ax1x.com/2022/04/11/LVDXjJ.png" alt="LVDXjJ.png"></a></p>
+<p>最后导出字节码，然后defineclass进行加载的操作；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVrR56"><img src="https://s1.ax1x.com/2022/04/11/LVrR56.png" alt="LVrR56.png"></a></p>
+<p>这里看一下相关的逻辑，有一个需要去注意的点，在defineclass的时候，每次加载的时候有可能是不同的Classloader declaringClass.getClassLoader()).newInstance()；所以如果一直大量的使用，不对Constructor 对象进行缓存，会不停的加载类 最终导致 Metaspace 空间不足，可能会频繁的触发 FullGC 的情况。</p>
+<p>最后进行defineclass之后生成Class对象，Name为</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVywX4"><img src="https://s1.ax1x.com/2022/04/11/LVywX4.png" alt="LVywX4.png"></a></p>
+<p>最后返回ConstructorAccessor接口的实现类；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVcGWV"><img src="https://s1.ax1x.com/2022/04/11/LVcGWV.png" alt="LVcGWV.png"></a></p>
+<p>然后通过setConstructorAccessor进行set；然后返回；</p>
+<p>到此相比就很明白为什么之后尽管调用Object的newinstance也会实例化information的实例了吧；</p>
+<p>回看一下Constructor这个class下的newInstance方法；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LVRIYR"><img src="https://s1.ax1x.com/2022/04/11/LVRIYR.png" alt="LVRIYR.png"></a></p>
+<p>原理已经很透彻了；感兴趣的师傅可以进一步分析一下Constructor这个class下的实现逻辑，就会更加的明白相关的原理；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    
+    <a class="pull-right" href="/2022/03/26/Java-SnakeYaml%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/">
+        Java SnakeYaml反序列化漏洞 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
