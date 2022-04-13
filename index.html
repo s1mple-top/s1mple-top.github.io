@@ -209,6 +209,41 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2022/04/13/Spring-Cloud-Gateway-RCE/">Spring Cloud Gateway RCE</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2022-04-13T13:53:19.000Z" itemprop="datePublished">
+          2022-04-13
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        之前爆了一个大洞，据说堪比log4j，现在追溯一波看看情况；
+还是老思路，从后往前推；漏洞是一个常规的spel注入；
+
+看一下触发点，可以看到在ShortcutConfigurable这个接口类里getValue函数中，传入spelExpressionParser，第三个参数是entryValue String；然后下面进行解析，把在 #&#123;&#125; 之间的str拿出来做spel解析；接着这个函数往前追；
+
+看到在norma
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2022/04/13/Spring-Cloud-Gateway-RCE/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2022/04/11/反序列化中对象实例化的原理探究/">反序列化中对象实例化的原理探究</a></h3>
                     <span>
                         <span class="post-meta">
@@ -485,38 +520,6 @@ Spring表达式语言（简称 SpEL，全称Spring Expression Language）是一�
                     
                     <p class="pull-right readMore">
                         <a href="/2021/12/12/Java原生序列化和反序列化分析/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2021/11/16/Javascript-iframe-postMessage-xss/">Javascript iframe postMessage xss</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2021-11-16T08:01:27.000Z" itemprop="datePublished">
-          2021-11-16
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        前言：​    我最开始发现这个有趣的点的时候，是我看到了Vinoth Kumar发掘了一个Facebook的xss；细致的看了一遍他的挖掘思路，其实是利用iframe window的postMessage进行xss；当没有验证来源的时候就可以接受任意来源的数据，攻击者相应的伪造postMessage函数就可达到篡改内容的效果；
-​    在读此文章前可以考虑先阅读如下几篇文章：
-https://javascript.info/cros
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2021/11/16/Javascript-iframe-postMessage-xss/">Read More...</a>
                     </p>
                     
                 </div>
