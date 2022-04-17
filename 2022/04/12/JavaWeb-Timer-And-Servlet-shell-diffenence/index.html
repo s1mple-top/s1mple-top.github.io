@@ -198,7 +198,7 @@
 <p>可以看到已经删除了文件，但是Timer线程依然在进行，也会一直弹出计算器；</p>
 <p>其实也都知道，jsp的本质就是servlet；那么就会存在一个新的问题，这种的木马算是servlet的那种内存马么；如果这么可以形成内存马的效果，那么可以进行外部参数可控么？    带着问题下面分析一下：jsp和servlet</p>
 <h2 id="分析Servlet生成"><a href="#分析Servlet生成" class="headerlink" title="分析Servlet生成"></a>分析Servlet生成</h2><p> servlet的生命周期一共经历三个阶段：我的理解是（servlet先实例化然后调用init再初始化）：在loadOnStratup默认为负数的情况下</p>
-<p>1、在请求到来的时候通过init进行初始化阶段（只会调用一次）【loadOnStratup不为负数则tomcat启动的时候就会调用init进行初始化】</p>
+<p> 1、在请求到来的时候通过init进行初始化阶段（只会调用一次）【loadOnStratup不为负数则tomcat启动的时候就会依次调用<code>静态代码块、构造方法和init方法</code>进行最后的初始化，反之则需要在请求到来的时候才进行一系列的操作进行load】{一个请求到来的时候会先去判断内存中是否有相应的servelt对象，如果有则直接调用，所以servlet的存在是单例的形式存在，并不是线程安全的}</p>
 <p>2、在之后调用service函数，传入ServletRequest对象经过servlet函数处理，按照请求方式去触发doGet()，doPost()方法，这些方法包括service方法都是运行的在多线程状态下； 每次请求都会servlet进行处理都会调用service方法；下图这个service方法是再封装的service的方法；</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3RV5q"><img src="https://s1.ax1x.com/2022/04/15/L3RV5q.png" alt="L3RV5q.png"></a></p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L3RNRK"><img src="https://s1.ax1x.com/2022/04/15/L3RNRK.png" alt="L3RNRK.png"></a></p>
