@@ -209,6 +209,37 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
+                    <h3><a href="/2022/04/25/Tomcat-FIlter和Servlet内存马的扫描和查杀脚本/">Tomcat FIlter和Servlet内存马的扫描和查杀脚本</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2022-04-25T05:31:52.000Z" itemprop="datePublished">
+          2022-04-25
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        ​    之前发过两种内存马的原理，其实也都是利用反射进行动态注册，那么针对查杀也有一些方法，我这边是随便直接写了个jsp脚本，内部采用反编译技术进行相关恶意代码的检测，这里我只是检测了getRuntime，exec( ，ProcessBuilder，ProcessImpl，shell等敏感的代码区域；实际情况根据需要来，可以自己后期加上一些新的污点；
+​    需要利用的时候直接上传就可自动扫描，然后可以调用接口进行kill掉内存马；
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2022/04/25/Tomcat-FIlter和Servlet内存马的扫描和查杀脚本/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
                     <h3><a href="/2022/04/18/Tomcat-Filter-shell/">Tomcat Filter shell</a></h3>
                     <span>
                         <span class="post-meta">
@@ -490,36 +521,6 @@ Spring表达式语言（简称 SpEL，全称Spring Expression Language）是一�
                     
                     <p class="pull-right readMore">
                         <a href="/2022/03/13/commons-fileupload-bypass/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2021/12/29/Spring-4-2-4反序列化一览/">Spring 4.2.4反序列化一览</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2021-12-29T13:36:16.000Z" itemprop="datePublished">
-          2021-12-29
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        前言：先来poc123456789101112131415161718192021222324import org.springframework.transaction.jta.JtaTransactionManager;import org.springframework.jndi.JndiTemplate;import java.io.*;import java.lang.reflect.Field;public class s1
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2021/12/29/Spring-4-2-4反序列化一览/">Read More...</a>
                     </p>
                     
                 </div>
