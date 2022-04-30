@@ -241,12 +241,12 @@
 <p><code>https://mp.weixin.qq.com/s?__biz=MzAwMzI0MTMwOQ==&amp;idx=1&amp;mid=2650174018&amp;sn=94cd324370afc2024346f7c508ff77dd</code></p>
 <p>可以采用Character构建字符串等等；我这里就不多提了；</p>
 <h3 id="方法五：外部可控字符进行绕过"><a href="#方法五：外部可控字符进行绕过" class="headerlink" title="方法五：外部可控字符进行绕过"></a>方法五：外部可控字符进行绕过</h3><p>结合相关的请求；采用request来进行获取GET或者POST字符，然后进行replace。也是老套路了；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(80,104)%2b#request.getMethod().substring(0,1).replace(80,51)%2b#request.getMethod().substring(0,1).replace(80,122)%2b#request.getMethod().substring(0,1).replace(80,104)%2b#request.getMethod().substring(0,1).replace(80,49)//post</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(80,112)%2b#request.getMethod().substring(0,1).replace(80,111)%2b#request.getMethod().substring(0,1).replace(80,115)%2b#request.getMethod().substring(0,1).replace(80,116)%2b//post</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(71,104)%2b#request.getMethod().substring(0,1).replace(71,51)%2b#request.getMethod().substring(0,1).replace(71,122)%2b#request.getMethod().substring(0,1).replace(71,104)%2b#request.getMethod().substring(0,1).replace(71,49)//get</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#request.getMethod().substring(0,1).replace(71,103)%2b#request.getMethod().substring(0,1).replace(71,101)%2b#request.getMethod().substring(0,1).replace(71,116)%2b//get</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>或者在header里进行相关的处理获取：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.getRequestedSessionId();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.getRequestedSessionId();</span><br></pre></td></tr></table></figure>
 
 <p>cookie中的jsessionid读取数据，然后用其来替代一些spel表达式中的str；可以实现饶过；</p>
 <h2 id="拓展："><a href="#拓展：" class="headerlink" title="拓展："></a>拓展：</h2><p>​    其实我们不妨换个角度来考虑一下这个问题，整体的流程来看。spel只是属于单向代码执行链；它并不像java的一般gadget反射那么的灵活，可以通过setAccessible来取消默认Java语言访问控制检查的能力；所以基于此，我们并不能很活泛的去执行一些命令或者说调用一些方法；</p>
