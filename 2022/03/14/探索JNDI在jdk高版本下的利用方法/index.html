@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<!--<![endif]-->
+
+<head>
+  <title>探索JNDI在jdk高版本下的利用方法 | s1mple</title>
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="s1mple">
+    <meta name="author" content="s1mple">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
+    <link rel="alternate" href="/atom.xml" title="s1mple" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+    
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+  
+  
+  
+
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link"></a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link"></a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a target="_blank" rel="noopener" href="https://blog.zeddyu.info/" class="animsition-link">陆队</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://st4ck.gitee.io/" class="animsition-link">书鱼</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://boluochuixue.top/" class="animsition-link">菠萝吹雪</a></li>
+                    
+                    <li><a target="_blank" rel="noopener" href="https://rmb122.com/" class="animsition-link">rmb</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
+    </div>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">s1mple</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+
+      
+<section id="intro">
+    <div class="container">
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2022-03-13T16:39:57.000Z" itemprop="datePublished">
+          2022-03-14
+      </time>
+    
+</span>
+                <h1>探索JNDI在jdk高版本下的利用方法</h1>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+      		<p>​    java的防护机制其实有很多种，最开始是对于java.rmi.server.useCodebaseOnly配置，从而限制rmi load class；但是jndi利用点可以多种，可以用reference去绑定第三方的factoryclass；从而导致采用urlclassloader去进行远程加载，这种加载机制和rmi load class还不一样，所以java.rmi.server.useCodebaseOnly这个配置无法限制jndi的注入；但是可以限制rmi的反序列化攻击；具体的可以看下面这个文章，我感觉写的挺好的，也挺详细；</p>
+<p><code>https://xz.aliyun.com/t/6660</code></p>
+<p>之后java在JDK 6u141, JDK 7u131, JDK 8u121 中Java提升了JNDI 限制了Naming/Directory服务中JNDI Reference远程加载Object Factory类的特性。系统属性 com.sun.jndi.rmi.object.trustURLCodebase、com.sun.jndi.cosnaming.object.trustURLCodebase 的默认值变为false导致第二条攻击道路也被禁止；相关的jndi注入原理可以看我上篇文章；本文简单分享两个利用点，其实利用点很多种，本文先简要分析一下；</p>
+<p>上篇文章记述过相关的jndi注入的原理，也提到jdk8在112之后开启了相关的防护机制，默认不允许从远程加载class；如果加载则会报错；具体看下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bXx6IJ"><img src="https://s1.ax1x.com/2022/03/14/bXx6IJ.png" alt="bXx6IJ.png"></a></p>
+<p>可以看到已经发生了jndi注入，相关的恶意注入已经发生，但是最后的结果是本地没有去远程恶意的class-server上进行加载，而且本地还报错出trustURLCodebase，提示需要设置为true；显然已经是做了相关的防护；除此之外还有jep290的相关防护</p>
+<p>JEP290是Java底层为了缓解反序列化攻击提出的一种解决方案，主要做了以下几件事</p>
+<ol>
+<li>提供一个限制反序列化类的机制，白名单或者黑名单。</li>
+<li>限制反序列化的深度和复杂度。</li>
+<li>为RMI远程调用对象提供了一个验证类的机制。</li>
+<li>定义一个可配置的过滤机制，比如可以通过配置properties文件的形式来定义过滤器。</li>
+</ol>
+<p>那么针对于这种防护机制一些之前提到的rmi反序列化攻击某些gadget也会受到影响；rmi的反序列化从某种程度上来算也是jndi注入的一种，那么这种jep290的防护方式也有效的杜绝了一些攻击；</p>
+<h2 id="jndi在高版本jdk有防护下的一些利用技术"><a href="#jndi在高版本jdk有防护下的一些利用技术" class="headerlink" title="jndi在高版本jdk有防护下的一些利用技术"></a>jndi在高版本jdk有防护下的一些利用技术</h2><p>根据之前说的一些原理，可以看到jndi直接攻击rmi反序列化已经很难利用，除非找到新的gadget，而且相关的要求也是得register接受object类型的参数，主要是因为server端会对传入的类型进行相应的判断，从而调用不同的解析方法进行反序列化；看下图就可明白：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bj7mWT"><img src="https://s1.ax1x.com/2022/03/15/bj7mWT.png" alt="bj7mWT.png"></a></p>
+<p>可以看到在UnicastRef下unmarshalValue函数会对相关的序列化流进行处理，会对相关的规定类型进行判断；从而调用相关函数，比如一个函数参数指定为int；那么解析的时候就算传入对象的序列化流，最后也会调用readInt进行反序列化读取处理，自然会报错，我们也无法攻击；可以看到对String也有相关的处理，当规定的type不是上面的一些指定type比如object的时候，就会调用readObject进行反序列化，这时才可进行相关的rmi反序列化攻击；</p>
+<p>那么有很多师傅估计也在想，ldap其实可以返回一个reference对象；通过一些属性的赋值，可以导致最后的处理流程和rmi的差不多，只是lookup()中的URL为一个LDAP地址：ldap://xxx/xxx，由攻击者控制的LDAP服务端返回一个恶意的JNDI Reference对象。并且LDAP服务的Reference远程加载Factory类不受上一点中 com.sun.jndi.rmi.object.trustURLCodebase、com.sun.jndi.cosnaming.object.trustURLCodebase等属性的限制，所以适用范围更广；不过在2018年10月，Java最终也修复了这个利用点，对LDAP Reference远程工厂类的加载增加了限制，在Oracle JDK 11.0.1、8u191、7u201、6u211之后 com.sun.jndi.ldap.object.trustURLCodebase 属性的默认值被调整为false；</p>
+<h3 id="所以对于高版本下的绕过方式，我们就得另辟蹊径，大概的思路有两种："><a href="#所以对于高版本下的绕过方式，我们就得另辟蹊径，大概的思路有两种：" class="headerlink" title="所以对于高版本下的绕过方式，我们就得另辟蹊径，大概的思路有两种："></a>所以对于高版本下的绕过方式，我们就得另辟蹊径，大概的思路有两种：</h3><p>1:Reference角度来看，我们可以不用远程的Factory；采用本地的factory进行相关的处理；</p>
+<p>2:ldap新的角度来看，可以直接赋值JavaSerializeData属性从而直接反序列化数据从而攻击本地的gadget；</p>
+<p>我本地采用了一个高版本的jdk；jdk8u282；来进行相关的测试；主要得思路就是第一种；在本地找相关的Factory进行利用；因为采用的是本地的class做攻击，所以本地的factory需要继承javax.naming.spi.ObjectFactory接口，至于原因，在上篇文章有提到过，远程不用继承接口是因为在进行实例化之前就可以进行恶意代码执行，所以无所谓，但是本地的class；我们无法控制static中的代码，所以在实例化之前是无法命令执行的，而且实例化触发构造函数构造函数中的逻辑也无法控制（但是也有可能利用），上篇文章也说过实例化完之后会调用getObjectInstance函数，所以我们这里把主要的逻辑放在getObjectInstance函数中；所以思路就是找一个本地的Class，继承javax.naming.spi.ObjectFactory接口，并且其中有getObjectInstance函数；其实有一个符合的class；就是tomcat中广泛的BeanFactory；org.apache.naming.factory.BeanFactory；</p>
+<p>先来看一下如果还是请求远程的rmiserver情况下，依然可以拿到完整的wrapper，对其进行解析的时候就会发现相关的Factoryclass获取的地方出现了问题：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvg8qf"><img src="https://s1.ax1x.com/2022/03/15/bvg8qf.png" alt="bvg8qf.png"></a></p>
+<p>所以更好的验证了，在高版本下攻击者无法向远程的恶意factoryclass进行请求拿到class去恶意执行；</p>
+<p>我为了测试方便直接在本地开了一个恶意的server；然后jndi请求本地；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvDM26"><img src="https://s1.ax1x.com/2022/03/15/bvDM26.png" alt="bvDM26.png"></a></p>
+<p>这里有个细节的点，因为在BeanFactory的源码中最开始有限制；可以简单看一下下图：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvrIpt"><img src="https://s1.ax1x.com/2022/03/15/bvrIpt.png" alt="bvrIpt.png"></a></p>
+<p>要求最开始处理的obj要继承ResourceRef；所以这也是为什么在绑定对象的时候需要new一个ResourceRef的原因；ResourceRef也是继承于Reference的；调试跟进下逻辑；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvgxyt"><img src="https://s1.ax1x.com/2022/03/15/bvgxyt.png" alt="bvgxyt.png"></a></p>
+<p>可以看到已经成功请求到了相关的返回值；</p>
+<p>然后对相应返回的wrapper进行decodeObject的处理：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bv2CTS"><img src="https://s1.ax1x.com/2022/03/15/bv2CTS.png" alt="bv2CTS.png"></a></p>
+<p>相关的处理就和低版本jndi注入的后续处理差不多一样了；简单看一下相关的逻辑：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bv2YOx"><img src="https://s1.ax1x.com/2022/03/15/bv2YOx.png" alt="bv2YOx.png"></a></p>
+<p>可以看到后续对factoryClass的相关处理逻辑如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bv220f"><img src="https://s1.ax1x.com/2022/03/15/bv220f.png" alt="bv220f.png"></a></p>
+<p>因为设置的是本地的BeanFactory；所以这里自然不会触发相关的限制；可以成功对其进行实例化操作，这也就是之前为什么说在本地找的FactoryClass一定要继承相关的ObjectFactory接口，原因就在此，如果没有继承，这里实例化的时候会触发类型转换的错误，jdk低版本下我们不需要转的原因是将恶意的代码放在了static代码块中，后续会进行class初始化操作导致直接执行，在实例化前已经出发恶意的命令，所以实例化就无关紧要；</p>
+<p>实例化结束之后就会去处理相关的class；当然自然是利用factory去进行相关的处理；如下图；这个流程就发生在ObjectFactory中；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvRG4g"><img src="https://s1.ax1x.com/2022/03/15/bvRG4g.png" alt="bvRG4g.png"></a></p>
+<p>这里跟着代码走一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvRg29"><img src="https://s1.ax1x.com/2022/03/15/bvRg29.png" alt="bvRg29.png"></a></p>
+<p>发现会拿到forceString属性的相关值，这里攻击者是可以控制相应server的；给相关的属性进行赋值；这里结合之前在本地启的恶意registry服务就可明白；跟着走下流程看看后续会如何操作；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvfeOI"><img src="https://s1.ax1x.com/2022/03/15/bvfeOI.png" alt="bvfeOI.png"></a></p>
+<p>可以看到后续的处理是先对forceString的value进行按照<code>,</code>进行分割，分割完了之后会检索等号的位置，然后按照等号再进行相关的前后截取；也就是相当于再次按照等号进行分割，分隔成为propName和param；然后可以看到利用反射去调用了ELProcessor下的相关方法，方法的参数类型在前面已经定义过，在上图可清楚的看到是String；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvfGlj"><img src="https://s1.ax1x.com/2022/03/15/bvfGlj.png" alt="bvfGlj.png"></a></p>
+<p>跟进去细致的看一下，发现果然是eval；所以相关的逻辑就已经很明显；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvhdKA"><img src="https://s1.ax1x.com/2022/03/15/bvhdKA.png" alt="bvhdKA.png"></a></p>
+<p>最后利用反射调用相关class下的eval方法；相关参数可以看到就是最开始被分隔的param的value；在此环境中也就是s1mple的value；所以最后逻辑就很明显了；直接反射调用方法进行相关的执行，反射调用到此：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvhXrR"><img src="https://s1.ax1x.com/2022/03/15/bvhXrR.png" alt="bvhXrR.png"></a></p>
+<p>执行EL表达式；看一下表达式就可明白是调用了Script引擎；ScriptEngineManager获得脚本引擎管理，然后getEngineByName拿到相关的引擎，相当于是最后在js引擎里利用eval执行了相关的命令从而触发rce；后续就不跟了；最后效果：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bv5fA0"><img src="https://s1.ax1x.com/2022/03/15/bv5fA0.png" alt="bv5fA0.png"></a></p>
+<p>所以总结一下要找到相关的可利用的classname需要一下几个要求：</p>
+<ul>
+<li><p>JDK或者常用库的类</p>
+</li>
+<li><p>有public修饰的无参构造方法</p>
+</li>
+<li><p>public修饰的只有一个String.class类型参数的方法，且该方法可以造成漏洞</p>
+</li>
+</ul>
+<p>public无参构造方法的原因是因为getConstructor函数，根据代码写的规范只能拿到无参的public的构造器；否则就会报错导致流程异常；至于第三点也应该已经很清楚了，利用了反射，但是没有进行setAccessible；所以也不难理解；</p>
+<p>至于上述说的第二种ldap的方法，也可以直接如下检测一下，本地导入Commons-Collections依赖，然后利用ysoserial生成恶意的序列化对象，然后直接传回来；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvX2xx"><img src="https://s1.ax1x.com/2022/03/15/bvX2xx.png" alt="bvX2xx.png"></a></p>
+<p>这里有一个细节，javaClassName不能为空，因为本地会先进行判断，如果为空就不会继续相关的流程；相关流程在上篇文章也提过，相关代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((attr = attrs.get(JAVA_ATTRIBUTES[SERIALIZED_DATA])) != <span class="keyword">null</span>) &#123; </span><br><span class="line">    ClassLoader cl = helper.getURLClassLoader(codebases);</span><br><span class="line">    <span class="keyword">return</span> deserializeObject((<span class="keyword">byte</span>[])attr.get(), cl);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后本地ldap一下导致rce；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bvjAyV"><img src="https://s1.ax1x.com/2022/03/15/bvjAyV.png" alt="bvjAyV.png"></a></p>
+<p>不过这种方法相对比较拘束，前提是本地得有相关的依赖，且存在gadget；才可进行如此的攻击；因为此过程不涉及去远程加载class的情况，所以也可以进行相关的绕过；</p>
+<p>那么除了以上的两种利用点之外还有一些其他的利用点；当然这些点都是对classname的选择上的一些点，并不是Factoryclass的点，因为BeanFactory下可以实现调用任意classname下的任意方法了；所以我们只需要寻找合适的classname即可；</p>
+<h3 id="MLet"><a href="#MLet" class="headerlink" title="MLet"></a>MLet</h3><p>javax.management.loading.MLet这个类；选择这个class主要是因为其满足于上述的几点要求，另外其继承于java.net.URLClassLoader；这个是一个很有意思的点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxYAeI"><img src="https://s1.ax1x.com/2022/03/15/bxYAeI.png" alt="bxYAeI.png"></a></p>
+<p>这个方法我们是可以直接通过反射进行相关的调用的；看一下这个函数的逻辑，new一个URL；然后contains一下如果没有新的url加载就addurl进去；又因为是继承URLClassLoader这个class肯定继承ClassLoader这个class；去到ClassLoader这个类里看一下；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxdsJ0"><img src="https://s1.ax1x.com/2022/03/15/bxdsJ0.png" alt="bxdsJ0.png"></a></p>
+<p>可以看到可以loadClass；那么这里的思路就已经出来了，我们可以给forceString属性多赋值；然后再put的时候从前往后进行put；最后调用反射进行相关方法的调用，参数自然就是param的value；所以首先来说我们这里是可以进行一个本地class的加载；如果本地存在相应的class，那么自然会被加载，加载完成之后就会继续下一轮反射，继续后面的方法，否则将会触发报错；从而影响相关流程；</p>
+<p>利用这个点我们就可以来通过loadClass的方法来判断本地是否存在一些特殊的class；为接下来的攻击进行探测；举个例子；如果想利用Commons-Collections，那么拿里面的一个恶意class来进行探测看看；跟踪个流程看看；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxwctI"><img src="https://s1.ax1x.com/2022/03/15/bxwctI.png" alt="bxwctI.png"></a></p>
+<p>可以看到我的相关代码做了下检测ChainedTransformer这个class；看一下远程的请求效果；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxwzB4"><img src="https://s1.ax1x.com/2022/03/15/bxwzB4.png" alt="bxwzB4.png"></a></p>
+<p>可以看到存在ChainedTransformer这个class；所以过了相关的加载，然后走向了后面的流程，addUrl之后进行URL上的class加载，有一次外带请求；类似一种盲注的感觉，从而达到判断是否存在相关class的方法，然后通过后续的一些rce进行攻击，比如ldap的JavaSerializerData，如果探测到有ELProcesser就可直接进行rce等等的方法；</p>
+<p>具体的可以跟一下流程就知道：跳过前面的加载流程直接进入到处理的点；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bx06rF"><img src="https://s1.ax1x.com/2022/03/15/bx06rF.png" alt="bx06rF.png"></a></p>
+<p>可以看到是利用循环将按照逗号分隔之后的三个propName进行了put；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxBFaj"><img src="https://s1.ax1x.com/2022/03/15/bxBFaj.png" alt="bxBFaj.png"></a></p>
+<p>可以看到已经形成了相应的映射关系；然后在后续就会进行反射invoke执行相关函数，并且参数也可控，之前已经分析过；这里不过多赘述；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxBusU"><img src="https://s1.ax1x.com/2022/03/15/bxBusU.png" alt="bxBusU.png"></a></p>
+<p>可以看到相关的调用是按照最开始put的顺序进行调用；所以这里任何一个环节出了问题，程序都将会进入catch；从而影响整体程序的流程；这里来调试一下，当正确加载之后的逻辑；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxBhwQ"><img src="https://s1.ax1x.com/2022/03/15/bxBhwQ.png" alt="bxBhwQ.png"></a></p>
+<p>当正确加载之后可以看到会进入第二个put的流程，为了鲜明，我最开始的相关值是按照a b c的顺序进行传入，可以看到先进行a然后再进行b；诸如此类；这个方法显然是添加url；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxBvTJ"><img src="https://s1.ax1x.com/2022/03/15/bxBvTJ.png" alt="bxBvTJ.png"></a></p>
+<p>这个classlaode的url是全新的；所以contain自然为false；就会将新的url进行add，从而可以从url上远程加载class；第三次就会进行远程class的加载；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxDQ6f"><img src="https://s1.ax1x.com/2022/03/15/bxDQ6f.png" alt="bxDQ6f.png"></a></p>
+<p>所以这套流程主要是判断一些本地的攻击class是否存在，当然看到这肯定有很多朋友想远程加载恶意的class进行rce；但是我们看一下相关的load；</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bxDW1x"><img src="https://s1.ax1x.com/2022/03/15/bxDW1x.png" alt="bxDW1x.png"></a></p>
+<p>可以看到resolve默认为false；所以就算造成了恶意加载也不会进行初始化，相关远程恶意class的静态代码也不会执行；仅仅是一个加载到jvm的过程；所以这种方法只是用来探测本地的gadget的链；当然也不排除实际开发中有工作人员重写相关的loadClass造成远程加载恶意class的利用rce点；</p>
+
+            <div class="clearfix"></div>
+            <hr class="nogutter">
+        </div>
+        <nav class="m-pagination col-md-8 col-md-offset-2 col-sm-24" role="pagination">
+    
+    <a class="pull-left" href="/2022/03/14/java-JNDI%E6%B3%A8%E5%85%A5%E5%BA%95%E5%B1%82%E5%88%86%E6%9E%90/" style="float: left;">
+        ← java JNDI注入底层分析
+    </a>
+    
+    
+    <a class="pull-right" href="/2022/03/13/commons-fileupload-bypass/">
+        commons-fileupload bypass →
+    </a>
+    
+</nav>
+
+        <div class="col-md-8 col-md-offset-2 col-sm-24"><script type="text/javascript">
+  /**
+   * 搜狐畅言
+   */
+
+  /*
+  document.write('<div id="SOHUCS" sid="' + window.location.pathname.slice(1) + '" ></div>');
+
+  window.onload = function () {
+    (function () {
+      var appid = 'cytXXXX';
+      var conf = 'prod_xxxxxxxxxxxxxxxxx';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      var loadJs = function (d, a, id) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("charset", "UTF-8");
+        b.setAttribute("src", d);
+        if (id) {
+          b.setAttribute("id", id);
+        }
+        if (typeof a === "function") {
+          if (window.attachEvent) {
+            b.onreadystatechange = function () {
+              var e = b.readyState;
+              if (e === "loaded" || e === "complete") {
+                b.onreadystatechange = null;
+                a()
+              }
+            }
+          } else {
+            b.onload = a
+          }
+        }
+        c.appendChild(b)
+      };
+
+      loadJs("https://changyan.sohu.com/upload/changyan.js", function () {
+        window.changyan.api.config({
+          appid: appid,
+          conf: conf
+        })
+      });
+    })();
+  }
+  */
+
+</script>
+</div>
+    </div>
+</section>
+
+
+      
+<!-- ============================ Footer =========================== -->
+
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By s1mple. All Rights Reserved.
+                </p>
+                <p>Theme By <a target="_blank" rel="noopener" href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+</footer>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+
+    resizeHero();
+
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$('#intro').find('img').each(function(){
+  var alt = this.alt;
+
+  if (alt){
+    $(this).after('<span class="caption" style="display:none">' + alt + '</span>');
+  }
+
+  $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox" rel="gallery" />');
+});
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+      
+</body>
+</html>

@@ -500,11 +500,11 @@ Spring表达式语言（简称 SpEL，全称Spring Expression Language）是一�
         <div class="row">
             <div class="col-md-8 col-md-offset-2 opening-statement">
                 <div class="col-md-4">
-                    <h3><a href="/2022/03/13/commons-fileupload-bypass/">commons-fileupload bypass</a></h3>
+                    <h3><a href="/2022/03/14/探索JNDI在jdk高版本下的利用方法/">探索JNDI在jdk高版本下的利用方法</a></h3>
                     <span>
                         <span class="post-meta">
-      <time datetime="2022-03-13T05:47:04.000Z" itemprop="datePublished">
-          2022-03-13
+      <time datetime="2022-03-13T16:39:57.000Z" itemprop="datePublished">
+          2022-03-14
       </time>
     
 </span>
@@ -513,13 +513,12 @@ Spring表达式语言（简称 SpEL，全称Spring Expression Language）是一�
                 <div class="col-md-8">
                     <p>
                       
-                        开头：​    之前有一些师傅对Commons-fileupload这个apache文件上传组件有过一些研究，我之前也看到很多文章，今天来自己做一下研究看看相关的原理；
-正文：​    首先构建一个项目用于方便复现；相关搭建过程就不过多赘述了，我的环境搭建是采用springboot+fileupload；在此之前要先在配置文件中关闭掉原本springboot的文件上传解析，否则parseRequest函数处理返回为空；搭建完成之后导入相
+                        ​    java的防护机制其实有很多种，最开始是对于java.rmi.server.useCodebaseOnly配置，从而限制rmi load class；但是jndi利用点可以多种，可以用reference去绑定第三方的factoryclass；从而导致采用urlclassloader去进行远程加载，这种加载机制和rmi load class还不一样，所以java.rmi.server.useCodebaseOnly这个配置无法限
                       
                     </p>
                     
                     <p class="pull-right readMore">
-                        <a href="/2022/03/13/commons-fileupload-bypass/">Read More...</a>
+                        <a href="/2022/03/14/探索JNDI在jdk高版本下的利用方法/">Read More...</a>
                     </p>
                     
                 </div>

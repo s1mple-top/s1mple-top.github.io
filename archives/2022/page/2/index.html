@@ -17,7 +17,7 @@
 <!--<![endif]-->
 
 <head>
-  <title>s1mple</title>
+  <title>Archives: 2022 | s1mple</title>
   <!-- Meta data -->
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -201,186 +201,32 @@
 <!-- // End height spacing helper -->
 
 <!-- ============================ END Hero Image =========================== -->
-<!-- ============================ Content =========================== -->
 
-<section id="intro">
+
+
+
+<section id="services">
     <div class="container">
-        
         <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Further discussion on SSTI template injection</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-19T05:25:46.000Z" itemprop="datePublished">
-          2020-11-19
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        模板注入一个亘古不变的话题，现在来深入的了解一下；
-基础点都不再赘述；网上资料很多；这里主要分享一下在再次复现SSTI的时候发现的一些有趣的点；
-首先来说有一个可以直接利用的链条；
-&#39;&#39;.__class__.__mro__[-1].__subclasses__()[40](&#39;/etc/passwd&#39;).read()
-这里我们可以直接调用file类进行文件读取；这里再分享几种找到file的方法；通过简单的实
-                      
-                    </p>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row boxes">
                     
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/19/Further-discussion-on-SSTI-template-injection/">Read More...</a>
-                    </p>
+                    
+                        
+                        
+                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 wow fadeInUp" data-wow-delay="0.3s">
+                            
+                              <h4 class="title"><a href="/2022/03/13/commons-fileupload-bypass/">commons-fileupload bypass</a></h4>
+                            
+                            <p><time datetime="2022-03-13T05:47:04.000Z"><a href="/2022/03/13/commons-fileupload-bypass/">2022-03-13</a></time></p>
+                        </div>
                     
                 </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
+            </div>    
         </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Yii2 deserialization rce pop chain analysis</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T12:19:55.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        影响范围
-Yii2 &lt; 2.0.38
-
-该框架反序列化起点在： /vendor/yiisoft/yii2/db/BatchQueryResult.php 中；
-12345public function __destruct()&#123;    // make sure cursor is closed    $this-&gt;reset();&#125;
-
-直接析构函数出可以调用reset函数；追踪reset函数；
-12345
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/Yii2-deserialization-rce-pop-chain-analysis/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/研究对中间件攻击至影响FPM造成RCE的四种方法/">研究对中间件攻击至影响FPM造成RCE的四种方法</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T05:15:16.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        ​    我们对于Fastcgi的攻击方法有很多种，可以利用未授权访问漏洞，直接伪造发包进行php_value传入从而包含我们POST的内容进行rce；前提是服务器的9000端口暴漏在公网中；也可以利用FastCgi动态加载我们的恶意so库然后rce；甚至如果我们有服务器的ssrf漏洞，我们则可以直接利用gopher协议进行传入php_value进行攻击使其rce；
-什么是FastCgi​    Fastcgi是一种通信协议，和HTTP
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/研究对中间件攻击至影响FPM造成RCE的四种方法/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/file-put-content和死亡·杂糅代码之缘/">file_put_content和死亡·杂糅代码之缘</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T05:07:29.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        首发先知：： https://xz.aliyun.com/t/8163之前打了WMCTF，题目还行，只是非预期很快乐，比赛时checkin2感觉很有意思，就来思考个专题；
-首先来说，file_put_content大概有三种情形出现；
-file_put_contents($filename,&quot;&lt;?php exit();&quot;.$content);
-file_put_contents($content,&quot;&
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/file-put-content和死亡·杂糅代码之缘/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 opening-statement">
-                <div class="col-md-4">
-                    <h3><a href="/2020/11/18/Review-of-the-classic-sprintf-format-string-vulnerability/">Review of the classic sprintf format string vulnerability</a></h3>
-                    <span>
-                        <span class="post-meta">
-      <time datetime="2020-11-18T05:04:55.000Z" itemprop="datePublished">
-          2020-11-18
-      </time>
-    
-</span>
-                    </span>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                      
-                        Foreword​    抽时间帮助学校的队伍打了下上海大学生信息安全竞赛，题目质量还可以，最后ak了web题；有一道题利用sprintf经典格式化字符串漏洞进行逃逸单引号达到盲注的效果，最开始没想出来是这个点，后来本地测试了下发现是可以绕过的，发生在password处；
-textsprintf函数将格式化的字符输入到变量中；
-1sprintf(format,arg1,arg2,arg++)
-
- arg1、arg2、++ 参数将被插入到
-                      
-                    </p>
-                    
-                    <p class="pull-right readMore">
-                        <a href="/2020/11/18/Review-of-the-classic-sprintf-format-string-vulnerability/">Read More...</a>
-                    </p>
-                    
-                </div>
-                <div class="clearfix"></div>
-                <hr class="nogutter">
-            </div>
-        </div>
-        
-        <nav class="pagination" role="pagination">
-          <a class="pull-left" href="/page/3/">← Newer Posts</a>
-          
-        </nav>
     </div>
-</section>
+</section> 
+
 <section id="statement">
     <div class="container text-center wow fadeInUp" data-wow-delay="0.5s">
         <div class="row">
@@ -388,8 +234,6 @@ textsprintf函数将格式化的字符输入到变量中；
         </div>
     </div>
 </section>
-<!-- ============================ END Content =========================== -->
-
       
 <!-- ============================ Footer =========================== -->
 
